@@ -89,6 +89,17 @@ npx tsx .claude/scripts/session-linker.ts --lookup <any-id>
 3. `docs/{{this.path}}` — {{this.description}}
 {{/each}}
 
+### Canonical Maps (VISUAL SYSTEM REFERENCE)
+These maps provide visual documentation of how components connect. **Read alongside specs.**
+
+1. `docs/MASTER_MAP.md` — System topology overview, component relationships
+2. `docs/maps/MAP_PIPELINE.md` — 6-stage processing flow, AI provider sequence
+3. `docs/maps/MAP_DATA.md` — Full ERD, schema relationships, data lifecycle
+4. `docs/maps/MAP_AUTH.md` — OAuth flow, role hierarchy, RLS policy matrix
+5. `docs/maps/MAP_INFRASTRUCTURE.md` — Service topology, deployment flow
+
+**Maps vs Specs:** Specs define *what* to build. Maps visualize *how* it connects.
+
 ### Project Context
 - `CHANGELOG.md` — All elicitation decisions and version history
 - `README.md` — Project overview and architecture diagram

@@ -184,9 +184,23 @@ const KEY_DECISIONS = `| Decision | Choice |
 | Domain restriction enforcement | Supabase level |
 | CLI authentication | Service role key (bypasses RLS) |
 | Supabase project | Create new |
-| Primary research provider | Grok first, then Perplexity |
+| **AI Provider Hierarchy** | Claude PRIMARY, Grok/Perplexity SECONDARY |
 | Template source | Copy from defi-rwa microsite |
 | Storage | Supabase from start (not local JSON) |`;
+
+const CANONICAL_MAPS_SECTION = `
+### Canonical Maps (VISUAL SYSTEM REFERENCE)
+
+These maps provide visual documentation of how components connect. **Read alongside specs.**
+
+1. \`docs/MASTER_MAP.md\` — System topology overview, component relationships
+2. \`docs/maps/MAP_PIPELINE.md\` — 6-stage processing flow, AI provider sequence
+3. \`docs/maps/MAP_DATA.md\` — Full ERD, schema relationships, data lifecycle
+4. \`docs/maps/MAP_AUTH.md\` — OAuth flow, role hierarchy, RLS policy matrix
+5. \`docs/maps/MAP_INFRASTRUCTURE.md\` — Service topology, deployment flow
+
+**Maps vs Specs:** Specs define *what* to build. Maps visualize *how* it connects.
+`;
 
 function getLatestHandoff(phase?: string): any {
   if (!fs.existsSync(INDEX_PATH)) return null;
@@ -357,7 +371,7 @@ npx tsx .claude/scripts/session-linker.ts --lookup <any-id>
 1. \`docs/MASTER_SPEC.md\` — Master specification with all architecture decisions
 2. \`docs/${config.primarySpec}\` — **PRIMARY SPEC FOR THIS PHASE**
 ${relatedSpecsSection}
-
+${CANONICAL_MAPS_SECTION}
 ### Project Context
 - \`CHANGELOG.md\` — All elicitation decisions and version history
 - \`README.md\` — Project overview and architecture diagram

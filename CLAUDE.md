@@ -75,7 +75,28 @@ This rule is enforced in:
 | Master Spec | `docs/MASTER_SPEC.md` |
 | Project Overview | `docs/project-overview.html` |
 | Phase Specs | `docs/specs/SPEC_*.md` |
+| **Canonical Maps** | `docs/MASTER_MAP.md` + `docs/maps/` |
 | Design Docs | `docs/design/` |
+
+### Documentation Hierarchy
+
+```
+CLAUDE.md                    ← You are here (project instructions)
+    │
+    ├── docs/MASTER_SPEC.md  ← Architecture decisions, requirements
+    │   └── docs/specs/      ← Phase-specific specifications
+    │
+    ├── docs/MASTER_MAP.md   ← Visual system topology (ASCII/Mermaid)
+    │   └── docs/maps/       ← Detailed visual documentation
+    │       ├── MAP_PIPELINE.md      (6-stage processing flow)
+    │       ├── MAP_DATA.md          (ERD, schema relationships)
+    │       ├── MAP_AUTH.md          (OAuth, RLS, role hierarchy)
+    │       └── MAP_INFRASTRUCTURE.md (deployment, connections)
+    │
+    └── docs/project-overview.html   ← Single-page summary (v0.1.2)
+```
+
+**Maps vs Specs:** Specs define *what* to build and *why*. Maps visualize *how* it all connects. Always read both when implementing.
 
 ### Key Decisions
 
@@ -83,7 +104,18 @@ This rule is enforced in:
 - **Auth**: Google OAuth, @ritual.net restriction
 - **Portal**: Next.js (Phase 2)
 - **Microsites**: React/Vite, Making Software aesthetic
-- **Multi-AI**: Grok → Perplexity → bird-cli → Claude
+- **AI Providers**: Claude PRIMARY (reasoning), Grok/Perplexity SECONDARY (enrichment)
+
+### AI Provider Hierarchy
+
+| Tier | Provider | API Key | Role |
+|------|----------|---------|------|
+| **PRIMARY** | Claude | `ANTHROPIC_API_KEY` | All core reasoning: artifacts, extraction, synthesis, config |
+| SECONDARY | Grok | `XAI_API_KEY` | Real-time context enrichment (can fail gracefully) |
+| SECONDARY | Perplexity | `PERPLEXITY_API_KEY` | Deep research with citations (can fail gracefully) |
+| INTERNAL | bird-cli | SSH key | Twitter data retrieval |
+
+See `docs/maps/MAP_PIPELINE.md` for the full provider sequence diagram.
 
 ---
 

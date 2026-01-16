@@ -1,6 +1,38 @@
 {
   "project": "ritual-research-graph",
   "projectPath": "/Users/danielgosek/dev/projects/ritual/ritual-research-graph",
+  "documentation": {
+    "specs": {
+      "master": "docs/MASTER_SPEC.md",
+      "children": "docs/specs/SPEC_*.md"
+    },
+    "maps": {
+      "master": "docs/MASTER_MAP.md",
+      "children": [
+        "docs/maps/MAP_PIPELINE.md",
+        "docs/maps/MAP_DATA.md",
+        "docs/maps/MAP_AUTH.md",
+        "docs/maps/MAP_INFRASTRUCTURE.md"
+      ],
+      "description": "Canonical visual documentation with ASCII/Mermaid diagrams"
+    },
+    "overview": "docs/project-overview.html",
+    "version": "0.1.2"
+  },
+  "aiProviders": {
+    "primary": {
+      "name": "Claude",
+      "key": "ANTHROPIC_API_KEY",
+      "role": "Core reasoning, synthesis, all structured output"
+    },
+    "secondary": [
+      {"name": "Grok", "key": "XAI_API_KEY", "role": "Real-time context enrichment"},
+      {"name": "Perplexity", "key": "PERPLEXITY_API_KEY", "role": "Deep research with citations"}
+    ],
+    "internal": [
+      {"name": "bird-cli", "key": "SSH", "role": "Twitter data retrieval"}
+    ]
+  },
   "phases": {
     "0": {
       "name": "Foundation",
@@ -30,18 +62,68 @@
     },
     "1a": {
       "name": "Database Setup",
-      "status": "in-progress",
+      "status": "complete",
       "dependsOn": []
     },
     "1b": {
       "name": "Processing Pipeline",
-      "status": "pending",
+      "status": "complete",
       "dependsOn": [
         "1a"
       ]
     }
   },
   "sessions": [
+    {
+      "id": "rrg-auto-20260116-2013",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T20:13:18.774Z",
+      "file": "rrg-auto-20260116-2013.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2012",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T20:12:49.694Z",
+      "file": "rrg-auto-20260116-2012.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-1b-20260116-post-commit",
+      "phase": "1b",
+      "status": "complete",
+      "created": "2026-01-16T20:00:00.000Z",
+      "file": "rrg-1b-20260116-post-commit.md",
+      "summary": "Phase 1B complete. 6-stage pipeline implemented with Claude API primary, Grok/Perplexity secondary. 40 entities, 780 relations in test. Graceful degradation working.",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-1950",
+      "phase": "auto",
+      "status": "complete",
+      "created": "2026-01-16T19:50:08.233Z",
+      "file": "rrg-auto-20260116-1950.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-1841",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T18:41:04.187Z",
+      "file": "rrg-auto-20260116-1841.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
     {
       "id": "rrg-0-20260116-1702-3",
       "phase": "0",
@@ -76,5 +158,5 @@
       "blocks": []
     }
   ],
-  "lastUpdated": "2026-01-16T17:48:53.610Z"
+  "lastUpdated": "2026-01-16T20:13:18.774Z"
 }
