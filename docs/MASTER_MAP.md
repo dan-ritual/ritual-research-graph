@@ -330,29 +330,37 @@ SUPABASE_ANON_KEY=eyJ...         # Client key (respects RLS)
 │                                                                              │
 │  Phase 1a: Database & Storage                                               │
 │  ═══════════════════════════                                                │
-│  [████████████████████████████░░░░░░░░░░░] 75% IN PROGRESS                  │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
 │  ✓ Supabase project created                                                 │
 │  ✓ All 9 tables deployed                                                    │
 │  ✓ Google OAuth enabled                                                     │
 │  ✓ Storage buckets created                                                  │
-│  ⚠ RLS recursion fix pending (migration 004)                                │
-│  ○ TypeScript types generation                                              │
+│  ✓ RLS policies configured                                                  │
+│  ✓ TypeScript types generated                                               │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
 │  Phase 1b: Processing Pipeline                                              │
 │  ═════════════════════════════                                              │
-│  [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0% PENDING                       │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
-│  ○ CLI skeleton (scripts/generate.ts)                                       │
-│  ○ AI provider clients (Claude, Grok, Perplexity, bird)                     │
-│  ○ Prompt templates                                                         │
-│  ○ 6-stage pipeline implementation                                          │
+│  ✓ CLI skeleton (scripts/generate.ts)                                       │
+│  ✓ AI provider clients (Claude, Grok, Perplexity, bird)                     │
+│  ✓ Prompt templates                                                         │
+│  ✓ 6-stage pipeline implementation                                          │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│  Phase 2: Portal MVP           ░░░░░░░░░░ PENDING (depends on 1a + 1b)      │
+│  Phase 2: Portal MVP           [████████░░] 80% IN PROGRESS                 │
+│  ═══════════════════                                                        │
+│                                                                              │
+│  ✓ Next.js project setup (apps/portal)                                      │
+│  ✓ Making Software design system                                            │
+│  ✓ Authentication (Google OAuth)                                            │
+│  ✓ Route structure                                                          │
+│  ○ Generation wizard                                                        │
+│  ○ Microsite list/detail views                                              │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
