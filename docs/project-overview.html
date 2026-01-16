@@ -458,7 +458,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v0.1.2 · Last Updated: 2026-01-16</div>
+      <div class="eyebrow">Internal Documentation · v0.3.0-dev · Last Updated: 2026-01-16</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -468,15 +468,15 @@
       <div class="status-bar">
         <div class="status-item">
           <span class="status-dot complete"></span>
-          <span class="status-label">Phase 0: Foundation</span>
-        </div>
-        <div class="status-item">
-          <span class="status-dot active"></span>
           <span class="status-label">Phase 1a: Database</span>
         </div>
         <div class="status-item">
-          <span class="status-dot pending"></span>
+          <span class="status-dot complete"></span>
           <span class="status-label">Phase 1b: Pipeline</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot active"></span>
+          <span class="status-label">Phase 2: Portal MVP</span>
         </div>
       </div>
     </header>
@@ -523,47 +523,48 @@
 
       <div class="grid-2">
         <div>
-          <h3>Completed</h3>
-          <ul>
-            <li>Core type definitions (Entity, Microsite, Opportunity)</li>
-            <li>Entity registry utilities (CRUD, deduplication)</li>
-            <li>Microsite index with backlink calculation</li>
-            <li>Example microsite (RWA × DeFi) imported</li>
-            <li>Master specification + 3 child specs</li>
-            <li>Session continuity system (handoffs)</li>
-            <li>GitHub repository initialized</li>
-            <li>Mode system scaffolded (/dev-mode, /op-mode)</li>
-          </ul>
-
-          <h3>Database Status <span class="tag new">Verified</span></h3>
+          <h3>Phase 1a: Database <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
           <ul>
             <li>Supabase project: <code>grvnvtonghptitgxitkv</code></li>
             <li>All 9 tables deployed and operational</li>
             <li>Google OAuth enabled (@ritual.net)</li>
-            <li>3 storage buckets created (transcripts, artifacts, microsites)</li>
-            <li>1 microsite seeded: "RITUAL INTELLIGENCE"</li>
-            <li>5+ entities seeded (Centrifuge, Hyperliquid, etc.)</li>
-            <li>1 admin user: migration@ritual.net</li>
+            <li>RLS policies with SECURITY DEFINER helpers</li>
+            <li>3 storage buckets (transcripts, artifacts, microsites)</li>
+            <li>Seed data: 1 microsite, 5+ entities, 1 admin user</li>
+          </ul>
+
+          <h3>Phase 1b: Pipeline <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
+          <ul>
+            <li>6-stage processing pipeline implemented</li>
+            <li>Multi-AI research chain (Grok → Perplexity → bird-cli → Claude)</li>
+            <li>40 entities, 780 relations extracted in test run</li>
+            <li>Graceful degradation (secondaries can fail)</li>
+            <li>CLI: <code>npx tsx scripts/generate.ts</code></li>
           </ul>
         </div>
         <div>
-          <h3>In Progress — Phase 1a</h3>
+          <h3>In Progress — Phase 2: Portal MVP</h3>
           <ul>
-            <li><span class="tag changed">Fix</span> Apply RLS recursion fix migration (004)</li>
-            <li>Generate TypeScript types from schema</li>
-            <li>Test anon key queries with RLS</li>
+            <li>Next.js 14+ with App Router</li>
+            <li>shadcn/ui component library</li>
+            <li>3-step generation wizard</li>
+            <li>Supabase Realtime for job updates</li>
+            <li>Entity review before graph write</li>
           </ul>
 
-          <h3>Known Issues</h3>
+          <h3>Portal Elicitation Complete</h3>
           <ul>
-            <li>RLS infinite recursion in users table (migration 004 ready)</li>
+            <li>UI Library: shadcn/ui</li>
+            <li>State: TanStack Query</li>
+            <li>Job Trigger: API route → spawn CLI</li>
+            <li>Theme: Light only for MVP</li>
+            <li>Design: Making Software aesthetic</li>
           </ul>
 
-          <h3>Blocked Until 1a Completes</h3>
+          <h3>Remaining Phases</h3>
           <ul>
-            <li>Phase 1b: Processing Pipeline</li>
-            <li>Phase 2: Portal MVP</li>
-            <li>/op-mode capabilities</li>
+            <li>Phase 3: Graph UI (entity pages, co-occurrence viz)</li>
+            <li>Phase 4: Spot Treatment (surgical editing)</li>
           </ul>
         </div>
       </div>
@@ -758,19 +759,19 @@
           <span class="phase-id">Phase 1a</span>
           <span class="phase-name">Database Setup</span>
           <span class="phase-tasks">Supabase, tables, RLS, OAuth, storage buckets</span>
-          <span class="phase-status in-progress">In Progress</span>
+          <span class="phase-status complete">Complete</span>
         </div>
         <div class="phase-row">
           <span class="phase-id">Phase 1b</span>
           <span class="phase-name">Processing Pipeline</span>
           <span class="phase-tasks">CLI, multi-AI chain, artifacts, entity extraction, builder</span>
-          <span class="phase-status pending">Pending</span>
+          <span class="phase-status complete">Complete</span>
         </div>
         <div class="phase-row">
           <span class="phase-id">Phase 2</span>
           <span class="phase-name">Portal MVP</span>
-          <span class="phase-tasks">Next.js, auth, upload UI, job dashboard, preview</span>
-          <span class="phase-status pending">Pending</span>
+          <span class="phase-tasks">Next.js, shadcn/ui, wizard, job dashboard, entity review</span>
+          <span class="phase-status in-progress">In Progress</span>
         </div>
         <div class="phase-row">
           <span class="phase-id">Phase 3</span>
@@ -900,12 +901,18 @@
       </div>
 
       <div class="spec-card">
+        <div class="spec-title">Portal UI Specification <span class="tag new">New</span></div>
+        <div class="spec-desc">Next.js portal: shadcn/ui, TanStack Query, 3-step wizard, Supabase Realtime.</div>
+        <div class="spec-path">docs/specs/SPEC_PORTAL_UI.md</div>
+      </div>
+
+      <div class="spec-card">
         <div class="spec-title">Making Software Design Library</div>
         <div class="spec-desc">Design system for microsites. Colors, typography, components.</div>
         <div class="spec-path">docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md</div>
       </div>
 
-      <h3>Canonical Maps <span class="tag new">New</span></h3>
+      <h3>Canonical Maps</h3>
       <p style="margin-bottom: 16px;">Visual documentation with ASCII and Mermaid diagrams for all system processes.</p>
 
       <div class="spec-card">
@@ -947,50 +954,54 @@
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v0.1.2 <span class="tag new">Latest</span></div>
+        <div class="changelog-version">v0.3.0-dev <span class="tag new">Current</span></div>
         <div class="changelog-date">2026-01-16</div>
 
         <h4>Added</h4>
         <ul>
-          <li>Canonical mapping system: MASTER_MAP.md + 4 child maps</li>
-          <li>MAP_PIPELINE.md: 6-stage processing flow with ASCII/Mermaid diagrams</li>
-          <li>MAP_DATA.md: Full ERD, schema relationships, data lifecycle</li>
-          <li>MAP_AUTH.md: OAuth flow, role hierarchy, RLS policy matrix</li>
-          <li>MAP_INFRASTRUCTURE.md: Service topology, deployment flow, connections</li>
-          <li>API Provider Hierarchy documentation in all specs</li>
+          <li>Portal UI specification (SPEC_PORTAL_UI.md)</li>
+          <li>Portal Design Overhaul specification</li>
+          <li>Canonical maps integrated into prompt generation pipeline</li>
+          <li>Documentation hierarchy in CLAUDE.md and kickoff templates</li>
         </ul>
 
-        <h4>Changed</h4>
+        <h4>Phase 2 Elicitation Complete</h4>
         <ul>
-          <li>Clarified Claude as PRIMARY provider (artifacts, extraction, synthesis)</li>
-          <li>Documented Grok/Perplexity as SECONDARY enrichment providers</li>
-          <li>Updated environment variable documentation with role explanations</li>
-        </ul>
-      </div>
-
-      <div class="changelog-entry">
-        <div class="changelog-version">v0.1.1</div>
-        <div class="changelog-date">2026-01-16</div>
-
-        <h4>Verified</h4>
-        <ul>
-          <li>Supabase tables deployed and operational (9 tables)</li>
-          <li>Google OAuth enabled in Supabase auth settings</li>
-          <li>Storage buckets created: transcripts, artifacts, microsites</li>
-          <li>Seeded data confirmed: 1 microsite, 5+ entities, 1 admin user</li>
+          <li>UI Library: shadcn/ui (accessible, customizable)</li>
+          <li>State Management: TanStack Query</li>
+          <li>Job Updates: Supabase Realtime</li>
+          <li>Wizard: 3 steps (Upload → Configure → Review)</li>
+          <li>Entity Review: Before graph write (job pauses)</li>
         </ul>
 
         <h4>Fixed</h4>
         <ul>
-          <li>Created migration 004 to fix RLS infinite recursion in users table</li>
-          <li>Added SECURITY DEFINER helper functions: is_admin(), is_editor_or_admin()</li>
+          <li>Applied RLS recursion fix via Supabase SQL Editor</li>
+          <li>SECURITY DEFINER functions now prevent infinite recursion</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.2.0</div>
+        <div class="changelog-date">2026-01-16</div>
+
+        <h4>Phase 1b Complete — Processing Pipeline</h4>
+        <ul>
+          <li>6-stage pipeline: Artifacts → Research → Extraction → Config → Build → Graph</li>
+          <li>Multi-AI research chain implemented (Grok → Perplexity → bird-cli → Claude)</li>
+          <li>40 entities, 780 relations extracted in test run</li>
+          <li>Graceful degradation (secondaries can fail, pipeline continues)</li>
+          <li>CLI entry point: <code>npx tsx scripts/generate.ts</code></li>
         </ul>
 
-        <h4>Remaining for 1a</h4>
+        <h4>Added</h4>
         <ul>
-          <li>Apply migration 004 via Supabase SQL Editor</li>
-          <li>Generate TypeScript types from schema</li>
-          <li>Verify RLS policies work with anon key</li>
+          <li>scripts/generate.ts — Main CLI entry point</li>
+          <li>scripts/lib/ — Claude, Grok, Perplexity, bird-cli clients</li>
+          <li>scripts/prompts/ — 6 prompt templates</li>
+          <li>scripts/stages/ — 6 stage implementations</li>
+          <li>Canonical mapping system: MASTER_MAP.md + 4 child maps</li>
+          <li>API Provider Hierarchy documentation</li>
         </ul>
       </div>
 
@@ -998,35 +1009,26 @@
         <div class="changelog-version">v0.1.0</div>
         <div class="changelog-date">2026-01-16</div>
 
-        <h4>Added</h4>
+        <h4>Phase 0 + 1a Complete — Foundation & Database</h4>
         <ul>
           <li>Project foundation and monorepo setup</li>
           <li>Core types: Entity, Microsite, Opportunity, SiteConfig</li>
-          <li>Entity registry and microsite index utilities</li>
-          <li>Import script for existing microsites</li>
-          <li>RWA×DeFi microsite imported with 14 entities</li>
-          <li>Master spec + 3 child specifications</li>
-          <li>Multi-AI research chain specification (Grok → Perplexity → bird-cli)</li>
+          <li>Supabase project with 9 tables, RLS, OAuth</li>
+          <li>3 storage buckets (transcripts, artifacts, microsites)</li>
+          <li>Master spec + child specifications</li>
           <li>Session continuity system (handoffs)</li>
-          <li>Mode system (/dev-mode, /op-mode)</li>
-        </ul>
-
-        <h4>Changed</h4>
-        <ul>
-          <li>Implementation sequence: Database (1a) before Pipeline (1b)</li>
-          <li>Pipeline now writes to Supabase (not local JSON)</li>
-          <li>Added multi-AI research as Stage 2</li>
         </ul>
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">Upcoming: v0.2.0</div>
+        <div class="changelog-version">Upcoming: v0.3.0</div>
         <div class="changelog-date">Planned</div>
         <ul>
-          <li>Phase 1b: Processing pipeline CLI</li>
-          <li>Multi-AI chain implementation</li>
-          <li>Artifact generation</li>
-          <li>Entity extraction</li>
+          <li>Phase 2: Portal MVP (Next.js)</li>
+          <li>3-step generation wizard</li>
+          <li>Job status with Supabase Realtime</li>
+          <li>Entity review before graph write</li>
+          <li>Microsite list/detail views</li>
         </ul>
       </div>
     </section>
@@ -1040,22 +1042,34 @@
 
       <p>Architecture decisions made via elicitation sessions.</p>
 
+      <h3>Infrastructure Decisions</h3>
       <table class="decision-table">
         <thead><tr><th>Decision</th><th>Choice</th></tr></thead>
         <tbody>
           <tr><td>Database</td><td>Supabase (Postgres)</td></tr>
-          <tr><td>Portal Framework</td><td>Next.js App Router</td></tr>
+          <tr><td>Portal Framework</td><td>Next.js 14+ App Router</td></tr>
           <tr><td>Authentication</td><td>Google OAuth (@ritual.net)</td></tr>
           <tr><td>Domain Restriction</td><td>Enforced at Supabase level</td></tr>
           <tr><td>CLI Authentication</td><td>Service role key (bypasses RLS)</td></tr>
-          <tr><td>Primary Research Provider</td><td>Grok first, then Perplexity</td></tr>
+          <tr><td>AI Provider Hierarchy</td><td>Claude PRIMARY, Grok/Perplexity SECONDARY</td></tr>
           <tr><td>Microsite Template</td><td>Copy from defi-rwa</td></tr>
           <tr><td>Storage</td><td>Supabase from start (not local JSON)</td></tr>
-          <tr><td>Human Review</td><td>Entities only (artifacts auto-approved)</td></tr>
-          <tr><td>Entity Deduplication</td><td>AI suggest + human confirm</td></tr>
-          <tr><td>Microsite Visibility</td><td>Internal-only (v1)</td></tr>
-          <tr><td>Editing</td><td>Yes - "spot treatment" capability</td></tr>
-          <tr><td>Exclusions (v1)</td><td>No collaboration, no analytics</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Phase 2 Portal Decisions</h3>
+      <table class="decision-table">
+        <thead><tr><th>Decision</th><th>Choice</th></tr></thead>
+        <tbody>
+          <tr><td>UI Library</td><td>shadcn/ui (accessible, customizable)</td></tr>
+          <tr><td>State Management</td><td>TanStack Query (async state, caching)</td></tr>
+          <tr><td>Job Updates</td><td>Supabase Realtime (instant updates)</td></tr>
+          <tr><td>Job Trigger</td><td>API route → spawn CLI (reuses Phase 1b)</td></tr>
+          <tr><td>Site Hosting</td><td>Vercel Blob + proxy (single deployment)</td></tr>
+          <tr><td>Wizard Steps</td><td>3 steps: Upload → Configure → Review</td></tr>
+          <tr><td>Entity Review</td><td>Before graph write (job pauses at awaiting_entity_review)</td></tr>
+          <tr><td>Theme</td><td>Light only for MVP (Making Software aesthetic)</td></tr>
+          <tr><td>Delete Action</td><td>Soft delete (archive, can restore)</td></tr>
         </tbody>
       </table>
     </section>
@@ -1116,25 +1130,29 @@ EOF
 ritual-research-graph/
 ├── <span class="key">.claude/</span>               <span class="comment"># Claude Code config</span>
 │   ├── handoffs/           <span class="comment"># Dev session continuity</span>
-│   ├── op-logs/            <span class="comment"># Research session logs</span>
 │   ├── hooks/              <span class="comment"># Auto-handoff hook</span>
-│   ├── skills/             <span class="comment"># Mode skills</span>
-│   └── mode.json           <span class="comment"># Current mode state</span>
+│   ├── scripts/            <span class="comment"># Kickoff, handoff utilities</span>
+│   └── templates/          <span class="comment"># Kickoff prompt templates</span>
 ├── <span class="key">docs/</span>                  <span class="comment"># Specifications</span>
 │   ├── MASTER_SPEC.md
+│   ├── MASTER_MAP.md       <span class="comment"># System topology</span>
 │   ├── specs/              <span class="comment"># Phase specs</span>
+│   ├── maps/               <span class="comment"># Visual docs (ERD, flows)</span>
 │   └── design/             <span class="comment"># Design docs</span>
+├── <span class="key">scripts/</span>              <span class="comment"># Pipeline CLI (Phase 1b)</span>
+│   ├── generate.ts         <span class="comment"># Main entry point</span>
+│   ├── lib/                <span class="comment"># AI clients (Claude, Grok, etc.)</span>
+│   ├── prompts/            <span class="comment"># 6 prompt templates</span>
+│   └── stages/             <span class="comment"># 6 stage implementations</span>
 ├── <span class="key">packages/</span>             <span class="comment"># Monorepo packages</span>
-│   ├── core/               <span class="comment"># Types, registry</span>
-│   └── cli/                <span class="comment"># Pipeline CLI (1b)</span>
+│   └── core/               <span class="comment"># Types, registry</span>
 ├── <span class="key">apps/</span>                 <span class="comment"># Applications</span>
 │   └── portal/             <span class="comment"># Next.js (Phase 2)</span>
-├── <span class="key">data/</span>                 <span class="comment"># Local data</span>
 ├── <span class="key">inputs/</span>               <span class="comment"># Source transcripts</span>
-├── <span class="key">outputs/</span>              <span class="comment"># Generated content</span>
-├── <span class="key">supabase/</span>             <span class="comment"># Migrations</span>
+├── <span class="key">outputs/</span>              <span class="comment"># Generated microsites</span>
+├── <span class="key">supabase/</span>             <span class="comment"># Migrations (001-004)</span>
 ├── CLAUDE.md               <span class="comment"># Project instructions</span>
-└── README.md
+└── CHANGELOG.md            <span class="comment"># Version history</span>
       </div>
     </section>
 
@@ -1142,12 +1160,12 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v0.1.2 · Updated 2026-01-16 ·
+          Ritual Research Graph · v0.3.0-dev · Updated 2026-01-16 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">
           <a href="./MASTER_SPEC.md">Master Spec</a>
-          <a href="../CLAUDE.md">CLAUDE.md</a>
+          <a href="./MASTER_MAP.md">Master Map</a>
           <a href="../CHANGELOG.md">Changelog</a>
         </div>
       </div>
