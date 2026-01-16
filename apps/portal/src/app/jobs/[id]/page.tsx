@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { SectionHeader } from "@/components/ui/section-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { Loading } from "@/components/ui/loading";
+import { RetryJobButton, CancelJobButton } from "@/components/jobs/job-actions";
 import { PIPELINE_STAGES } from "@/constants";
 
 interface Job {
@@ -172,10 +173,13 @@ export default function JobStatusPage() {
         {!isCompleted && !isFailed && (
           <Card className="mb-6">
             <CardHeader className="pb-2">
-              <CardTitle className="font-mono text-sm uppercase tracking-[0.05em]">
-                Stage {currentStageIndex + 1} of {PIPELINE_STAGES.length}:{" "}
-                {PIPELINE_STAGES[currentStageIndex]?.name}
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="font-mono text-sm uppercase tracking-[0.05em]">
+                  Stage {currentStageIndex + 1} of {PIPELINE_STAGES.length}:{" "}
+                  {PIPELINE_STAGES[currentStageIndex]?.name}
+                </CardTitle>
+                {!isAwaitingReview && <CancelJobButton jobId={job.id} />}
+              </div>
             </CardHeader>
             <CardContent>
               <Progress value={progressPercent} className="h-1 mb-2" />
@@ -199,9 +203,7 @@ export default function JobStatusPage() {
                 {job.error_message || "An unknown error occurred"}
               </p>
               <div className="flex gap-2">
-                <Button variant="outline" size="sm">
-                  Retry
-                </Button>
+                <RetryJobButton jobId={job.id} />
                 <Link href="/new">
                   <Button variant="outline" size="sm">
                     Start Over

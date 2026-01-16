@@ -4,14 +4,17 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
     "generate": "tsx scripts/generate.ts",
     "rebuild-graph": "tsx scripts/rebuild-graph.ts",
     "import-microsite": "tsx scripts/import-existing.ts",
-    "microsite:dev": "npm run dev --prefix outputs/microsites/rwa-defi-jan-2026"
+    "microsite:dev": "npm run dev --prefix outputs/microsites/rwa-defi-jan-2026",
+    "portal:dev": "npm run dev --prefix apps/portal",
+    "portal:build": "npm run build --prefix apps/portal"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
@@ -21,6 +24,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.71.2",
     "@supabase/supabase-js": "^2.90.1",
+    "@vercel/blob": "^2.0.0",
     "chalk": "^5.6.2",
     "commander": "^14.0.2",
     "dotenv": "^17.2.3",

@@ -21,6 +21,7 @@ interface GraphIntegrationOptions {
   spinner: Ora;
   outputDir: string;
   userId?: string; // Optional - defaults to system user
+  blobPath?: string; // Path in Vercel Blob storage (e.g., "microsites/rwa-defi-jan-2026")
 }
 
 interface GraphIntegrationResult {
@@ -93,6 +94,7 @@ export async function integrateWithGraph(
     thesis: siteConfig.thesis,
     config: siteConfig,
     entityCount: entities.length,
+    blobPath: options.blobPath,
   });
 
   // Step 6: Link entities to microsite via appearances
@@ -292,6 +294,7 @@ async function createMicrosite(
     thesis: string;
     config: SiteConfig;
     entityCount: number;
+    blobPath?: string;
   }
 ): Promise<string> {
   // Ensure unique slug by appending timestamp if needed
@@ -320,6 +323,7 @@ async function createMicrosite(
       config: options.config,
       entity_count: options.entityCount,
       visibility: 'internal',
+      blob_path: options.blobPath || null,
     })
     .select('id')
     .single();

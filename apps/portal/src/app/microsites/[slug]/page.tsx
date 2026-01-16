@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/ui/section-header";
+import { DeleteMicrositeButton } from "@/components/microsites/delete-button";
 import Link from "next/link";
 
 interface MicrositeDetailPageProps {
@@ -182,9 +183,10 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
-          <Button variant="outline" disabled>
-            Archive
-          </Button>
+          <DeleteMicrositeButton
+            micrositeId={microsite.id}
+            micrositeTitle={microsite.title}
+          />
           {microsite.blob_path && (
             <Link href={`/sites/${microsite.slug}`} target="_blank">
               <Button>Open Site</Button>

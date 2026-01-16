@@ -26,11 +26,23 @@
       "role": "Core reasoning, synthesis, all structured output"
     },
     "secondary": [
-      {"name": "Grok", "key": "XAI_API_KEY", "role": "Real-time context enrichment"},
-      {"name": "Perplexity", "key": "PERPLEXITY_API_KEY", "role": "Deep research with citations"}
+      {
+        "name": "Grok",
+        "key": "XAI_API_KEY",
+        "role": "Real-time context enrichment"
+      },
+      {
+        "name": "Perplexity",
+        "key": "PERPLEXITY_API_KEY",
+        "role": "Deep research with citations"
+      }
     ],
     "internal": [
-      {"name": "bird-cli", "key": "SSH", "role": "Twitter data retrieval"}
+      {
+        "name": "bird-cli",
+        "key": "SSH",
+        "role": "Twitter data retrieval"
+      }
     ]
   },
   "phases": {
@@ -40,11 +52,21 @@
     },
     "2": {
       "name": "Portal MVP",
-      "status": "pending",
+      "status": "complete",
       "dependsOn": [
         "1a",
         "1b"
       ]
+    },
+    "2.5a": {
+      "name": "Opportunity Pipeline Core",
+      "status": "pending",
+      "dependsOn": ["2"]
+    },
+    "2.5b": {
+      "name": "Opportunity Pipeline Advanced",
+      "status": "pending",
+      "dependsOn": ["2.5a"]
     },
     "3": {
       "name": "Graph UI",
@@ -74,6 +96,79 @@
     }
   },
   "sessions": [
+    {
+      "id": "rrg-auto-20260116-2141",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T21:41:22.283Z",
+      "file": "rrg-auto-20260116-2141.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2126",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T21:26:33.143Z",
+      "file": "rrg-auto-20260116-2126.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2105",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T21:05:58.752Z",
+      "file": "rrg-auto-20260116-2105.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2103",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T21:03:30.414Z",
+      "file": "rrg-auto-20260116-2103.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2103",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T21:03:10.263Z",
+      "file": "rrg-auto-20260116-2103.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-2-design-20260116-2058-1",
+      "phase": "2-design",
+      "status": "completed",
+      "created": "2026-01-16T20:58:54.354Z",
+      "file": "rrg-2-design-20260116-2058-1.md",
+      "summary": "Implemented complete Portal Design Overhaul with Making Software aesthetic. All 5 task groups completed: design tokens, global styles, component restyling (Card, Button, Badge, SectionHeader, Loading)...",
+      "dependsOn": [],
+      "blocks": [],
+      "claudeSessionId": "6db70bd3-8af9-4402-9e1a-7572a6ad9832",
+      "claudeSlug": "snoopy-exploring-sketch",
+      "jsonlPath": "/Users/danielgosek/.claude/projects/-Users-danielgosek-dev-projects-ritual-ritual-research-graph/6db70bd3-8af9-4402-9e1a-7572a6ad9832.jsonl"
+    },
+    {
+      "id": "rrg-auto-20260116-2042",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T20:42:20.292Z",
+      "file": "rrg-auto-20260116-2042.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
     {
       "id": "rrg-auto-20260116-2013",
       "phase": "auto",
@@ -158,5 +253,5 @@
       "blocks": []
     }
   ],
-  "lastUpdated": "2026-01-16T20:13:18.774Z"
+  "lastUpdated": "2026-01-16T21:41:22.283Z"
 }

@@ -13,7 +13,9 @@ import { extractEntities } from './stages/entities.js';
 import { generateSiteConfig } from './stages/site-config.js';
 import { buildMicrosite } from './stages/microsite.js';
 import { integrateWithGraph } from './stages/graph.js';
+import { uploadToBlob, isBlobConfigured, formatBytes } from './lib/blob.js';
 import { fileExists, ensureDir } from './utils/files.js';
+import { slugify } from './utils/files.js';
 import { GenerationError, GenerationErrorType } from './lib/errors.js';
 import type { GenerationConfig } from './lib/types.js';
 
@@ -177,6 +179,25 @@ async function main() {
       console.log(chalk.gray(`   └── ${path.relative(outputPath, distPath)}/`));
     }
 
+    // Stage 5b: Upload to Vercel Blob (optional)
+    let blobPath: string | undefined;
+    if (distPath && !config.skipBuild && !config.dryRun && isBlobConfigured()) {
+      spinner.start('\nStage 5b: Uploading to Vercel Blob...');
+      const micrositeSlug = slugify(siteConfig.branding.title);
+      const blobResult = await uploadToBlob({
+        distPath,
+        slug: micrositeSlug,
+        spinner,
+      });
+      blobPath = blobResult.blobPath;
+      spinner.succeed(`Stage 5b: Uploaded to Vercel Blob`);
+      console.log(chalk.gray(`   ├── Path: ${blobResult.blobPath}`));
+      console.log(chalk.gray(`   ├── Files: ${blobResult.fileCount}`));
+      console.log(chalk.gray(`   └── Size: ${formatBytes(blobResult.totalSize)}`));
+    } else if (!isBlobConfigured()) {
+      console.log(chalk.yellow('\n⏸️  Stage 5b: Skipping blob upload (BLOB_READ_WRITE_TOKEN not set)'));
+    }
+
     // Stage 6: Graph Integration
     spinner.start('\nStage 6/6: Integrating with graph database...');
     const graphResult = await integrateWithGraph({
@@ -193,6 +214,7 @@ async function main() {
       },
       spinner,
       outputDir: outputPath,
+      blobPath, // Pass blob path for storage in database
     });
     if (graphResult) {
       spinner.succeed(`Stage 6/6: Graph integration complete`);
