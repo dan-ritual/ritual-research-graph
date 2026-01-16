@@ -458,7 +458,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v0.3.0-dev · Last Updated: 2026-01-16</div>
+      <div class="eyebrow">Internal Documentation · v0.4.0-dev · Last Updated: 2026-01-16</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -468,15 +468,15 @@
       <div class="status-bar">
         <div class="status-item">
           <span class="status-dot complete"></span>
-          <span class="status-label">Phase 1a: Database</span>
+          <span class="status-label">Phase 1a/1b: Complete</span>
         </div>
         <div class="status-item">
           <span class="status-dot complete"></span>
-          <span class="status-label">Phase 1b: Pipeline</span>
+          <span class="status-label">Phase 2: Portal (100%)</span>
         </div>
         <div class="status-item">
-          <span class="status-dot active"></span>
-          <span class="status-label">Phase 2: Portal MVP</span>
+          <span class="status-dot pending"></span>
+          <span class="status-label">Phase 2.5a: Pipeline UI</span>
         </div>
       </div>
     </header>
@@ -543,26 +543,28 @@
           </ul>
         </div>
         <div>
-          <h3>In Progress — Phase 2: Portal MVP</h3>
+          <h3>Phase 2: Portal MVP <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
           <ul>
             <li>Next.js 14+ with App Router</li>
             <li>shadcn/ui component library</li>
-            <li>3-step generation wizard</li>
-            <li>Supabase Realtime for job updates</li>
-            <li>Entity review before graph write</li>
+            <li>Making Software design aesthetic</li>
+            <li>Google OAuth authentication</li>
+            <li>Job management with soft delete</li>
+            <li>Microsite viewing and listing</li>
           </ul>
 
-          <h3>Portal Elicitation Complete</h3>
+          <h3>Next — Phase 2.5a: Opportunity Pipeline</h3>
           <ul>
-            <li>UI Library: shadcn/ui</li>
-            <li>State: TanStack Query</li>
-            <li>Job Trigger: API route → spawn CLI</li>
-            <li>Theme: Light only for MVP</li>
-            <li>Design: Making Software aesthetic</li>
+            <li>Kanban board for BD opportunities</li>
+            <li>Configurable stages per workflow</li>
+            <li>Entity linking (many-to-many)</li>
+            <li>Multiple owners per opportunity</li>
+            <li>Supabase Realtime collaboration</li>
           </ul>
 
           <h3>Remaining Phases</h3>
           <ul>
+            <li>Phase 2.5b: Pipeline AI (strategy, email gen, chat)</li>
             <li>Phase 3: Graph UI (entity pages, co-occurrence viz)</li>
             <li>Phase 4: Spot Treatment (surgical editing)</li>
           </ul>
@@ -770,8 +772,20 @@
         <div class="phase-row">
           <span class="phase-id">Phase 2</span>
           <span class="phase-name">Portal MVP</span>
-          <span class="phase-tasks">Next.js, shadcn/ui, wizard, job dashboard, entity review</span>
-          <span class="phase-status in-progress">In Progress</span>
+          <span class="phase-tasks">Next.js, shadcn/ui, auth, job dashboard, microsite views</span>
+          <span class="phase-status complete">Complete</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 2.5a</span>
+          <span class="phase-name">Pipeline Core</span>
+          <span class="phase-tasks">Kanban board, configurable stages, entity linking, owners</span>
+          <span class="phase-status pending">Pending</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 2.5b</span>
+          <span class="phase-name">Pipeline AI</span>
+          <span class="phase-tasks">Strategy generation, email synthesis, chat interface</span>
+          <span class="phase-status pending">Pending</span>
         </div>
         <div class="phase-row">
           <span class="phase-id">Phase 3</span>
@@ -901,9 +915,15 @@
       </div>
 
       <div class="spec-card">
-        <div class="spec-title">Portal UI Specification <span class="tag new">New</span></div>
+        <div class="spec-title">Portal UI Specification</div>
         <div class="spec-desc">Next.js portal: shadcn/ui, TanStack Query, 3-step wizard, Supabase Realtime.</div>
         <div class="spec-path">docs/specs/SPEC_PORTAL_UI.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Opportunity Pipeline Specification <span class="tag new">New</span></div>
+        <div class="spec-desc">Kanban board for BD opportunities. Configurable stages, entity linking, AI actions.</div>
+        <div class="spec-path">docs/specs/SPEC_OPPORTUNITY_PIPELINE.md</div>
       </div>
 
       <div class="spec-card">
@@ -944,6 +964,12 @@
         <div class="spec-desc">Service topology, environment progression, deployment flow, connection diagram.</div>
         <div class="spec-path">docs/maps/MAP_INFRASTRUCTURE.md</div>
       </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Opportunity Map <span class="tag new">New</span></div>
+        <div class="spec-desc">Kanban UI layout, stage progression, AI action flows, Realtime collaboration.</div>
+        <div class="spec-path">docs/maps/MAP_OPPORTUNITY.md</div>
+      </div>
     </section>
 
     <!-- 11. Changelog -->
@@ -954,7 +980,36 @@
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v0.3.0-dev <span class="tag new">Current</span></div>
+        <div class="changelog-version">v0.4.0-dev <span class="tag new">Current</span></div>
+        <div class="changelog-date">2026-01-16</div>
+
+        <h4>Phase 2 Complete — Portal MVP</h4>
+        <ul>
+          <li>Next.js portal with Making Software design aesthetic</li>
+          <li>Google OAuth authentication (@ritual.net)</li>
+          <li>Job management with cancel, retry, soft delete</li>
+          <li>Microsite list and detail views</li>
+          <li>Route groups for authenticated layout</li>
+        </ul>
+
+        <h4>Added</h4>
+        <ul>
+          <li>Opportunity Pipeline specification (Phase 2.5a/2.5b)</li>
+          <li>Kanban board for BD opportunities with entity linking</li>
+          <li>Phase tracking hooks (SessionStart auto-reports status)</li>
+          <li>MAP_OPPORTUNITY.md canonical map</li>
+        </ul>
+
+        <h4>Developer Experience</h4>
+        <ul>
+          <li>SessionStart hook reports phase completion at session start</li>
+          <li>MASTER_MAP updated with accurate phase status</li>
+          <li>File markers for automatic phase detection</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.3.0</div>
         <div class="changelog-date">2026-01-16</div>
 
         <h4>Added</h4>
@@ -963,21 +1018,6 @@
           <li>Portal Design Overhaul specification</li>
           <li>Canonical maps integrated into prompt generation pipeline</li>
           <li>Documentation hierarchy in CLAUDE.md and kickoff templates</li>
-        </ul>
-
-        <h4>Phase 2 Elicitation Complete</h4>
-        <ul>
-          <li>UI Library: shadcn/ui (accessible, customizable)</li>
-          <li>State Management: TanStack Query</li>
-          <li>Job Updates: Supabase Realtime</li>
-          <li>Wizard: 3 steps (Upload → Configure → Review)</li>
-          <li>Entity Review: Before graph write (job pauses)</li>
-        </ul>
-
-        <h4>Fixed</h4>
-        <ul>
-          <li>Applied RLS recursion fix via Supabase SQL Editor</li>
-          <li>SECURITY DEFINER functions now prevent infinite recursion</li>
         </ul>
       </div>
 
@@ -1160,7 +1200,7 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v0.3.0-dev · Updated 2026-01-16 ·
+          Ritual Research Graph · v0.4.0-dev · Updated 2026-01-16 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">
