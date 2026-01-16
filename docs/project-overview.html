@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ritual Research Graph — Project Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FBFBFB;
+      --fg: #171717;
+      --muted: rgba(0,0,0,0.5);
+      --muted-light: rgba(0,0,0,0.2);
+      --muted-lighter: rgba(0,0,0,0.08);
+      --cobalt-50: #F5F7FF;
+      --cobalt-100: #E8EDFF;
+      --cobalt-200: #C5D3FF;
+      --cobalt-300: #9BB3FF;
+      --cobalt-400: #6B8AFF;
+      --cobalt-600: #3B5FE6;
+      --success: #22c55e;
+      --warning: #eab308;
+      --pending: rgba(0,0,0,0.3);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--fg);
+      font-size: 13px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      height: 100vh;
+      padding: 40px 24px;
+      border-right: 1px solid var(--muted-lighter);
+      overflow-y: auto;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .nav-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      color: var(--fg);
+    }
+
+    .nav-section {
+      margin-bottom: 24px;
+    }
+
+    .nav-section-title {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 6px 0;
+      color: var(--fg);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 300;
+      transition: color 0.15s;
+    }
+
+    .nav-link:hover { color: var(--cobalt-600); }
+    .nav-link.active { color: var(--cobalt-600); font-weight: 500; }
+
+    /* Main Content */
+    main {
+      margin-left: 240px;
+      padding: 60px 80px;
+      max-width: 1200px;
+    }
+
+    @media (max-width: 900px) {
+      nav { display: none; }
+      main { margin-left: 0; padding: 40px 24px; }
+    }
+
+    /* Header */
+    header { margin-bottom: 60px; }
+
+    .eyebrow {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 36px;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    .status-bar {
+      display: flex;
+      gap: 24px;
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: var(--cobalt-50);
+      border: 1px solid var(--cobalt-200);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-dot.active { background: var(--cobalt-600); animation: pulse 2s infinite; }
+    .status-dot.complete { background: var(--success); }
+    .status-dot.pending { background: var(--pending); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .status-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 64px;
+      scroll-margin-top: 40px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--muted-lighter);
+    }
+
+    .section-number {
+      font-size: 10px;
+      color: var(--muted);
+      min-width: 32px;
+    }
+
+    h2 {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    h3 {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 24px 0 12px 0;
+    }
+
+    h4 {
+      font-size: 12px;
+      font-weight: 500;
+      margin: 16px 0 8px 0;
+    }
+
+    p { margin-bottom: 12px; max-width: 680px; font-weight: 300; }
+
+    /* Grid */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* Cards */
+    .card {
+      padding: 20px;
+      background: white;
+      border: 1px solid var(--muted-light);
+    }
+
+    .card-sm {
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--muted-lighter);
+    }
+
+    .card-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin: 16px 0;
+    }
+
+    th {
+      text-align: left;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--muted-light);
+      font-weight: 500;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--muted-lighter);
+      font-weight: 300;
+    }
+
+    td:first-child { font-weight: 400; }
+
+    /* Timeline */
+    .timeline { display: flex; flex-direction: column; gap: 2px; }
+
+    .phase-row {
+      display: grid;
+      grid-template-columns: 64px 140px 1fr 80px;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--muted-lighter);
+      align-items: start;
+    }
+
+    .phase-id { font-size: 11px; font-weight: 500; color: var(--cobalt-600); }
+    .phase-name { font-size: 11px; font-weight: 500; }
+    .phase-tasks { font-size: 10px; color: var(--muted); font-weight: 300; }
+    .phase-status { font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; text-align: right; }
+    .phase-status.complete { color: var(--success); }
+    .phase-status.in-progress { color: var(--cobalt-600); }
+    .phase-status.pending { color: var(--pending); }
+
+    /* Pipeline */
+    .pipeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      padding: 24px;
+      background: var(--muted-lighter);
+      margin: 16px 0;
+    }
+
+    .pipeline-stage {
+      padding: 10px 14px;
+      background: white;
+      border: 1px solid var(--muted-light);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pipeline-arrow { color: var(--muted); font-size: 14px; }
+
+    /* Code */
+    .code-block {
+      background: var(--fg);
+      color: var(--bg);
+      padding: 20px;
+      font-size: 10px;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .code-block .comment { color: rgba(255,255,255,0.4); }
+    .code-block .key { color: var(--cobalt-300); }
+
+    code {
+      background: var(--muted-lighter);
+      padding: 2px 6px;
+      font-size: 11px;
+    }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: var(--muted-lighter);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-right: 4px;
+    }
+
+    .tag.new { background: var(--cobalt-100); color: var(--cobalt-600); }
+    .tag.changed { background: #fef3c7; color: #92400e; }
+
+    /* Lists */
+    ul { list-style: none; padding-left: 0; }
+    li { position: relative; padding-left: 16px; margin-bottom: 6px; font-weight: 300; font-size: 12px; }
+    li::before { content: "—"; position: absolute; left: 0; color: var(--muted); }
+
+    /* Architecture Diagram */
+    .arch-layer {
+      padding: 14px 20px;
+      border: 1px solid var(--cobalt-200);
+      background: var(--cobalt-50);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .arch-layer-name { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .arch-layer-tech { font-size: 9px; color: var(--muted); }
+
+    .arch-connector { width: 1px; height: 16px; background: var(--cobalt-200); margin: 0 auto; }
+
+    /* Changelog */
+    .changelog-entry { margin-bottom: 32px; }
+    .changelog-version { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+    .changelog-date { font-size: 10px; color: var(--muted); margin-bottom: 12px; }
+
+    /* Spec Card */
+    .spec-card {
+      padding: 16px;
+      border: 1px solid var(--muted-lighter);
+      margin-bottom: 12px;
+    }
+
+    .spec-title { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
+    .spec-desc { font-size: 10px; color: var(--muted); font-weight: 300; }
+    .spec-path { font-size: 9px; color: var(--cobalt-600); margin-top: 8px; }
+
+    /* Divider */
+    .divider { border-top: 1px dotted var(--muted-light); margin: 48px 0; }
+
+    /* Footer */
+    footer {
+      margin-top: 64px;
+      padding-top: 32px;
+      border-top: 1px solid var(--muted-lighter);
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { color: var(--fg); text-decoration: none; }
+    .footer-links a:hover { color: var(--cobalt-600); }
+
+    /* Highlight */
+    .highlight { background: var(--cobalt-100); padding: 2px 6px; }
+
+    /* Decision Table */
+    .decision-table td:first-child { width: 40%; }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-title">RRG Docs</div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Overview</div>
+      <a href="#overview" class="nav-link">Project Summary</a>
+      <a href="#status" class="nav-link">Current Status</a>
+      <a href="#architecture" class="nav-link">Architecture</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">System</div>
+      <a href="#pipeline" class="nav-link">Processing Pipeline</a>
+      <a href="#knowledge-graph" class="nav-link">Knowledge Graph</a>
+      <a href="#modes" class="nav-link">Operational Modes</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Implementation</div>
+      <a href="#phases" class="nav-link">Build Phases</a>
+      <a href="#database" class="nav-link">Database Schema</a>
+      <a href="#apis" class="nav-link">APIs & Integrations</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Reference</div>
+      <a href="#specs" class="nav-link">Specifications</a>
+      <a href="#changelog" class="nav-link">Changelog</a>
+      <a href="#decisions" class="nav-link">Key Decisions</a>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Developer</div>
+      <a href="#workflows" class="nav-link">Workflows</a>
+      <a href="#files" class="nav-link">File Structure</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Header -->
+    <header>
+      <div class="eyebrow">Internal Documentation · v0.1.0 · Last Updated: 2026-01-16</div>
+      <h1>Ritual Research Graph</h1>
+      <p class="subtitle">
+        Transform meeting transcripts into interconnected, Wikipedia-style microsites
+        with bi-directional entity linking and a compounding knowledge graph.
+      </p>
+
+      <div class="status-bar">
+        <div class="status-item">
+          <span class="status-dot complete"></span>
+          <span class="status-label">Phase 0: Foundation</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot active"></span>
+          <span class="status-label">Phase 1a: Database</span>
+        </div>
+        <div class="status-item">
+          <span class="status-dot pending"></span>
+          <span class="status-label">Phase 1b: Pipeline</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 01. Overview -->
+    <section id="overview">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2>Project Summary</h2>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <p>
+            Ritual Research Graph is an intelligent research aggregation and publication system.
+            It processes meeting transcripts through a multi-AI pipeline to generate structured
+            artifacts, extract entities, and deploy static microsites—all while building a
+            unified knowledge graph.
+          </p>
+          <p>
+            The system supports two operational modalities: a <span class="highlight">web-app GUI</span>
+            for general contributors, and a <span class="highlight">Claude Code interface</span> for
+            administrators requiring direct pipeline access.
+          </p>
+        </div>
+        <div>
+          <h3>Performance Targets</h3>
+          <table>
+            <tr><td>Transcript → Microsite</td><td>&lt; 10 minutes</td></tr>
+            <tr><td>Entity Extraction Accuracy</td><td>&gt; 90%</td></tr>
+            <tr><td>Cross-Microsite Linking</td><td>Automatic</td></tr>
+            <tr><td>AI Providers in Chain</td><td>4</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02. Current Status -->
+    <section id="status">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2>Current Status</h2>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Completed</h3>
+          <ul>
+            <li>Core type definitions (Entity, Microsite, Opportunity)</li>
+            <li>Entity registry utilities (CRUD, deduplication)</li>
+            <li>Microsite index with backlink calculation</li>
+            <li>Example microsite (RWA × DeFi) imported</li>
+            <li>14 entities seeded in registry</li>
+            <li>Master specification + 3 child specs</li>
+            <li>Database migration SQL</li>
+            <li>Supabase project created with credentials</li>
+            <li>Session continuity system (handoffs)</li>
+            <li>GitHub repository initialized</li>
+            <li>Mode system scaffolded (/dev-mode, /op-mode)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>In Progress — Phase 1a</h3>
+          <ul>
+            <li>Verify Google OAuth configuration</li>
+            <li>Verify RLS policies active</li>
+            <li>Create storage buckets</li>
+            <li>Migrate JSON data to Supabase</li>
+            <li>Generate TypeScript types from schema</li>
+          </ul>
+
+          <h3>Blocked Until 1a Completes</h3>
+          <ul>
+            <li>Phase 1b: Processing Pipeline</li>
+            <li>Phase 2: Portal MVP</li>
+            <li>/op-mode capabilities</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03. Architecture -->
+    <section id="architecture">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2>System Architecture</h2>
+      </div>
+
+      <div class="card" style="max-width: 600px;">
+        <div class="arch-layer">
+          <span class="arch-layer-name">Presentation</span>
+          <span class="arch-layer-tech">Next.js Portal · Static Microsites · Claude Code</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <span class="arch-layer-name">Processing</span>
+          <span class="arch-layer-tech">Multi-AI Pipeline · Entity Extraction · Site Gen</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <span class="arch-layer-name">Intelligence</span>
+          <span class="arch-layer-tech">Claude · Grok · Perplexity · bird-cli</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <span class="arch-layer-name">Data</span>
+          <span class="arch-layer-tech">Supabase (Postgres) · Entity Registry · Graph</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
+          <span class="arch-layer-name">Storage</span>
+          <span class="arch-layer-tech">Vercel Blob · Supabase Storage</span>
+        </div>
+      </div>
+
+      <h3>Technology Stack</h3>
+      <table>
+        <thead><tr><th>Component</th><th>Technology</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>Database</td><td>Supabase (Postgres)</td><td>Entities, microsites, jobs</td></tr>
+          <tr><td>Auth</td><td>Google OAuth</td><td>@ritual.net restriction</td></tr>
+          <tr><td>Portal</td><td>Next.js App Router</td><td>Web GUI</td></tr>
+          <tr><td>Microsites</td><td>React + Vite</td><td>Static site generation</td></tr>
+          <tr><td>Hosting</td><td>Vercel</td><td>Portal + microsites</td></tr>
+          <tr><td>Admin CLI</td><td>Claude Code</td><td>Direct pipeline access</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 04. Processing Pipeline -->
+    <section id="pipeline">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2>Processing Pipeline</h2>
+      </div>
+
+      <p>6-stage pipeline transforming transcripts into deployed microsites with graph integration.</p>
+
+      <div class="pipeline">
+        <div class="pipeline-stage">1. Artifacts</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-stage">2. Multi-AI Research</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-stage">3. Entity Extraction</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-stage">4. Site Config</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-stage">5. Build</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-stage">6. Graph Integration</div>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h4>Stage 1: Artifact Generation</h4>
+          <p>Claude generates 4 markdown artifacts: Cleaned Transcript, Intelligence Brief, Strategic Questions, Narrative Research.</p>
+
+          <h4>Stage 2: Multi-AI Research</h4>
+          <p>Chain: Grok (real-time) → Perplexity (deep research) → bird-cli (Twitter) → Claude (synthesis).</p>
+
+          <h4>Stage 3: Entity Extraction</h4>
+          <p>Extract companies, protocols, people, concepts. Auto-deduplicate with AI-suggested merges.</p>
+        </div>
+        <div>
+          <h4>Stage 4: Site Config</h4>
+          <p>Generate SITE_CONFIG JSON: key findings (5-7), recommendations (6-10), entity metadata, deep dives.</p>
+
+          <h4>Stage 5: Build</h4>
+          <p>Copy template → inject config → Vite build → static site. Making Software aesthetic.</p>
+
+          <h4>Stage 6: Graph Integration</h4>
+          <p>Register microsite, record appearances, calculate co-occurrences, update backlinks.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05. Knowledge Graph -->
+    <section id="knowledge-graph">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2>Knowledge Graph</h2>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Entity Registry</h3>
+          <p>Global registry of named things with canonical names, aliases, metadata, appearances, and co-occurrence relationships.</p>
+
+          <h3>Entity Types</h3>
+          <ul>
+            <li><span class="tag">Company</span> BlackRock, Coinbase, Circle</li>
+            <li><span class="tag">Protocol</span> Aave, Uniswap, Ondo Finance</li>
+            <li><span class="tag">Person</span> Founders, researchers</li>
+            <li><span class="tag">Concept</span> Self-repaying loans</li>
+            <li><span class="tag">Opportunity</span> Private credit, tokenized treasuries</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Bi-Directional Linking</h3>
+          <p>Entities link to microsites where mentioned. Microsites link to related microsites via shared entities. Relevance scoring by overlap count.</p>
+
+          <h3>Co-occurrence Graph</h3>
+          <p>Tracks which entities appear together. Enables "related entities" recommendations and thematic clustering.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. Operational Modes -->
+    <section id="modes">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2>Operational Modes</h2>
+      </div>
+
+      <p>Two interaction modalities producing identical outputs through different interfaces.</p>
+
+      <div class="grid-2" style="margin-top: 24px;">
+        <div class="card">
+          <div class="card-label">Primary Interface</div>
+          <div class="card-title">Web Portal (GUI)</div>
+          <div class="card-desc">
+            Next.js application for contributors. Upload transcripts, configure settings,
+            review entities, deploy microsites. Google OAuth (@ritual.net).
+          </div>
+          <div style="margin-top: 12px;"><span class="tag">Phase 2+</span></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Admin Interface</div>
+          <div class="card-title">Claude Code (CLI)</div>
+          <div class="card-desc">
+            Direct pipeline access for administrators. Same capabilities as portal,
+            with conversational and command-driven modes.
+          </div>
+          <div style="margin-top: 12px;">
+            <span class="tag">/dev-mode</span>
+            <span class="tag">/op-mode</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Mode Capabilities</h3>
+      <table>
+        <thead><tr><th>Mode</th><th>Purpose</th><th>Access</th></tr></thead>
+        <tbody>
+          <tr><td>/dev-mode</td><td>Building the system</td><td>Full codebase, specs, migrations</td></tr>
+          <tr><td>/op-mode</td><td>Using the system</td><td>Pipeline, entities, research workflows</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 07. Build Phases -->
+    <section id="phases">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2>Build Phases</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="phase-row">
+          <span class="phase-id">Phase 0</span>
+          <span class="phase-name">Foundation</span>
+          <span class="phase-tasks">Types, specs, data layer, example microsite, import scripts</span>
+          <span class="phase-status complete">Complete</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 1a</span>
+          <span class="phase-name">Database Setup</span>
+          <span class="phase-tasks">Supabase, tables, RLS, OAuth, storage buckets</span>
+          <span class="phase-status in-progress">In Progress</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 1b</span>
+          <span class="phase-name">Processing Pipeline</span>
+          <span class="phase-tasks">CLI, multi-AI chain, artifacts, entity extraction, builder</span>
+          <span class="phase-status pending">Pending</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 2</span>
+          <span class="phase-name">Portal MVP</span>
+          <span class="phase-tasks">Next.js, auth, upload UI, job dashboard, preview</span>
+          <span class="phase-status pending">Pending</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 3</span>
+          <span class="phase-name">Graph UI</span>
+          <span class="phase-tasks">Entity pages, backlinks, co-occurrence viz</span>
+          <span class="phase-status pending">Pending</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 4</span>
+          <span class="phase-name">Spot Treatment</span>
+          <span class="phase-tasks">Inline editing, entity correction, version history</span>
+          <span class="phase-status pending">Pending</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08. Database Schema -->
+    <section id="database">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <h2>Database Schema</h2>
+      </div>
+
+      <p>9 interconnected tables supporting the full research workflow.</p>
+
+      <table>
+        <thead><tr><th>Table</th><th>Purpose</th><th>Key Fields</th></tr></thead>
+        <tbody>
+          <tr><td>users</td><td>User profiles</td><td>id, email, role</td></tr>
+          <tr><td>generation_jobs</td><td>Pipeline tracking</td><td>status, current_stage</td></tr>
+          <tr><td>artifacts</td><td>Generated content</td><td>type, content</td></tr>
+          <tr><td>microsites</td><td>Deployed sites</td><td>slug, config, url</td></tr>
+          <tr><td>entities</td><td>Entity registry</td><td>canonical_name, aliases, type</td></tr>
+          <tr><td>entity_appearances</td><td>Entity ↔ Microsite</td><td>section, sentiment</td></tr>
+          <tr><td>entity_relations</td><td>Co-occurrences</td><td>co_occurrence_count</td></tr>
+          <tr><td>opportunities</td><td>Taxonomy</td><td>slug, parent_id</td></tr>
+          <tr><td>entity_opportunities</td><td>Entity ↔ Opportunity</td><td>junction table</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 09. APIs & Integrations -->
+    <section id="apis">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <h2>APIs & Integrations</h2>
+      </div>
+
+      <div class="grid-3">
+        <div class="card-sm">
+          <div class="card-label">AI Provider</div>
+          <div class="card-title">Claude (Anthropic)</div>
+          <div class="card-desc">Primary reasoning. Artifacts, extraction, synthesis.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-label">AI Provider</div>
+          <div class="card-title">Grok (xAI)</div>
+          <div class="card-desc">Real-time context. News, events, sentiment.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-label">AI Provider</div>
+          <div class="card-title">Perplexity</div>
+          <div class="card-desc">Deep research with citations.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-label">Data Source</div>
+          <div class="card-title">bird-cli</div>
+          <div class="card-desc">Twitter threads via SSH.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-label">Database</div>
+          <div class="card-title">Supabase</div>
+          <div class="card-desc">Postgres, auth, storage, RLS.</div>
+        </div>
+        <div class="card-sm">
+          <div class="card-label">Hosting</div>
+          <div class="card-title">Vercel</div>
+          <div class="card-desc">Portal, microsites, blob storage.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 10. Specifications -->
+    <section id="specs">
+      <div class="section-header">
+        <span class="section-number">10</span>
+        <h2>Specifications</h2>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Master Specification</div>
+        <div class="spec-desc">Complete architecture, all decisions, implementation phases, open questions.</div>
+        <div class="spec-path">docs/MASTER_SPEC.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Processing Pipeline Specification</div>
+        <div class="spec-desc">6-stage pipeline, prompts, workflow config, CLI interface, error handling.</div>
+        <div class="spec-path">docs/specs/SPEC_PROCESSING_PIPELINE.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Database Schema Specification</div>
+        <div class="spec-desc">All 9 tables, RLS policies, storage buckets, migration strategy.</div>
+        <div class="spec-path">docs/specs/SPEC_DATABASE_SCHEMA.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Multi-AI Research Specification</div>
+        <div class="spec-desc">Grok → Perplexity → bird-cli → Claude chain, provider configs, synthesis.</div>
+        <div class="spec-path">docs/specs/SPEC_MULTI_AI_RESEARCH.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Making Software Design Library</div>
+        <div class="spec-desc">Design system for microsites. Colors, typography, components.</div>
+        <div class="spec-path">docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md</div>
+      </div>
+    </section>
+
+    <!-- 11. Changelog -->
+    <section id="changelog">
+      <div class="section-header">
+        <span class="section-number">11</span>
+        <h2>Changelog</h2>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.1.0 <span class="tag new">Latest</span></div>
+        <div class="changelog-date">2026-01-16</div>
+
+        <h4>Added</h4>
+        <ul>
+          <li>Project foundation and monorepo setup</li>
+          <li>Core types: Entity, Microsite, Opportunity, SiteConfig</li>
+          <li>Entity registry and microsite index utilities</li>
+          <li>Import script for existing microsites</li>
+          <li>RWA×DeFi microsite imported with 14 entities</li>
+          <li>Master spec + 3 child specifications</li>
+          <li>Multi-AI research chain specification (Grok → Perplexity → bird-cli)</li>
+          <li>Session continuity system (handoffs)</li>
+          <li>Mode system (/dev-mode, /op-mode)</li>
+        </ul>
+
+        <h4>Changed</h4>
+        <ul>
+          <li>Implementation sequence: Database (1a) before Pipeline (1b)</li>
+          <li>Pipeline now writes to Supabase (not local JSON)</li>
+          <li>Added multi-AI research as Stage 2</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">Upcoming: v0.2.0</div>
+        <div class="changelog-date">Planned</div>
+        <ul>
+          <li>Phase 1b: Processing pipeline CLI</li>
+          <li>Multi-AI chain implementation</li>
+          <li>Artifact generation</li>
+          <li>Entity extraction</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 12. Key Decisions -->
+    <section id="decisions">
+      <div class="section-header">
+        <span class="section-number">12</span>
+        <h2>Key Decisions</h2>
+      </div>
+
+      <p>Architecture decisions made via elicitation sessions.</p>
+
+      <table class="decision-table">
+        <thead><tr><th>Decision</th><th>Choice</th></tr></thead>
+        <tbody>
+          <tr><td>Database</td><td>Supabase (Postgres)</td></tr>
+          <tr><td>Portal Framework</td><td>Next.js App Router</td></tr>
+          <tr><td>Authentication</td><td>Google OAuth (@ritual.net)</td></tr>
+          <tr><td>Domain Restriction</td><td>Enforced at Supabase level</td></tr>
+          <tr><td>CLI Authentication</td><td>Service role key (bypasses RLS)</td></tr>
+          <tr><td>Primary Research Provider</td><td>Grok first, then Perplexity</td></tr>
+          <tr><td>Microsite Template</td><td>Copy from defi-rwa</td></tr>
+          <tr><td>Storage</td><td>Supabase from start (not local JSON)</td></tr>
+          <tr><td>Human Review</td><td>Entities only (artifacts auto-approved)</td></tr>
+          <tr><td>Entity Deduplication</td><td>AI suggest + human confirm</td></tr>
+          <tr><td>Microsite Visibility</td><td>Internal-only (v1)</td></tr>
+          <tr><td>Editing</td><td>Yes - "spot treatment" capability</td></tr>
+          <tr><td>Exclusions (v1)</td><td>No collaboration, no analytics</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- 13. Workflows -->
+    <section id="workflows">
+      <div class="section-header">
+        <span class="section-number">13</span>
+        <h2>Workflows</h2>
+      </div>
+
+      <div class="grid-2">
+        <div>
+          <h3>Transcript → Microsite</h3>
+          <ol style="list-style: decimal; padding-left: 20px;">
+            <li style="padding-left: 6px;">Upload transcript (paste or file)</li>
+            <li style="padding-left: 6px;">Select workflow type</li>
+            <li style="padding-left: 6px;">Configure title, accent color</li>
+            <li style="padding-left: 6px;">Submit for generation</li>
+            <li style="padding-left: 6px;">Monitor pipeline progress</li>
+            <li style="padding-left: 6px;">Review extracted entities</li>
+            <li style="padding-left: 6px;">Preview microsite</li>
+            <li style="padding-left: 6px;">Deploy to production</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Dev Session</h3>
+          <div class="code-block">
+<span class="comment"># Start session</span>
+npx tsx .claude/scripts/resume-handoff.ts --latest
+
+<span class="comment"># Work on implementation...</span>
+
+<span class="comment"># End session</span>
+cat << 'EOF' | npx tsx .claude/scripts/create-handoff.ts
+{
+  "<span class="key">phase</span>": "1a",
+  "<span class="key">status</span>": "in-progress",
+  "<span class="key">summary</span>": "What you did",
+  "<span class="key">nextSteps</span>": ["Next step"]
+}
+EOF
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 14. File Structure -->
+    <section id="files">
+      <div class="section-header">
+        <span class="section-number">14</span>
+        <h2>File Structure</h2>
+      </div>
+
+      <div class="code-block">
+ritual-research-graph/
+├── <span class="key">.claude/</span>               <span class="comment"># Claude Code config</span>
+│   ├── handoffs/           <span class="comment"># Dev session continuity</span>
+│   ├── op-logs/            <span class="comment"># Research session logs</span>
+│   ├── hooks/              <span class="comment"># Auto-handoff hook</span>
+│   ├── skills/             <span class="comment"># Mode skills</span>
+│   └── mode.json           <span class="comment"># Current mode state</span>
+├── <span class="key">docs/</span>                  <span class="comment"># Specifications</span>
+│   ├── MASTER_SPEC.md
+│   ├── specs/              <span class="comment"># Phase specs</span>
+│   └── design/             <span class="comment"># Design docs</span>
+├── <span class="key">packages/</span>             <span class="comment"># Monorepo packages</span>
+│   ├── core/               <span class="comment"># Types, registry</span>
+│   └── cli/                <span class="comment"># Pipeline CLI (1b)</span>
+├── <span class="key">apps/</span>                 <span class="comment"># Applications</span>
+│   └── portal/             <span class="comment"># Next.js (Phase 2)</span>
+├── <span class="key">data/</span>                 <span class="comment"># Local data</span>
+├── <span class="key">inputs/</span>               <span class="comment"># Source transcripts</span>
+├── <span class="key">outputs/</span>              <span class="comment"># Generated content</span>
+├── <span class="key">supabase/</span>             <span class="comment"># Migrations</span>
+├── CLAUDE.md               <span class="comment"># Project instructions</span>
+└── README.md
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-row">
+        <div>
+          Ritual Research Graph · v0.1.0 · Updated 2026-01-16 ·
+          <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
+        </div>
+        <div class="footer-links">
+          <a href="./MASTER_SPEC.md">Master Spec</a>
+          <a href="../CLAUDE.md">CLAUDE.md</a>
+          <a href="../CHANGELOG.md">Changelog</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+</body>
+</html>

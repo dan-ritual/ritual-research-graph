@@ -262,11 +262,39 @@ cat .claude/handoffs/${latestHandoff.file}
     ? config.relatedSpecs.map((s, i) => `${i + 3}. \`docs/${s.path}\` — ${s.description}`).join('\n')
     : '';
 
+  // Add elicitation section for NEW phases (not continuations)
+  const elicitationSection = !isContinuation ? `
+## MANDATORY: Phase Transition Elicitation
+
+**STOP.** Before implementing ANYTHING, you must run an exhaustive elicitation loop with the user.
+
+### Protocol
+1. Read the phase spec (\`docs/${config.primarySpec}\`)
+2. Identify ALL decision points, ambiguities, and edge cases
+3. Use **AskUserQuestionTool** in a recursive loop:
+   - Ask 2-4 focused questions per round
+   - Dig deeper on complex answers
+   - Continue until user says "proceed" or all ambiguity resolved
+4. Document decisions in CHANGELOG.md
+5. Only THEN begin implementation
+
+### Questions to Consider
+- What's the priority order for the ${config.tasks?.length || 0} tasks?
+- Are there any existing patterns/conventions I should follow?
+- What are the acceptance criteria beyond the spec?
+- Any edge cases the spec doesn't address?
+- Integration points with existing code?
+
+**DO NOT SKIP THIS.** Starting implementation without elicitation violates project protocol.
+
+---
+` : '';
+
   const prompt = `I'm ${sessionType} **Phase ${phase}: ${config.name}** for the **Ritual Research Graph** project.
 ${continuationSection}
 ## Project Location
 \`/Users/danielgosek/dev/projects/ritual/ritual-research-graph\`
-
+${elicitationSection}
 ## Session Continuity System (CRITICAL)
 
 This project has a bespoke handoff system that links to Claude Code's native session management. **USE IT.**

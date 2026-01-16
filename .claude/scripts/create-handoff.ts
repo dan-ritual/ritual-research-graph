@@ -28,6 +28,7 @@ interface HandoffInput {
   nextSteps: string[];
   blockers?: string[];
   notes?: string;
+  elicitationComplete?: boolean;  // REQUIRED for new phase starts - confirms user alignment
 }
 
 interface Session {
@@ -42,6 +43,7 @@ interface Session {
   claudeSessionId?: string;   // Native Claude Code UUID
   claudeSlug?: string;        // Human-readable slug
   jsonlPath?: string;         // Path to full transcript
+  elicitationComplete?: boolean;  // Was elicitation done for this phase?
 }
 
 interface SessionLink {
@@ -269,6 +271,10 @@ function createHandoffDocument(sessionId: string, input: HandoffInput, claudeSes
 | **JSONL Transcript** | \`${claudeSession.jsonlPath}\` |`
     : '';
 
+  const elicitationRow = input.elicitationComplete !== undefined
+    ? `| **Elicitation Complete** | ${input.elicitationComplete ? '✅ Yes' : '⚠️ No'} |`
+    : '';
+
   return `# Handoff: ${sessionId}
 
 ## Metadata
@@ -280,6 +286,7 @@ function createHandoffDocument(sessionId: string, input: HandoffInput, claudeSes
 | **Status** | ${input.status} |
 | **Created** | ${now} |
 | **Project** | ritual-research-graph |
+${elicitationRow}
 ${claudeInfo}
 
 ---
@@ -341,6 +348,8 @@ function updateIndex(sessionId: string, input: HandoffInput, claudeSession?: { s
     claudeSessionId: claudeSession?.sessionId,
     claudeSlug: claudeSession?.slug,
     jsonlPath: claudeSession?.jsonlPath,
+    // Track elicitation status for phase transitions
+    elicitationComplete: input.elicitationComplete,
   };
 
   // Remove any existing session with same ID (update case)
