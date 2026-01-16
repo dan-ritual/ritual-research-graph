@@ -1,4 +1,4 @@
-// Prompt template for extracting entities from research artifacts
+// Prompt template for extracting entities and opportunities from research artifacts
 
 export function buildEntityExtractionPrompt(
   intelligenceBrief: string,
@@ -9,14 +9,14 @@ export function buildEntityExtractionPrompt(
 ${narrativeResearch}`
     : '';
 
-  return `You are an entity extraction specialist. Extract all named entities from the research documents below.
+  return `You are an entity and opportunity extraction specialist. Extract all named entities and identify potential opportunities from the research documents below.
 
 ## Source 1: Intelligence Brief
 ${intelligenceBrief}
 
 ${narrativeSection}
 
-## Task
+## Task 1: Entity Extraction
 Extract ALL entities mentioned in the documents. For each entity, provide:
 
 1. **canonicalName**: The official/most common name
@@ -36,6 +36,19 @@ Extract ALL entities mentioned in the documents. For each entity, provide:
 - **person**: Individuals mentioned by name
 - **concept**: Market themes, technologies, strategies (RWA, Tokenization, Private Credit)
 - **opportunity**: Investment opportunities, market gaps, action items identified
+
+## Task 2: Opportunity Identification
+In addition to entities, identify potential opportunities:
+- Business development targets (companies to partner with)
+- Product ideas mentioned
+- Research questions worth exploring
+
+For each opportunity, provide:
+- **name**: Short descriptive name
+- **thesis**: Core value proposition (2-3 sentences)
+- **angle**: Outreach hook or timing rationale
+- **confidence**: 0-100 score based on evidence strength
+- **linked_entities**: Array of entity canonicalNames this relates to
 
 ## Output Format
 
@@ -59,18 +72,35 @@ Return a JSON object with this structure:
         }
       ]
     }
+  ],
+  "opportunities": [
+    {
+      "name": "Ondo Finance Partnership",
+      "thesis": "Ondo's dominant position in tokenized treasuries ($1.93B TVL) and their institutional-grade infrastructure makes them an ideal partner for expanding Ritual's RWA capabilities.",
+      "angle": "Recent USDY launch shows openness to new distribution channels. Their BD team is actively seeking new integrations.",
+      "confidence": 85,
+      "linked_entities": ["Ondo Finance"]
+    }
   ]
 }
 \`\`\`
 
 ## Rules
 
+### Entities
 - Extract ALL entities, including those mentioned only once
 - Prefer official names over abbreviations for canonicalName
 - Include ticker symbols in aliases (e.g., "BTC", "ETH", "ONDO")
 - Set url/twitter to null if not explicitly stated or commonly known
 - Derive sentiment from how the entity is portrayed in context
 - Keep descriptions factual, based only on document content
+
+### Opportunities
+- Focus on actionable business development opportunities
+- Only include opportunities with concrete evidence in the documents
+- Set confidence based on strength of evidence (high: 80+, medium: 50-79, low: <50)
+- Link to relevant entities mentioned in the documents
+- Be specific about the angle/timing for outreach
 
 Return ONLY the JSON object, no additional text.`;
 }

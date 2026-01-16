@@ -3,13 +3,15 @@
 import path from 'path';
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase.js';
 import { slugify } from '../utils/files.js';
-import type { Artifact, GenerationConfig, ExtractedEntity, SiteConfig } from '../lib/types.js';
+import { entityNameToSlug, resolveLinkedEntities } from './entities.js';
+import type { Artifact, GenerationConfig, ExtractedEntity, ExtractedOpportunity, SiteConfig } from '../lib/types.js';
 import type { Ora } from 'ora';
 
 interface GraphIntegrationOptions {
   config: GenerationConfig;
   siteConfig: SiteConfig;
   entities: ExtractedEntity[];
+  opportunities?: ExtractedOpportunity[]; // Opportunities extracted from Stage 3
   artifacts: {
     cleanedTranscript: Artifact;
     intelligenceBrief: Artifact;
@@ -28,6 +30,7 @@ interface GraphIntegrationResult {
   micrositeId: string;
   entityCount: number;
   relationCount: number;
+  opportunityCount: number;
 }
 
 // Map ExtractedEntity type to database enum
@@ -53,7 +56,7 @@ const SECTION_MAP: Record<string, string> = {
 export async function integrateWithGraph(
   options: GraphIntegrationOptions
 ): Promise<GraphIntegrationResult | null> {
-  const { config, siteConfig, entities, artifacts, spinner } = options;
+  const { config, siteConfig, entities, opportunities = [], artifacts, spinner } = options;
 
   if (!isSupabaseConfigured()) {
     spinner.warn('Stage 6/6: Skipping graph integration (Supabase not configured)');
@@ -81,6 +84,13 @@ export async function integrateWithGraph(
   // Step 4: Upsert entities to global registry
   spinner.text = 'Stage 6/6: Upserting entities...';
   const entityIds = await upsertEntities(supabase, entities);
+
+  // Step 4b: Insert opportunities into pipeline (if any)
+  let opportunityCount = 0;
+  if (opportunities.length > 0) {
+    spinner.text = 'Stage 6/6: Creating opportunities...';
+    opportunityCount = await insertOpportunities(supabase, opportunities, entities, entityIds, jobId, userId);
+  }
 
   // Step 5: Create microsite record
   spinner.text = 'Stage 6/6: Creating microsite record...';
@@ -113,6 +123,7 @@ export async function integrateWithGraph(
     micrositeId,
     entityCount: Object.keys(entityIds).length,
     relationCount,
+    opportunityCount,
   };
 }
 
@@ -439,4 +450,72 @@ async function completeGenerationJob(
       completed_at: new Date().toISOString(),
     })
     .eq('id', jobId);
+}
+
+/**
+ * Insert opportunities into the pipeline from Stage 3 extraction
+ */
+async function insertOpportunities(
+  supabase: ReturnType<typeof getSupabaseClient>,
+  opportunities: ExtractedOpportunity[],
+  entities: ExtractedEntity[],
+  entityIds: Record<string, string>,
+  jobId: string,
+  userId: string
+): Promise<number> {
+  let insertedCount = 0;
+
+  // Resolve linked entities to entity IDs
+  const linkedEntityMap = resolveLinkedEntities(opportunities, entities);
+
+  for (const opp of opportunities) {
+    // Insert opportunity
+    const { data: oppData, error: oppError } = await supabase
+      .from('opportunities')
+      .insert({
+        name: opp.name,
+        status: 'new',
+        thesis: opp.thesis,
+        angle: opp.angle,
+        confidence: opp.confidence,
+        source: 'extraction',
+        job_id: jobId,
+        created_by: userId,
+      })
+      .select('id')
+      .single();
+
+    if (oppError) {
+      console.warn(`Failed to insert opportunity ${opp.name}: ${oppError.message}`);
+      continue;
+    }
+
+    insertedCount++;
+
+    // Link entities to opportunity
+    const linkedSlugs = linkedEntityMap.get(opp.name) || [];
+    for (const slug of linkedSlugs) {
+      // Find entity ID by matching slug
+      for (const [name, id] of Object.entries(entityIds)) {
+        if (entityNameToSlug(name) === slug) {
+          await supabase.from('opportunity_entities').insert({
+            opportunity_id: oppData.id,
+            entity_id: id,
+            relationship: 'related',
+          });
+          break;
+        }
+      }
+    }
+
+    // Log activity
+    await supabase.from('opportunity_activity').insert({
+      opportunity_id: oppData.id,
+      user_id: userId,
+      action: 'created',
+      details: { source: 'stage3_extraction', job_id: jobId },
+    });
+  }
+
+  return insertedCount;
 }

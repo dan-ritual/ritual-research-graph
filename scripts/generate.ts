@@ -124,16 +124,19 @@ async function main() {
 
     // Stage 3: Entity Extraction
     spinner.start('\nStage 3/6: Extracting entities...');
-    const entitiesArtifact = await extractEntities({
+    const extractionResult = await extractEntities({
       config,
       intelligenceBrief: artifacts.intelligenceBrief,
       narrativeResearch: narrativeResearch || null,
       spinner,
       outputDir: outputPath,
     });
-    const entityData = JSON.parse(entitiesArtifact.content);
-    spinner.succeed(`Stage 3/6: Entities extracted (${entityData.entities.length} entities)`);
-    console.log(chalk.gray(`   └── ${entitiesArtifact.filename}`));
+    const { entitiesArtifact, opportunitiesArtifact, entities, opportunities } = extractionResult;
+    spinner.succeed(`Stage 3/6: Entities extracted (${entities.length} entities, ${opportunities.length} opportunities)`);
+    console.log(chalk.gray(`   ├── ${entitiesArtifact.filename}`));
+    if (opportunitiesArtifact) {
+      console.log(chalk.gray(`   └── ${opportunitiesArtifact.filename}`));
+    }
 
     // Stage 4: SITE_CONFIG Generation
     spinner.start('\nStage 4/6: Generating SITE_CONFIG...');
@@ -142,7 +145,7 @@ async function main() {
       intelligenceBrief: artifacts.intelligenceBrief,
       strategicQuestions: artifacts.strategicQuestions,
       narrativeResearch,
-      entities: entityData.entities,
+      entities,
       spinner,
       outputDir: outputPath,
     });
@@ -158,7 +161,7 @@ async function main() {
     const distPath = await buildMicrosite({
       config,
       siteConfig,
-      entities: entityData.entities,
+      entities,
       artifacts: {
         cleanedTranscript: artifacts.cleanedTranscript,
         intelligenceBrief: artifacts.intelligenceBrief,
@@ -203,7 +206,8 @@ async function main() {
     const graphResult = await integrateWithGraph({
       config,
       siteConfig,
-      entities: entityData.entities,
+      entities,
+      opportunities,
       artifacts: {
         cleanedTranscript: artifacts.cleanedTranscript,
         intelligenceBrief: artifacts.intelligenceBrief,
@@ -220,7 +224,12 @@ async function main() {
       spinner.succeed(`Stage 6/6: Graph integration complete`);
       console.log(chalk.gray(`   ├── Microsite ID: ${graphResult.micrositeId.slice(0, 8)}...`));
       console.log(chalk.gray(`   ├── ${graphResult.entityCount} entities indexed`));
-      console.log(chalk.gray(`   └── ${graphResult.relationCount} relations created`));
+      console.log(chalk.gray(`   ├── ${graphResult.relationCount} relations created`));
+      if (graphResult.opportunityCount > 0) {
+        console.log(chalk.gray(`   └── ${graphResult.opportunityCount} opportunities created`));
+      } else {
+        console.log(chalk.gray(`   └── 0 opportunities created`));
+      }
     }
 
     console.log(chalk.green('\n✨ Pipeline complete!'));

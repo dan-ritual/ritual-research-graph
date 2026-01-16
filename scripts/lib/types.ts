@@ -43,6 +43,15 @@ export interface ExtractedEntity {
 
 export interface EntityExtractionResult {
   entities: ExtractedEntity[];
+  opportunities?: ExtractedOpportunity[];
+}
+
+export interface ExtractedOpportunity {
+  name: string;
+  thesis: string;
+  angle: string;
+  confidence: number;
+  linked_entities: string[]; // entity slugs
 }
 
 export interface SiteConfig {

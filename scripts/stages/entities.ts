@@ -1,10 +1,16 @@
-// Stage 3: Entity Extraction
+// Stage 3: Entity and Opportunity Extraction
 
 import path from 'path';
 import { generateJsonWithClaude } from '../lib/claude.js';
 import { buildEntityExtractionPrompt } from '../prompts/extract-entities.js';
 import { writeFile, readFile, fileExists } from '../utils/files.js';
-import type { Artifact, GenerationConfig, ExtractedEntity, EntityExtractionResult } from '../lib/types.js';
+import type {
+  Artifact,
+  GenerationConfig,
+  ExtractedEntity,
+  ExtractedOpportunity,
+  EntityExtractionResult
+} from '../lib/types.js';
 import type { Ora } from 'ora';
 
 interface EntityExtractionOptions {
@@ -13,12 +19,20 @@ interface EntityExtractionOptions {
   narrativeResearch: Artifact | null;
   spinner: Ora;
   outputDir: string;
+  jobId?: string; // Optional job ID for opportunity linking
 }
 
-export async function extractEntities(options: EntityExtractionOptions): Promise<Artifact> {
-  const { config, intelligenceBrief, narrativeResearch, spinner, outputDir } = options;
+interface ExtractionOutput {
+  entitiesArtifact: Artifact;
+  opportunitiesArtifact: Artifact | null;
+  entities: ExtractedEntity[];
+  opportunities: ExtractedOpportunity[];
+}
 
-  spinner.text = 'Stage 3/6: Extracting entities with Claude...';
+export async function extractEntities(options: EntityExtractionOptions): Promise<ExtractionOutput> {
+  const { config, intelligenceBrief, narrativeResearch, spinner, outputDir, jobId } = options;
+
+  spinner.text = 'Stage 3/6: Extracting entities and opportunities with Claude...';
 
   const prompt = buildEntityExtractionPrompt(
     intelligenceBrief.content,
@@ -34,6 +48,9 @@ export async function extractEntities(options: EntityExtractionOptions): Promise
   // Validate and deduplicate entities
   const entities = deduplicateEntities(result.entities || []);
 
+  // Extract opportunities (if any)
+  const opportunities = result.opportunities || [];
+
   // Create output artifact
   const topic = config.title || 'Research';
   const slug = topic
@@ -41,19 +58,49 @@ export async function extractEntities(options: EntityExtractionOptions): Promise
     .replace(/[^a-z0-9]+/g, '_')
     .slice(0, 40);
 
-  const artifact: Artifact = {
+  // Entities artifact
+  const entitiesArtifact: Artifact = {
     id: 'entities',
     name: 'Extracted Entities',
     filename: `${slug}_Entities.json`,
-    content: JSON.stringify({ entities, extractedAt: new Date().toISOString() }, null, 2),
+    content: JSON.stringify({
+      entities,
+      extractedAt: new Date().toISOString()
+    }, null, 2),
   };
-  artifact.path = path.join(outputDir, 'artifacts', artifact.filename);
+  entitiesArtifact.path = path.join(outputDir, 'artifacts', entitiesArtifact.filename);
 
-  if (!config.dryRun) {
-    await writeFile(artifact.path, artifact.content);
+  // Opportunities artifact (if any found)
+  let opportunitiesArtifact: Artifact | null = null;
+  if (opportunities.length > 0) {
+    opportunitiesArtifact = {
+      id: 'opportunities',
+      name: 'Extracted Opportunities',
+      filename: `${slug}_Opportunities.json`,
+      content: JSON.stringify({
+        opportunities,
+        jobId,
+        extractedAt: new Date().toISOString()
+      }, null, 2),
+    };
+    opportunitiesArtifact.path = path.join(outputDir, 'artifacts', opportunitiesArtifact.filename);
+
+    spinner.text = `Stage 3/6: Found ${entities.length} entities and ${opportunities.length} opportunities`;
   }
 
-  return artifact;
+  if (!config.dryRun) {
+    await writeFile(entitiesArtifact.path, entitiesArtifact.content);
+    if (opportunitiesArtifact) {
+      await writeFile(opportunitiesArtifact.path, opportunitiesArtifact.content);
+    }
+  }
+
+  return {
+    entitiesArtifact,
+    opportunitiesArtifact,
+    entities,
+    opportunities,
+  };
 }
 
 /**
@@ -106,4 +153,52 @@ export async function loadExistingEntities(outputDir: string, slug: string): Pro
   }
 
   return [];
+}
+
+/**
+ * Create slugs for entities to match with linked_entities
+ */
+export function entityNameToSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 50);
+}
+
+/**
+ * Match opportunity linked_entities to entity slugs
+ */
+export function resolveLinkedEntities(
+  opportunities: ExtractedOpportunity[],
+  entities: ExtractedEntity[]
+): Map<string, string[]> {
+  const entitySlugMap = new Map<string, string>();
+
+  // Build lookup: canonicalName (lowercase) -> slug
+  for (const entity of entities) {
+    const slug = entityNameToSlug(entity.canonicalName);
+    entitySlugMap.set(entity.canonicalName.toLowerCase(), slug);
+    // Also add aliases
+    for (const alias of entity.aliases) {
+      entitySlugMap.set(alias.toLowerCase(), slug);
+    }
+  }
+
+  // For each opportunity, resolve linked_entities to slugs
+  const result = new Map<string, string[]>();
+
+  for (const opp of opportunities) {
+    const resolvedSlugs: string[] = [];
+    for (const linked of opp.linked_entities) {
+      const slug = entitySlugMap.get(linked.toLowerCase());
+      if (slug) {
+        resolvedSlugs.push(slug);
+      }
+    }
+    result.set(opp.name, resolvedSlugs);
+  }
+
+  return result;
 }
