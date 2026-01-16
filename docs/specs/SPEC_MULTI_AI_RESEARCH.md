@@ -41,6 +41,71 @@ A multi-provider AI chain that leverages:
 3. **bird-cli** — Direct Twitter thread retrieval and engagement metrics
 4. **Claude** — Final synthesis into structured Narrative Research Notes
 
+### API Provider Hierarchy
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        API PROVIDER HIERARCHY                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │  PRIMARY: ANTHROPIC_API_KEY (Claude)                               │ │
+│  │  ════════════════════════════════════                              │ │
+│  │                                                                     │ │
+│  │  Purpose: Core reasoning and synthesis for ALL structured outputs  │ │
+│  │                                                                     │ │
+│  │  Tasks:                                                             │ │
+│  │  • Stage 1: Artifact generation (Cleaned Transcript, Brief, Q&A)  │ │
+│  │  • Stage 2: Research synthesis (final Narrative Research output)  │ │
+│  │  • Stage 3: Entity extraction and classification                   │ │
+│  │  • Stage 4: SITE_CONFIG generation                                 │ │
+│  │                                                                     │ │
+│  │  Rationale: Original specifications developed with Opus 4.5.       │ │
+│  │  Claude provides consistent reasoning, structured output quality,  │ │
+│  │  and alignment with Ritual's voice and requirements.               │ │
+│  │                                                                     │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                              │                                           │
+│                              │ consumes                                  │
+│                              ▼                                           │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │  SECONDARY: Enrichment Providers (Feed into Claude synthesis)      │ │
+│  │  ══════════════════════════════════════════════════════════════   │ │
+│  │                                                                     │ │
+│  │  ┌─────────────────────────────────┬─────────────────────────────┐│ │
+│  │  │  XAI_API_KEY (Grok)             │  PERPLEXITY_API_KEY (Sonar) ││ │
+│  │  │  ─────────────────────────      │  ─────────────────────────  ││ │
+│  │  │  Purpose: Real-time context     │  Purpose: Deep research     ││ │
+│  │  │  • Twitter/X sentiment          │  • Verified facts/figures   ││ │
+│  │  │  • Breaking news                │  • Citations with URLs      ││ │
+│  │  │  • Current discussions          │  • Entity metrics (TVL)     ││ │
+│  │  │  • Recent events                │  • Competitive analysis     ││ │
+│  │  │                                 │                             ││ │
+│  │  │  Output → grok.json             │  Output → perplexity.json   ││ │
+│  │  └─────────────────────────────────┴─────────────────────────────┘│ │
+│  │                                                                     │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                              │                                           │
+│                              ▼                                           │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │  INTERNAL: bird-cli (SSH to GCP VM)                                │ │
+│  │  ══════════════════════════════════                                │ │
+│  │                                                                     │ │
+│  │  Purpose: Direct Twitter data retrieval                            │ │
+│  │  • Thread trees with full context                                  │ │
+│  │  • Engagement metrics (likes, retweets, replies)                   │ │
+│  │  • Account activity and influence                                  │ │
+│  │                                                                     │ │
+│  │  Access: SSH key authentication (no API key)                       │ │
+│  │  Output → bird.json                                                │ │
+│  │                                                                     │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key Principle:** Claude is the **orchestrator and final synthesizer**. Secondary providers supply raw data that Claude transforms into cohesive, Ritual-aligned outputs. This ensures consistent quality, voice, and structured formatting across all artifacts.
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                     WHY MULTIPLE PROVIDERS?                              │
@@ -687,15 +752,25 @@ async function executeWithFallback<T>(
 ### Environment Variables
 
 ```bash
-# Required
-XAI_API_KEY=xai-...              # Grok API key
-PERPLEXITY_API_KEY=pplx-...      # Perplexity API key
-ANTHROPIC_API_KEY=sk-ant-...     # Claude API key
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRIMARY AI PROVIDER — Claude handles final synthesis and structured output
+# ═══════════════════════════════════════════════════════════════════════════════
+ANTHROPIC_API_KEY=sk-ant-...     # Required for all Claude operations
 
-# Optional (for bird-cli)
-BIRD_SSH_HOST=gcp-agentic        # SSH host alias
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECONDARY AI PROVIDERS — Enrichment data that feeds into Claude synthesis
+# ═══════════════════════════════════════════════════════════════════════════════
+XAI_API_KEY=xai-...              # Grok: real-time context (can fail gracefully)
+PERPLEXITY_API_KEY=pplx-...      # Perplexity: deep research (can fail gracefully)
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# INTERNAL DATA SOURCE — bird-cli (SSH, no API key required)
+# ═══════════════════════════════════════════════════════════════════════════════
+BIRD_SSH_HOST=gcp-agentic        # SSH host alias (see ~/.ssh/config)
 BIRD_PROJECT_PATH=~/rite         # Path on remote server
 ```
+
+> **Graceful Degradation:** If Grok or Perplexity fail, the chain continues with available data. If Claude fails, the chain fails (no fallback for primary reasoning).
 
 ### Runtime Configuration
 

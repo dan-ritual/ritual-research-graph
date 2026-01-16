@@ -458,7 +458,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v0.1.0 · Last Updated: 2026-01-16</div>
+      <div class="eyebrow">Internal Documentation · v0.1.2 · Last Updated: 2026-01-16</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -529,23 +529,34 @@
             <li>Entity registry utilities (CRUD, deduplication)</li>
             <li>Microsite index with backlink calculation</li>
             <li>Example microsite (RWA × DeFi) imported</li>
-            <li>14 entities seeded in registry</li>
             <li>Master specification + 3 child specs</li>
-            <li>Database migration SQL</li>
-            <li>Supabase project created with credentials</li>
             <li>Session continuity system (handoffs)</li>
             <li>GitHub repository initialized</li>
             <li>Mode system scaffolded (/dev-mode, /op-mode)</li>
+          </ul>
+
+          <h3>Database Status <span class="tag new">Verified</span></h3>
+          <ul>
+            <li>Supabase project: <code>grvnvtonghptitgxitkv</code></li>
+            <li>All 9 tables deployed and operational</li>
+            <li>Google OAuth enabled (@ritual.net)</li>
+            <li>3 storage buckets created (transcripts, artifacts, microsites)</li>
+            <li>1 microsite seeded: "RITUAL INTELLIGENCE"</li>
+            <li>5+ entities seeded (Centrifuge, Hyperliquid, etc.)</li>
+            <li>1 admin user: migration@ritual.net</li>
           </ul>
         </div>
         <div>
           <h3>In Progress — Phase 1a</h3>
           <ul>
-            <li>Verify Google OAuth configuration</li>
-            <li>Verify RLS policies active</li>
-            <li>Create storage buckets</li>
-            <li>Migrate JSON data to Supabase</li>
+            <li><span class="tag changed">Fix</span> Apply RLS recursion fix migration (004)</li>
             <li>Generate TypeScript types from schema</li>
+            <li>Test anon key queries with RLS</li>
+          </ul>
+
+          <h3>Known Issues</h3>
+          <ul>
+            <li>RLS infinite recursion in users table (migration 004 ready)</li>
           </ul>
 
           <h3>Blocked Until 1a Completes</h3>
@@ -808,26 +819,39 @@
         <h2>APIs & Integrations</h2>
       </div>
 
+      <h3>AI Provider Hierarchy</h3>
+      <p style="margin-bottom: 16px;">Claude orchestrates and synthesizes. Secondary providers supply enrichment data.</p>
+
+      <table style="margin-bottom: 24px;">
+        <thead><tr><th>Tier</th><th>Provider</th><th>API Key</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><strong>PRIMARY</strong></td><td>Claude (Anthropic)</td><td><code>ANTHROPIC_API_KEY</code></td><td>Core reasoning, synthesis, all structured output</td></tr>
+          <tr><td>SECONDARY</td><td>Grok (xAI)</td><td><code>XAI_API_KEY</code></td><td>Real-time context enrichment</td></tr>
+          <tr><td>SECONDARY</td><td>Perplexity (Sonar)</td><td><code>PERPLEXITY_API_KEY</code></td><td>Deep research with citations</td></tr>
+          <tr><td>INTERNAL</td><td>bird-cli</td><td>SSH key</td><td>Twitter data retrieval</td></tr>
+        </tbody>
+      </table>
+
       <div class="grid-3">
         <div class="card-sm">
-          <div class="card-label">AI Provider</div>
+          <div class="card-label">Primary · Stages 1-4</div>
           <div class="card-title">Claude (Anthropic)</div>
-          <div class="card-desc">Primary reasoning. Artifacts, extraction, synthesis.</div>
+          <div class="card-desc">Artifacts, entity extraction, research synthesis, config generation.</div>
         </div>
         <div class="card-sm">
-          <div class="card-label">AI Provider</div>
+          <div class="card-label">Secondary · Stage 2</div>
           <div class="card-title">Grok (xAI)</div>
-          <div class="card-desc">Real-time context. News, events, sentiment.</div>
+          <div class="card-desc">Real-time Twitter/X context, breaking news, sentiment.</div>
         </div>
         <div class="card-sm">
-          <div class="card-label">AI Provider</div>
+          <div class="card-label">Secondary · Stage 2</div>
           <div class="card-title">Perplexity</div>
-          <div class="card-desc">Deep research with citations.</div>
+          <div class="card-desc">Deep research with URLs, metrics (TVL, users).</div>
         </div>
         <div class="card-sm">
-          <div class="card-label">Data Source</div>
+          <div class="card-label">Internal · Stage 2</div>
           <div class="card-title">bird-cli</div>
-          <div class="card-desc">Twitter threads via SSH.</div>
+          <div class="card-desc">Full thread trees, engagement metrics via SSH.</div>
         </div>
         <div class="card-sm">
           <div class="card-label">Database</div>
@@ -880,6 +904,39 @@
         <div class="spec-desc">Design system for microsites. Colors, typography, components.</div>
         <div class="spec-path">docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md</div>
       </div>
+
+      <h3>Canonical Maps <span class="tag new">New</span></h3>
+      <p style="margin-bottom: 16px;">Visual documentation with ASCII and Mermaid diagrams for all system processes.</p>
+
+      <div class="spec-card">
+        <div class="spec-title">Master Map</div>
+        <div class="spec-desc">System topology overview, component relationships, data flow, AI provider hierarchy.</div>
+        <div class="spec-path">docs/MASTER_MAP.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Pipeline Map</div>
+        <div class="spec-desc">6-stage processing flow, AI provider sequence, stage dependencies, error handling.</div>
+        <div class="spec-path">docs/maps/MAP_PIPELINE.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Data Map</div>
+        <div class="spec-desc">Full ERD, table relationships, enums, storage architecture, data lifecycle.</div>
+        <div class="spec-path">docs/maps/MAP_DATA.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Auth Map</div>
+        <div class="spec-desc">Google OAuth flow, API key types, role hierarchy, RLS policy matrix.</div>
+        <div class="spec-path">docs/maps/MAP_AUTH.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Infrastructure Map</div>
+        <div class="spec-desc">Service topology, environment progression, deployment flow, connection diagram.</div>
+        <div class="spec-path">docs/maps/MAP_INFRASTRUCTURE.md</div>
+      </div>
     </section>
 
     <!-- 11. Changelog -->
@@ -890,7 +947,55 @@
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v0.1.0 <span class="tag new">Latest</span></div>
+        <div class="changelog-version">v0.1.2 <span class="tag new">Latest</span></div>
+        <div class="changelog-date">2026-01-16</div>
+
+        <h4>Added</h4>
+        <ul>
+          <li>Canonical mapping system: MASTER_MAP.md + 4 child maps</li>
+          <li>MAP_PIPELINE.md: 6-stage processing flow with ASCII/Mermaid diagrams</li>
+          <li>MAP_DATA.md: Full ERD, schema relationships, data lifecycle</li>
+          <li>MAP_AUTH.md: OAuth flow, role hierarchy, RLS policy matrix</li>
+          <li>MAP_INFRASTRUCTURE.md: Service topology, deployment flow, connections</li>
+          <li>API Provider Hierarchy documentation in all specs</li>
+        </ul>
+
+        <h4>Changed</h4>
+        <ul>
+          <li>Clarified Claude as PRIMARY provider (artifacts, extraction, synthesis)</li>
+          <li>Documented Grok/Perplexity as SECONDARY enrichment providers</li>
+          <li>Updated environment variable documentation with role explanations</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.1.1</div>
+        <div class="changelog-date">2026-01-16</div>
+
+        <h4>Verified</h4>
+        <ul>
+          <li>Supabase tables deployed and operational (9 tables)</li>
+          <li>Google OAuth enabled in Supabase auth settings</li>
+          <li>Storage buckets created: transcripts, artifacts, microsites</li>
+          <li>Seeded data confirmed: 1 microsite, 5+ entities, 1 admin user</li>
+        </ul>
+
+        <h4>Fixed</h4>
+        <ul>
+          <li>Created migration 004 to fix RLS infinite recursion in users table</li>
+          <li>Added SECURITY DEFINER helper functions: is_admin(), is_editor_or_admin()</li>
+        </ul>
+
+        <h4>Remaining for 1a</h4>
+        <ul>
+          <li>Apply migration 004 via Supabase SQL Editor</li>
+          <li>Generate TypeScript types from schema</li>
+          <li>Verify RLS policies work with anon key</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.1.0</div>
         <div class="changelog-date">2026-01-16</div>
 
         <h4>Added</h4>
@@ -1037,7 +1142,7 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v0.1.0 · Updated 2026-01-16 ·
+          Ritual Research Graph · v0.1.2 · Updated 2026-01-16 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">

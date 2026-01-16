@@ -672,6 +672,17 @@ Generate SITE_CONFIG:
 
 > **Key Change:** This system uses multiple AI providers, not just Claude. See Section 4 for the multi-AI research chain.
 
+### Provider Hierarchy
+
+| Tier | Provider | API Key | Role | Stages Used |
+|------|----------|---------|------|-------------|
+| **PRIMARY** | Claude (Anthropic) | `ANTHROPIC_API_KEY` | Core reasoning, synthesis, structured output | 1, 2 (final), 3, 4 |
+| **SECONDARY** | Grok (xAI) | `XAI_API_KEY` | Real-time context enrichment | 2 (parallel) |
+| **SECONDARY** | Perplexity (Sonar) | `PERPLEXITY_API_KEY` | Deep research with citations | 2 (parallel) |
+| **INTERNAL** | bird-cli | SSH key | Twitter data retrieval | 2 (parallel) |
+
+**Key Principle:** Claude orchestrates and synthesizes. Secondary providers supply enrichment data that Claude transforms into final outputs. This ensures consistent quality, voice, and structured formatting across all artifacts.
+
 ### Claude API Client (Primary)
 
 ```typescript
@@ -1143,12 +1154,52 @@ async function withRetry<T>(
 
 ```bash
 # .env.local
-ANTHROPIC_API_KEY=sk-ant-...        # Claude API
-XAI_API_KEY=xai-...                  # Grok API
-PERPLEXITY_API_KEY=pplx-...          # Perplexity API
-SUPABASE_URL=https://xxx.supabase.co # Supabase project URL
-SUPABASE_SERVICE_KEY=eyJ...          # Supabase service role key
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PRIMARY AI PROVIDER — Claude handles all core reasoning tasks
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Used for:
+#   • Stage 1: Artifact generation (Cleaned Transcript, Intelligence Brief, Strategic Questions)
+#   • Stage 2: Research synthesis (Narrative Research final output)
+#   • Stage 3: Entity extraction and classification
+#   • Stage 4: SITE_CONFIG generation
+#
+# Rationale: Original specifications developed with Opus 4.5. Claude provides
+# consistent reasoning, structured output quality, and alignment with Ritual's
+# voice and requirements.
+#
+ANTHROPIC_API_KEY=sk-ant-...
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SECONDARY AI PROVIDERS — Enrichment data that feeds into Claude synthesis
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# XAI (Grok): Real-time context gathering
+#   • Twitter/X sentiment and discussions
+#   • Breaking news and current events
+#   • Recent developments not in training data
+#
+XAI_API_KEY=xai-...
+
+# Perplexity (Sonar Pro): Deep research with citations
+#   • Verified facts and figures with URLs
+#   • Entity metrics (TVL, users, volume)
+#   • Competitive analysis
+#
+PERPLEXITY_API_KEY=pplx-...
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# DATABASE — Supabase
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+SUPABASE_URL=https://xxx.supabase.co   # Supabase project URL
+SUPABASE_SERVICE_KEY=eyJ...            # Service role key (CLI writes)
+SUPABASE_ANON_KEY=eyJ...               # Anon key (portal client-side)
 ```
+
+> **Note:** bird-cli requires SSH key authentication to `gcp-agentic`, not an API key.
+> See `~/.ssh/config` for SSH configuration.
 
 ### File Structure After Implementation
 
