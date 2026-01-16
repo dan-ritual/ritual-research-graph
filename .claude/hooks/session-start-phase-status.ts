@@ -57,8 +57,10 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     id: '2.5a',
     name: 'Pipeline Core',
     markers: [
-      'supabase/migrations/005_opportunity_pipeline.sql',
-      'apps/portal/src/app/pipeline/kanban/page.tsx',
+      'apps/portal/src/app/pipeline/page.tsx',
+      'apps/portal/src/components/pipeline/opportunity-card.tsx',
+      'apps/portal/src/components/pipeline/pipeline-column.tsx',
+      'apps/portal/src/components/pipeline/entity-linker.tsx',
     ],
   },
   {
@@ -66,7 +68,8 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     name: 'Pipeline Advanced',
     markers: [
       'apps/portal/src/app/pipeline/chat/page.tsx',
-      'scripts/prompts/opportunity-strategy.ts',
+      'apps/portal/src/components/pipeline/opportunity-chat.tsx',
+      'apps/portal/src/components/pipeline/email-modal.tsx',
     ],
   },
   {
