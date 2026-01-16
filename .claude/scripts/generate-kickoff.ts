@@ -186,7 +186,33 @@ const KEY_DECISIONS = `| Decision | Choice |
 | Supabase project | Create new |
 | **AI Provider Hierarchy** | Claude PRIMARY, Grok/Perplexity SECONDARY |
 | Template source | Copy from defi-rwa microsite |
-| Storage | Supabase from start (not local JSON) |`;
+| Storage | Supabase from start (not local JSON) |
+| **Visual Design** | Making Software aesthetic (MANDATORY for all frontend) |`;
+
+const DESIGN_SYSTEM_SECTION = `
+### Design System (MANDATORY FOR FRONTEND WORK)
+
+> **All frontend work MUST follow the Making Software aesthetic.** This is non-negotiable.
+
+**Reference Documents:**
+- \`docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md\` — Full design library
+- \`docs/specs/SPEC_PORTAL_DESIGN_OVERHAUL.md\` — Portal implementation + elicitation decisions
+- \`outputs/microsites/rwa-defi-jan-2026/src/App.jsx\` — Reference implementation
+
+**Design Tokens:**
+\`\`\`
+FONTS:     JetBrains Mono (UI) | Crimson Text (body) | Space Grotesk (display)
+COLORS:    #FBFBFB (bg) | #171717 (text) | #3B5FE6 (accent)
+PATTERNS:  20px grid | dotted borders | sharp card edges (no radius)
+\`\`\`
+
+**Key Patterns:**
+- Section headers: Mono, uppercase, 0.12em spacing, accent color, dotted border
+- Cards: Sharp edges, 1px solid border, white background
+- Thesis/Hero: Serif italic, centered, dotted borders
+- Buttons: Mono, uppercase, accent primary
+- Loading: "LOADING..." mono uppercase
+`;
 
 const CANONICAL_MAPS_SECTION = `
 ### Canonical Maps (VISUAL SYSTEM REFERENCE)
@@ -386,7 +412,7 @@ ${CANONICAL_MAPS_SECTION}
 - \`.claude/templates/kickoff-prompt.md\` — Template reference (self-referential)
 - \`.claude/hooks/pre-compact-handoff.sh\` — Auto-handoff on compaction
 - \`.claude/settings.json\` — Hook registration
-
+${['2', '3'].includes(phase) ? DESIGN_SYSTEM_SECTION : ''}
 ### Phase-Specific Files
 ${generateFilesSection(config.files)}
 

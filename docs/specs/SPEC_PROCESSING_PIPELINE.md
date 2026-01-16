@@ -864,12 +864,30 @@ const queues = {
 
 ## 8. Microsite Template
 
+> **DESIGN SYSTEM:** All generated microsites MUST use the Making Software aesthetic. See [`docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md`](../design/DESIGN_LIBRARY_MAKING_SOFTWARE.md) for the full design library.
+
 ### Template Source
 
 The microsite template is copied from the existing RWA×DeFi microsite:
 
 ```
 Source: /Users/danielgosek/Downloads/defi-rwa
+       OR: outputs/microsites/rwa-defi-jan-2026 (project-local copy)
+```
+
+**Design Tokens (from Making Software):**
+```typescript
+const FONTS = {
+  mono: '"JetBrains Mono", "SF Mono", "Consolas", monospace',
+  serif: '"Crimson Text", Georgia, "Times New Roman", serif',
+  display: '"Space Grotesk", "Inter", system-ui, sans-serif',
+};
+
+const COLORS = {
+  background: '#FBFBFB',
+  text: '#171717',
+  accent: '#3B5FE6',  // User can override via --accent flag
+};
 ```
 
 ### Template Structure
@@ -1263,6 +1281,7 @@ scripts/
 | [`MASTER_SPEC.md`](../MASTER_SPEC.md) | Parent specification |
 | [`SPEC_DATABASE_SCHEMA.md`](./SPEC_DATABASE_SCHEMA.md) | **Prerequisite** — Phase 1a setup required |
 | [`SPEC_MULTI_AI_RESEARCH.md`](./SPEC_MULTI_AI_RESEARCH.md) | Detailed research chain specification |
+| [`docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md`](../design/DESIGN_LIBRARY_MAKING_SOFTWARE.md) | **Microsite design system** — MUST follow for all generated sites |
 | `SPEC_SPOT_TREATMENT.md` | Extends editing of generated artifacts |
 
 ---

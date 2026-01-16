@@ -116,8 +116,53 @@ A system where:
 | **Authentication** | Google OAuth | Restricted to @ritual.net domain. Simple, no password management. |
 | **Processing** | Direct API calls | Portal backend calls Claude API directly. Simplest architecture. |
 | **Visibility (v1)** | Internal-only | All microsites require authentication. Safer for sensitive content. |
+| **Visual Design** | Making Software Aesthetic | Institutional, research-grade design. See [Design System](#213-design-system). |
 
-### 2.4 Additional Decisions
+### 2.4 Design System (CANONICAL)
+
+> **All frontend work MUST follow the Making Software aesthetic.** This is the canonical design standard for both the Portal UI and generated Microsites.
+
+**Reference Documents:**
+- [`docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md`](./design/DESIGN_LIBRARY_MAKING_SOFTWARE.md) — Full design library specification
+- [`docs/specs/SPEC_PORTAL_DESIGN_OVERHAUL.md`](./specs/SPEC_PORTAL_DESIGN_OVERHAUL.md) — Portal implementation with elicitation decisions
+- `outputs/microsites/rwa-defi-jan-2026/src/App.jsx` — Reference implementation
+
+**Design Tokens:**
+
+```typescript
+const FONTS = {
+  mono: '"JetBrains Mono", "SF Mono", "Consolas", monospace',  // UI elements, headers
+  serif: '"Crimson Text", Georgia, "Times New Roman", serif',   // Body text
+  display: '"Space Grotesk", "Inter", system-ui, sans-serif',   // Display/hero text
+};
+
+const COLORS = {
+  background: '#FBFBFB',           // Off-white paper
+  text: '#171717',                 // Near-black
+  accent: '#3B5FE6',               // Cobalt blue
+  muted: 'rgba(0,0,0,0.45)',       // Secondary text
+  border: 'rgba(0,0,0,0.08)',      // Subtle borders
+};
+
+const PATTERNS = {
+  gridBackground: '20px grid, rgba(0,0,0,0.018)',
+  dottedBorder: '1px dotted rgba(59,95,230,0.3)',
+};
+```
+
+**Key Visual Patterns:**
+| Element | Style |
+|---------|-------|
+| Section Headers | Mono, uppercase, 0.12em letter-spacing, accent color, dotted bottom border |
+| Cards | Sharp edges (no border-radius), 1px solid border, white background |
+| Thesis/Hero | Serif italic, centered, dotted top/bottom borders |
+| Buttons | Mono, uppercase, 0.1em letter-spacing, accent primary |
+| Links | Accent color, dotted underline |
+| Loading | Mono, uppercase "LOADING...", 0.12em letter-spacing |
+
+**Enforcement:** All frontend PRs must align with this aesthetic. When in doubt, reference the existing microsite implementation.
+
+### 2.5 Additional Decisions
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
@@ -738,13 +783,15 @@ SPEC_AUTHENTICATION                                    SPEC_GRAPH_UI
 
 | # | Spec | Status | Phase | Purpose |
 |---|------|--------|-------|---------|
-| 1 | [`SPEC_PROCESSING_PIPELINE.md`](./SPEC_PROCESSING_PIPELINE.md) | ✅ Complete | 1b | Artifact generation, multi-AI research chain, Supabase integration |
-| 2 | [`SPEC_DATABASE_SCHEMA.md`](./SPEC_DATABASE_SCHEMA.md) | ✅ Complete | 1a | Supabase schema, RLS policies, Google OAuth config |
-| 3 | [`SPEC_MULTI_AI_RESEARCH.md`](./SPEC_MULTI_AI_RESEARCH.md) | ✅ Complete | 1b | Grok → Perplexity → bird-cli → Claude chain |
-| 4 | `SPEC_PORTAL_UI.md` | ⬚ Not started | 2 | Portal wireframes, components, routing |
+| 1 | [`SPEC_PROCESSING_PIPELINE.md`](./specs/SPEC_PROCESSING_PIPELINE.md) | ✅ Complete | 1b | Artifact generation, multi-AI research chain, Supabase integration |
+| 2 | [`SPEC_DATABASE_SCHEMA.md`](./specs/SPEC_DATABASE_SCHEMA.md) | ✅ Complete | 1a | Supabase schema, RLS policies, Google OAuth config |
+| 3 | [`SPEC_MULTI_AI_RESEARCH.md`](./specs/SPEC_MULTI_AI_RESEARCH.md) | ✅ Complete | 1b | Grok → Perplexity → bird-cli → Claude chain |
+| 4 | [`SPEC_PORTAL_UI.md`](./specs/SPEC_PORTAL_UI.md) | ✅ Complete | 2 | Portal wireframes, components, routing, shadcn/ui |
+| 4a | [`SPEC_PORTAL_DESIGN_OVERHAUL.md`](./specs/SPEC_PORTAL_DESIGN_OVERHAUL.md) | ✅ Ready | 2 | **Making Software aesthetic** — visual design for Portal |
 | 5 | `SPEC_GRAPH_UI.md` | ⬚ Not started | 3 | Entity pages, co-occurrence visualization |
 | 6 | `SPEC_SPOT_TREATMENT.md` | ⬚ Not started | 4 | Surgical editing UI, prompt strategy |
 | 7 | `SPEC_DEPLOYMENT.md` | ⬚ Not started | All | CI/CD, environments, Vercel config |
+| — | [`DESIGN_LIBRARY_MAKING_SOFTWARE.md`](./design/DESIGN_LIBRARY_MAKING_SOFTWARE.md) | ✅ Active | All | **CANONICAL design library** — applies to all frontend work |
 
 ### Next Steps
 

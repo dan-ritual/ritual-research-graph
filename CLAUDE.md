@@ -105,6 +105,37 @@ CLAUDE.md                    ← You are here (project instructions)
 - **Portal**: Next.js (Phase 2)
 - **Microsites**: React/Vite, Making Software aesthetic
 - **AI Providers**: Claude PRIMARY (reasoning), Grok/Perplexity SECONDARY (enrichment)
+- **Visual Design**: Making Software aesthetic (see below)
+
+### Design System (CANONICAL)
+
+> **MANDATORY:** All frontend work (Portal + Microsites) MUST follow the Making Software aesthetic.
+
+**Reference Documents:**
+| Document | Purpose |
+|----------|---------|
+| `docs/design/DESIGN_LIBRARY_MAKING_SOFTWARE.md` | Full design library specification |
+| `docs/specs/SPEC_PORTAL_DESIGN_OVERHAUL.md` | Portal implementation + elicitation decisions |
+| `outputs/microsites/rwa-defi-jan-2026/src/App.jsx` | Reference implementation (live code) |
+
+**Quick Reference — Design Tokens:**
+```
+FONTS:     JetBrains Mono (UI) | Crimson Text (body) | Space Grotesk (display)
+COLORS:    #FBFBFB (bg) | #171717 (text) | #3B5FE6 (accent)
+PATTERNS:  20px grid background | 1px dotted borders | sharp card edges
+```
+
+**Visual Patterns:**
+- Section headers → Mono, uppercase, 0.12em spacing, accent color, dotted border
+- Cards → Sharp edges (no radius), 1px solid border, white background
+- Thesis/Hero → Serif italic, centered, dotted top/bottom borders
+- Buttons → Mono, uppercase, accent primary
+- Loading → "LOADING..." mono uppercase
+
+**When implementing frontend:**
+1. Read `SPEC_PORTAL_DESIGN_OVERHAUL.md` for token values
+2. Reference `App.jsx` for pattern examples
+3. Never use generic shadcn defaults without restyling
 
 ### AI Provider Hierarchy
 

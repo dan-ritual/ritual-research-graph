@@ -1,6 +1,22 @@
 # Design Library: Making Software Aesthetic
 ## Ritual Intelligence Microsite Design System
 
+> **CANONICAL DESIGN REFERENCE** — This is the authoritative design system for all Ritual Research Graph frontend work.
+
+---
+
+## Status & Usage
+
+| Aspect | Value |
+|--------|-------|
+| **Status** | Active — Canonical Reference |
+| **Applies To** | Portal UI + Generated Microsites |
+| **Elicitation Spec** | [`docs/specs/SPEC_PORTAL_DESIGN_OVERHAUL.md`](../specs/SPEC_PORTAL_DESIGN_OVERHAUL.md) |
+| **Reference Implementation** | `outputs/microsites/rwa-defi-jan-2026/src/App.jsx` |
+| **Last Updated** | 2026-01-16 |
+
+**IMPORTANT:** All frontend PRs must align with this design system. When in doubt, reference the microsite implementation.
+
 ---
 
 # Source Analysis
