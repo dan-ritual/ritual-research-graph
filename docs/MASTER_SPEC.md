@@ -636,14 +636,16 @@ Maintain consistent tone and formatting with frozen sections.
 
 ## 10. Implementation Phases
 
-### Build Order: Database First → Processing → Portal UI
+### Build Order: Database First → Processing → Portal UI → Pipeline → Graph
 
 > **Key Decision (2026-01-16):** Supabase setup is now Phase 1a, executed BEFORE the Processing Pipeline. The CLI will write directly to Supabase rather than using local JSON files.
+>
+> **Updated (2026-01-16):** Added Phase 2.5a/2.5b for Opportunity Pipeline integration (Kanban tracking, AI actions).
 
 ```
-Phase 1a ──► Phase 1b ──► Phase 2 ──► Phase 3 ──► Phase 4
-Database     Pipeline     Portal      Graph       Edit
-(Supabase)   (CLI)        (Next.js)   (UI)        (Spot)
+Phase 1a ──► Phase 1b ──► Phase 2 ──► Phase 2.5a ──► Phase 2.5b ──► Phase 3 ──► Phase 4
+Database     Pipeline     Portal      Pipeline      Pipeline       Graph       Edit
+(Supabase)   (CLI)        (Next.js)   Core          Advanced       (UI)        (Spot)
 ```
 
 ### Phase 0: Foundation (Current) ✅
@@ -691,7 +693,32 @@ Database     Pipeline     Portal      Graph       Edit
 
 **Deliverable:** Contributors can generate microsites via web UI
 
-### Phase 4: Knowledge Graph UI
+### Phase 2.5a: Opportunity Pipeline (Core)
+**Goal:** Kanban-style opportunity tracking
+
+- [ ] Database migrations (pipeline_workflows, pipeline_stages, expanded opportunities)
+- [ ] `/pipeline` page with Kanban UI
+- [ ] Opportunity CRUD (create, read, update, archive)
+- [ ] Stage progression (button-based, not drag-drop)
+- [ ] Workflow selection dropdown
+- [ ] Supabase Realtime subscriptions
+
+**Deliverable:** Functional Kanban board with manual opportunity management
+
+### Phase 2.5b: Opportunity Pipeline (Advanced)
+**Goal:** AI-assisted opportunity management
+
+- [ ] AI strategy generation (Claude)
+- [ ] AI email generation (Claude)
+- [ ] Duplicate detection during creation
+- [ ] Entity linking UI (many-to-many)
+- [ ] Multiple owner assignment
+- [ ] Chat interface (query opportunities conversationally)
+- [ ] Opportunity extraction during Stage 3
+
+**Deliverable:** Full AI-assisted opportunity management with chat
+
+### Phase 3: Knowledge Graph UI
 **Goal:** Full Wikipedia-style navigation
 
 - [ ] Entity pages (all appearances, co-occurrences)
@@ -763,15 +790,15 @@ Database     Pipeline     Portal      Graph       Edit
 Child specs should be implemented in this order (matches implementation phases):
 
 ```
-SPEC_DATABASE_SCHEMA ──► SPEC_PROCESSING_PIPELINE ──► SPEC_PORTAL_UI
-    (Phase 1a)                 (Phase 1b)                (Phase 2)
-        │                          │                         │
-        │                          ▼                         │
-        │            SPEC_MULTI_AI_RESEARCH                  │
-        │                   (Phase 1b)                       │
-        │                                                    │
-        ▼                                                    ▼
-SPEC_AUTHENTICATION                                    SPEC_GRAPH_UI
+SPEC_DATABASE_SCHEMA ──► SPEC_PROCESSING_PIPELINE ──► SPEC_PORTAL_UI ──► SPEC_OPPORTUNITY_PIPELINE
+    (Phase 1a)                 (Phase 1b)                (Phase 2)         (Phase 2.5a/2.5b)
+        │                          │                         │                    │
+        │                          ▼                         │                    │
+        │            SPEC_MULTI_AI_RESEARCH                  │                    │
+        │                   (Phase 1b)                       │                    │
+        │                                                    │                    │
+        ▼                                                    ▼                    ▼
+SPEC_AUTHENTICATION                                    SPEC_GRAPH_UI ◄───────────┘
    (merged w/ 1a)                                       (Phase 3)
                                                             │
                                                             ▼
@@ -788,9 +815,10 @@ SPEC_AUTHENTICATION                                    SPEC_GRAPH_UI
 | 3 | [`SPEC_MULTI_AI_RESEARCH.md`](./specs/SPEC_MULTI_AI_RESEARCH.md) | ✅ Complete | 1b | Grok → Perplexity → bird-cli → Claude chain |
 | 4 | [`SPEC_PORTAL_UI.md`](./specs/SPEC_PORTAL_UI.md) | ✅ Complete | 2 | Portal wireframes, components, routing, shadcn/ui |
 | 4a | [`SPEC_PORTAL_DESIGN_OVERHAUL.md`](./specs/SPEC_PORTAL_DESIGN_OVERHAUL.md) | ✅ Ready | 2 | **Making Software aesthetic** — visual design for Portal |
-| 5 | `SPEC_GRAPH_UI.md` | ⬚ Not started | 3 | Entity pages, co-occurrence visualization |
-| 6 | `SPEC_SPOT_TREATMENT.md` | ⬚ Not started | 4 | Surgical editing UI, prompt strategy |
-| 7 | `SPEC_DEPLOYMENT.md` | ⬚ Not started | All | CI/CD, environments, Vercel config |
+| 5 | [`SPEC_OPPORTUNITY_PIPELINE.md`](./specs/SPEC_OPPORTUNITY_PIPELINE.md) | ✅ Ready | 2.5 | **Kanban pipeline** — opportunity tracking, AI actions, chat |
+| 6 | `SPEC_GRAPH_UI.md` | ⬚ Not started | 3 | Entity pages, co-occurrence visualization |
+| 7 | `SPEC_SPOT_TREATMENT.md` | ⬚ Not started | 4 | Surgical editing UI, prompt strategy |
+| 8 | `SPEC_DEPLOYMENT.md` | ⬚ Not started | All | CI/CD, environments, Vercel config |
 | — | [`DESIGN_LIBRARY_MAKING_SOFTWARE.md`](./design/DESIGN_LIBRARY_MAKING_SOFTWARE.md) | ✅ Active | All | **CANONICAL design library** — applies to all frontend work |
 
 ### Next Steps

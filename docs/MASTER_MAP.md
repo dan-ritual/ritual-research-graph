@@ -1,7 +1,7 @@
 # Ritual Research Graph — Master Map
 
 **Type:** Canonical Visual Documentation
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Created:** 2026-01-16
 **Last Updated:** 2026-01-16
 
@@ -18,6 +18,7 @@
 | **MAP_DATA** | Database schema, entity relationships | [maps/MAP_DATA.md](./maps/MAP_DATA.md) |
 | **MAP_AUTH** | OAuth flow, RLS policies, roles | [maps/MAP_AUTH.md](./maps/MAP_AUTH.md) |
 | **MAP_INFRASTRUCTURE** | Deployment, environments, CI/CD | [maps/MAP_INFRASTRUCTURE.md](./maps/MAP_INFRASTRUCTURE.md) |
+| **MAP_OPPORTUNITY** | Kanban pipeline, stages, AI actions | [maps/MAP_OPPORTUNITY.md](./maps/MAP_OPPORTUNITY.md) (Phase 2.5) |
 
 ---
 
@@ -32,17 +33,17 @@
 ║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
 ║  │                           PRESENTATION LAYER                             │  ║
 ║  │                                                                          │  ║
-║  │   ┌─────────────┐    ┌─────────────┐    ┌─────────────────────────┐    │  ║
-║  │   │   Portal    │    │   Claude    │    │      Microsites         │    │  ║
-║  │   │  (Next.js)  │    │    Code     │    │  (Static React/Vite)    │    │  ║
-║  │   │             │    │   (CLI)     │    │                         │    │  ║
-║  │   │  • Upload   │    │             │    │  • Key Findings         │    │  ║
-║  │   │  • Monitor  │    │  • /dev     │    │  • Recommendations      │    │  ║
-║  │   │  • Browse   │    │  • /op      │    │  • Entity Hover         │    │  ║
-║  │   │  • Edit     │    │             │    │  • Backlinks            │    │  ║
-║  │   └──────┬──────┘    └──────┬──────┘    └───────────┬─────────────┘    │  ║
-║  │          │                  │                       │                   │  ║
-║  └──────────┼──────────────────┼───────────────────────┼───────────────────┘  ║
+║  │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌───────────────┐  │  ║
+║  │   │   Portal    │  │  Pipeline   │  │   Claude    │  │  Microsites   │  │  ║
+║  │   │  (Next.js)  │  │  (Kanban)   │  │    Code     │  │(React/Vite)   │  │  ║
+║  │   │             │  │             │  │   (CLI)     │  │               │  │  ║
+║  │   │  • Upload   │  │  • Track    │  │             │  │• Key Findings │  │  ║
+║  │   │  • Monitor  │  │  • Stage    │  │  • /dev     │  │• Recommend.   │  │  ║
+║  │   │  • Browse   │  │  • Assign   │  │  • /op      │  │• Entity Hover │  │  ║
+║  │   │  • Edit     │  │  • AI Acts  │  │             │  │• Backlinks    │  │  ║
+║  │   └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └───────┬───────┘  │  ║
+║  │          │                │                │                 │           │  ║
+║  └──────────┼────────────────┼────────────────┼─────────────────┼───────────┘  ║
 ║             │                  │                       │                      ║
 ║             ▼                  ▼                       ▼                      ║
 ║  ┌─────────────────────────────────────────────────────────────────────────┐  ║
@@ -86,12 +87,16 @@
 ║  │   │  • entities                 │    └─────────────────────────────┘   │  ║
 ║  │   │  • entity_appearances       │                                      │  ║
 ║  │   │  • entity_relations         │    ┌─────────────────────────────┐   │  ║
-║  │   │  • opportunities            │    │    Supabase Storage         │   │  ║
-║  │   │  • entity_opportunities     │    │                             │   │  ║
-║  │   │                             │    │  • transcripts (private)    │   │  ║
-║  │   │  + Google OAuth             │    │  • artifacts (private)      │   │  ║
-║  │   │  + RLS Policies             │    │  • microsites (public)      │   │  ║
-║  │   └─────────────────────────────┘    └─────────────────────────────┘   │  ║
+║  │   │  • opportunities (expanded) │    │    Supabase Storage         │   │  ║
+║  │   │  • opportunity_owners       │    │                             │   │  ║
+║  │   │  • opportunity_entities     │    │  • transcripts (private)    │   │  ║
+║  │   │  • pipeline_workflows       │    │  • artifacts (private)      │   │  ║
+║  │   │  • pipeline_stages          │    │  • microsites (public)      │   │  ║
+║  │   │  • opportunity_activity     │    └─────────────────────────────┘   │  ║
+║  │   │                             │                                      │  ║
+║  │   │  + Google OAuth             │                                      │  ║
+║  │   │  + RLS Policies             │                                      │  ║
+║  │   └─────────────────────────────┘                                      │  ║
 ║  │                                                                          │  ║
 ║  └──────────────────────────────────────────────────────────────────────────┘  ║
 ║                                                                                ║
@@ -348,7 +353,30 @@ SUPABASE_ANON_KEY=eyJ...         # Client key (respects RLS)
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
 │  Phase 2: Portal MVP           ░░░░░░░░░░ PENDING (depends on 1a + 1b)      │
-│  Phase 3: Graph UI             ░░░░░░░░░░ PENDING (depends on 2)            │
+│                                                                              │
+│  ───────────────────────────────────────────────────────────────────────────│
+│                                                                              │
+│  Phase 2.5a: Pipeline Core     ░░░░░░░░░░ PENDING (depends on 2)            │
+│  ═══════════════════════════                                                │
+│                                                                              │
+│  ○ Database migrations (pipeline_workflows, pipeline_stages)                │
+│  ○ /pipeline Kanban UI                                                      │
+│  ○ Opportunity CRUD + stage progression                                     │
+│  ○ Supabase Realtime subscriptions                                          │
+│                                                                              │
+│  ───────────────────────────────────────────────────────────────────────────│
+│                                                                              │
+│  Phase 2.5b: Pipeline Advanced ░░░░░░░░░░ PENDING (depends on 2.5a)         │
+│  ═══════════════════════════════                                            │
+│                                                                              │
+│  ○ AI strategy + email generation                                           │
+│  ○ Entity linking UI                                                        │
+│  ○ Chat interface (query opportunities)                                     │
+│  ○ Opportunity extraction in Stage 3                                        │
+│                                                                              │
+│  ───────────────────────────────────────────────────────────────────────────│
+│                                                                              │
+│  Phase 3: Graph UI             ░░░░░░░░░░ PENDING (depends on 2.5)          │
 │  Phase 4: Spot Treatment       ░░░░░░░░░░ PENDING (depends on 3)            │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -385,6 +413,14 @@ Deployment and infrastructure including:
 - Service connections
 - CI/CD pipeline
 - Monitoring points
+
+### [MAP_OPPORTUNITY.md](./maps/MAP_OPPORTUNITY.md) *(Phase 2.5)*
+Opportunity pipeline visualization including:
+- Kanban board layout
+- Stage progression flow
+- AI action triggers
+- Entity/microsite linking
+- Realtime collaboration pattern
 
 ---
 
