@@ -1,0 +1,80 @@
+{
+  "project": "ritual-research-graph",
+  "projectPath": "/Users/danielgosek/dev/projects/ritual/ritual-research-graph",
+  "phases": {
+    "0": {
+      "name": "Foundation",
+      "status": "complete"
+    },
+    "2": {
+      "name": "Portal MVP",
+      "status": "pending",
+      "dependsOn": [
+        "1a",
+        "1b"
+      ]
+    },
+    "3": {
+      "name": "Graph UI",
+      "status": "pending",
+      "dependsOn": [
+        "2"
+      ]
+    },
+    "4": {
+      "name": "Spot Treatment",
+      "status": "pending",
+      "dependsOn": [
+        "3"
+      ]
+    },
+    "1a": {
+      "name": "Database Setup",
+      "status": "pending",
+      "dependsOn": []
+    },
+    "1b": {
+      "name": "Processing Pipeline",
+      "status": "pending",
+      "dependsOn": [
+        "1a"
+      ]
+    }
+  },
+  "sessions": [
+    {
+      "id": "rrg-0-20260116-1702-3",
+      "phase": "0",
+      "status": "complete",
+      "created": "2026-01-16T17:02:04.584Z",
+      "file": "rrg-0-20260116-1702-3.md",
+      "summary": "Session handoff (details not provided)",
+      "dependsOn": [],
+      "blocks": [],
+      "claudeSessionId": "4b93520e-4552-4816-88bf-77fa8b4d161e",
+      "claudeSlug": "melodic-swinging-tarjan",
+      "jsonlPath": "/Users/danielgosek/.claude/projects/-Users-danielgosek-Downloads-defi-rwa/4b93520e-4552-4816-88bf-77fa8b4d161e.jsonl"
+    },
+    {
+      "id": "rrg-0-20260116-1701-2",
+      "phase": "0",
+      "status": "complete",
+      "created": "2026-01-16T17:01:03.498Z",
+      "file": "rrg-0-20260116-1701-2.md",
+      "summary": "Completed session linking integration. Handoff system now captures Claude Code native session IDs (UUIDs), slugs, and JSONL transcript paths. This enables bidirectional lookup between our bespoke hand...",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-0-20260116-1655-1",
+      "phase": "0",
+      "status": "complete",
+      "created": "2026-01-16T16:55:14.815Z",
+      "file": "rrg-0-20260116-1655-1.md",
+      "summary": "Completed Ritual Research Graph foundation phase. Created comprehensive specifications for all implementation phases. Made key architecture decisions via elicitation: Supabase for database, Next.js fo...",
+      "dependsOn": [],
+      "blocks": []
+    }
+  ],
+  "lastUpdated": "2026-01-16T17:02:04.584Z"
+}

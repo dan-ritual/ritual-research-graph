@@ -1,0 +1,74 @@
+{
+  "opportunities": {
+    "private-credit": {
+      "slug": "private-credit",
+      "name": "Private Credit",
+      "description": "Tokenized private credit and lending protocols enabling on-chain access to off-chain credit opportunities",
+      "parent": "rwa",
+      "children": ["merchant-cash-advance", "trade-finance", "revenue-based-financing"],
+      "relatedOpportunities": ["institutional-lending", "emerging-markets"],
+      "entityCount": 4,
+      "micrositeCount": 1
+    },
+    "tokenized-treasuries": {
+      "slug": "tokenized-treasuries",
+      "name": "Tokenized Treasuries",
+      "description": "On-chain representation of government securities, primarily US Treasury bills",
+      "parent": "rwa",
+      "children": [],
+      "relatedOpportunities": ["institutional-adoption", "yield-products"],
+      "entityCount": 2,
+      "micrositeCount": 1
+    },
+    "defi-lending": {
+      "slug": "defi-lending",
+      "name": "DeFi Lending",
+      "description": "Algorithmic lending protocols with automated interest rates and liquidation",
+      "parent": "defi",
+      "children": ["isolated-markets", "modular-vaults"],
+      "relatedOpportunities": ["institutional-defi", "rwa-collateral"],
+      "entityCount": 3,
+      "micrositeCount": 1
+    },
+    "verifiable-intelligence": {
+      "slug": "verifiable-intelligence",
+      "name": "Verifiable Intelligence",
+      "description": "On-chain AI inference with cryptographic verification of model execution",
+      "parent": null,
+      "children": ["credit-scoring", "risk-pricing", "fraud-detection"],
+      "relatedOpportunities": ["private-credit", "insurance"],
+      "entityCount": 0,
+      "micrositeCount": 1
+    },
+    "institutional-adoption": {
+      "slug": "institutional-adoption",
+      "name": "Institutional Adoption",
+      "description": "Traditional finance institutions entering crypto and blockchain infrastructure",
+      "parent": null,
+      "children": [],
+      "relatedOpportunities": ["tokenized-treasuries", "compliance"],
+      "entityCount": 1,
+      "micrositeCount": 1
+    },
+    "defi-rwa-convergence": {
+      "slug": "defi-rwa-convergence",
+      "name": "DeFi × RWA Convergence",
+      "description": "Integration of DeFi primitives with real-world asset protocols",
+      "parent": null,
+      "children": ["streaming-payments", "self-repaying-perps"],
+      "relatedOpportunities": ["private-credit", "defi-lending"],
+      "entityCount": 5,
+      "micrositeCount": 1
+    },
+    "self-repaying-perps": {
+      "slug": "self-repaying-perps",
+      "name": "Self-Repaying Perpetuals",
+      "description": "Novel primitive: perpetual positions where yield-bearing collateral offsets funding rates",
+      "parent": "defi-rwa-convergence",
+      "children": [],
+      "relatedOpportunities": ["perp-dex", "tokenized-treasuries"],
+      "entityCount": 2,
+      "micrositeCount": 1
+    }
+  }
+}

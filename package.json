@@ -1,0 +1,21 @@
+{
+  "name": "ritual-research-graph",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "generate": "tsx scripts/generate.ts",
+    "rebuild-graph": "tsx scripts/rebuild-graph.ts",
+    "import-microsite": "tsx scripts/import-existing.ts",
+    "microsite:dev": "npm run dev --prefix outputs/microsites/rwa-defi-jan-2026"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "microsites": {
+    "rwa-defi-jan-2026": {
+      "id": "rwa-defi-jan-2026",
+      "title": "RITUAL INTELLIGENCE",
+      "subtitle": "RWA × DeFi × AI · January 2026",
+      "date": "2026-01-15",
+      "thesis": "RWA crossed $35B with 7x growth in 2025, but credit decisions remain manual and off-chain. Ritual can be the verifiable intelligence layer these protocols need but can't build themselves.",
+      "sourceTranscript": "transcripts/rwa-defi-2026-01-15.md",
+      "artifacts": [
+        "RWA_DeFi_2026_Transcript_Clean.md",
+        "RWA_DeFi_2026_Intelligence_Brief.md",
+        "RWA_DeFi_Strategic_Questions_Explorations.md",
+        "Twitter_Research_Notes_Matyv_2026_Narratives.md"
+      ],
+      "entities": [
+        "ondo-finance",
+        "maple-finance",
+        "goldfinch",
+        "centrifuge",
+        "zivoe",
+        "credix",
+        "aave",
+        "morpho",
+        "euler",
+        "blackrock-buidl",
+        "hyperliquid",
+        "etherfi",
+        "alchemix",
+        "chainlink"
+      ],
+      "opportunities": [
+        "private-credit",
+        "tokenized-treasuries",
+        "defi-rwa-convergence",
+        "verifiable-intelligence",
+        "institutional-adoption"
+      ],
+      "keyFindingTitles": [
+        "Market Position",
+        "Structural Shift",
+        "Catalyst Analysis",
+        "Intelligence Gap",
+        "DeFi×RWA Convergence",
+        "Novel Primitive"
+      ],
+      "recommendationTitles": [
+        "Positioning",
+        "Reference Implementation",
+        "Target Segment",
+        "Vertical Depth",
+        "BD vs. Integration",
+        "DeFi Bridge",
+        "Narrative Positioning",
+        "Anti-patterns"
+      ],
+      "backlinks": [],
+      "url": "https://rit-internal-rwa-defi-jan152025.vercel.app",
+      "localPath": "outputs/microsites/rwa-defi-jan-2026",
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    }
+  },
+  "stats": {
+    "totalMicrosites": 1,
+    "totalEntities": 14,
+    "totalOpportunities": 5,
+    "lastUpdated": "2026-01-16T00:00:00Z"
+  }
+}

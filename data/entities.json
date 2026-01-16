@@ -1,0 +1,714 @@
+{
+  "entities": {
+    "ondo-finance": {
+      "slug": "ondo-finance",
+      "canonicalName": "Ondo Finance",
+      "aliases": [
+        "Ondo",
+        "ONDO"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://ondo.finance",
+        "twitter": "OndoFinance",
+        "tvSymbol": "COINBASE:ONDOUSD",
+        "category": "Tokenized Treasuries"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "Some opportunities are **business development** (partnership announcements, co-marketing), others are **technical integration** (actual primitive usage). Be honest about which is which. Ondo partnersh",
+          "section": "recommendations"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "tokenized-treasuries",
+        "institutional-defi"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "maple-finance": {
+      "slug": "maple-finance",
+      "canonicalName": "Maple Finance",
+      "aliases": [
+        "Maple"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://maple.finance",
+        "twitter": "maplefinance",
+        "category": "Private Credit"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "The 2022-23 defaults (**Maple: $54M** across Orthogonal Trading pools) forced industry-wide pivot from trust-based under-collateralized lending to **asset-backed structures**. This isn\\",
+          "section": "keyFindings"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "private-credit",
+        "institutional-lending"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "goldfinch": {
+      "slug": "goldfinch",
+      "canonicalName": "Goldfinch",
+      "aliases": [
+        "GFI"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://goldfinch.finance",
+        "twitter": "goldfinch_fi",
+        "tvSymbol": "COINBASE:GFIUSD",
+        "category": "Private Credit"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "In our protocol survey, **only Bid.io attempts on-chain AI** (risk pricing oracle). Maple, Credix, Zivoe, Goldfinch—all running credit decisions off-chain via manual review or opaque ML. This creates ",
+          "section": "keyFindings"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "private-credit",
+        "emerging-markets"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "centrifuge": {
+      "slug": "centrifuge",
+      "canonicalName": "Centrifuge",
+      "aliases": [
+        "CFG"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://centrifuge.io",
+        "twitter": "centrifuge",
+        "tvSymbol": "KRAKEN:CFGUSD",
+        "category": "RWA Infrastructure"
+      },
+      "appearances": [],
+      "relatedEntities": [],
+      "opportunities": [
+        "rwa-infrastructure",
+        "tokenization"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "zivoe": {
+      "slug": "zivoe",
+      "canonicalName": "Zivoe",
+      "aliases": [
+        "Zivoe Protocol"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://zivoe.com",
+        "twitter": "ZivoeProtocol",
+        "category": "Private Credit"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "In our protocol survey, **only Bid.io attempts on-chain AI** (risk pricing oracle). Maple, Credix, Zivoe, Goldfinch—all running credit decisions off-chain via manual review or opaque ML. This creates ",
+          "section": "keyFindings"
+        },
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "Build **ONE reference app**: verifiable credit scoring for private credit protocols. Target: **Zivoe or similar ($5-50M TVL)**. Scope: ONNX model for merchant cash advance risk, deployed with full inf",
+          "section": "recommendations"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "private-credit",
+        "streaming-payments"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "credix": {
+      "slug": "credix",
+      "canonicalName": "Credix",
+      "aliases": [
+        "Credix Finance"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://credix.finance",
+        "twitter": "CredixFinance",
+        "category": "Private Credit"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "In our protocol survey, **only Bid.io attempts on-chain AI** (risk pricing oracle). Maple, Credix, Zivoe, Goldfinch—all running credit decisions off-chain via manual review or opaque ML. This creates ",
+          "section": "keyFindings"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "private-credit",
+        "emerging-markets"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "aave": {
+      "slug": "aave",
+      "canonicalName": "Aave",
+      "aliases": [
+        "AAVE"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://aave.com",
+        "twitter": "aave",
+        "tvSymbol": "COINBASE:AAVEUSD",
+        "category": "DeFi Lending"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "Leverage existing DeFi relationships. **Aave, Morpho, and Euler** already trust Ritual\\",
+          "section": "recommendations"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "defi-lending",
+        "institutional-defi"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "morpho": {
+      "slug": "morpho",
+      "canonicalName": "Morpho",
+      "aliases": [
+        "Morpho Labs",
+        "Morpho Blue"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://morpho.org",
+        "twitter": "MorphoLabs",
+        "category": "DeFi Lending"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "Leverage existing DeFi relationships. **Aave, Morpho, and Euler** already trust Ritual\\",
+          "section": "recommendations"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "defi-lending",
+        "isolated-markets"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "euler": {
+      "slug": "euler",
+      "canonicalName": "Euler",
+      "aliases": [
+        "Euler Finance",
+        "Euler V2"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://euler.finance",
+        "twitter": "eulerfinance",
+        "category": "DeFi Lending"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "Leverage existing DeFi relationships. **Aave, Morpho, and Euler** already trust Ritual\\",
+          "section": "recommendations"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "blackrock-buidl",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "defi-lending",
+        "modular-vaults"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "blackrock-buidl": {
+      "slug": "blackrock-buidl",
+      "canonicalName": "BlackRock BUIDL",
+      "aliases": [
+        "BUIDL",
+        "BlackRock"
+      ],
+      "type": "company",
+      "metadata": {
+        "url": "https://securitize.io/blackrock",
+        "twitter": "BlackRock",
+        "category": "Institutional"
+      },
+      "appearances": [
+        {
+          "micrositeId": "rwa-defi-jan-2026",
+          "micrositeTitle": "RWA × DeFi × AI · January 2026",
+          "context": "**BlackRock BUIDL** wasn\\",
+          "section": "keyFindings"
+        }
+      ],
+      "relatedEntities": [
+        {
+          "slug": "ondo-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "maple-finance",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "goldfinch",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "zivoe",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "credix",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "aave",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "morpho",
+          "coOccurrenceCount": 1
+        },
+        {
+          "slug": "euler",
+          "coOccurrenceCount": 1
+        }
+      ],
+      "opportunities": [
+        "tokenized-treasuries",
+        "institutional-adoption"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "hyperliquid": {
+      "slug": "hyperliquid",
+      "canonicalName": "Hyperliquid",
+      "aliases": [
+        "HYPE"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://hyperliquid.xyz",
+        "twitter": "HyperliquidX",
+        "tvSymbol": "COINBASE:HYPEUSD",
+        "category": "PerpDEX"
+      },
+      "appearances": [],
+      "relatedEntities": [],
+      "opportunities": [
+        "perp-dex",
+        "self-repaying-perps"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "etherfi": {
+      "slug": "etherfi",
+      "canonicalName": "EtherFi",
+      "aliases": [
+        "ether.fi",
+        "ETHFI"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://ether.fi",
+        "twitter": "ether_fi",
+        "tvSymbol": "COINBASE:ETHFIUSD",
+        "category": "Liquid Staking"
+      },
+      "appearances": [],
+      "relatedEntities": [],
+      "opportunities": [
+        "liquid-staking",
+        "restaking"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "alchemix": {
+      "slug": "alchemix",
+      "canonicalName": "Alchemix",
+      "aliases": [
+        "ALCX"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://alchemix.fi",
+        "twitter": "AlchemixFi",
+        "tvSymbol": "COINBASE:ALCXUSD",
+        "category": "Self-Repaying Loans"
+      },
+      "appearances": [],
+      "relatedEntities": [],
+      "opportunities": [
+        "self-repaying-loans",
+        "yield-abstraction"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    },
+    "chainlink": {
+      "slug": "chainlink",
+      "canonicalName": "Chainlink",
+      "aliases": [
+        "LINK"
+      ],
+      "type": "protocol",
+      "metadata": {
+        "url": "https://chain.link",
+        "twitter": "chainlink",
+        "tvSymbol": "COINBASE:LINKUSD",
+        "category": "Oracle Infrastructure"
+      },
+      "appearances": [],
+      "relatedEntities": [],
+      "opportunities": [
+        "oracle-infrastructure",
+        "price-feeds"
+      ],
+      "createdAt": "2026-01-16T00:00:00Z",
+      "updatedAt": "2026-01-16T00:00:00Z"
+    }
+  },
+  "opportunityIndex": {
+    "private-credit": [
+      "maple-finance",
+      "goldfinch",
+      "zivoe",
+      "credix"
+    ],
+    "tokenized-treasuries": [
+      "ondo-finance",
+      "blackrock-buidl"
+    ],
+    "defi-lending": [
+      "aave",
+      "morpho",
+      "euler"
+    ],
+    "institutional-defi": [
+      "ondo-finance",
+      "aave"
+    ],
+    "rwa-infrastructure": [
+      "centrifuge"
+    ],
+    "perp-dex": [
+      "hyperliquid"
+    ],
+    "self-repaying-loans": [
+      "alchemix"
+    ],
+    "oracle-infrastructure": [
+      "chainlink"
+    ]
+  },
+  "stats": {
+    "totalEntities": 14,
+    "lastUpdated": "2026-01-16T15:26:52.436Z"
+  }
+}
