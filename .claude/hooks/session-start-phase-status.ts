@@ -6,6 +6,9 @@
 
 import { existsSync } from 'fs';
 import { execSync } from 'child_process';
+import { join } from 'path';
+
+const PROJECT_ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd().replace('/.claude/hooks', '');
 
 interface PhaseInfo {
   id: string;
@@ -27,7 +30,7 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     markers: [
       'supabase/migrations/001_initial_schema.sql',
       'supabase/migrations/002_rls_policies.sql',
-      'packages/core/src/lib/supabase.ts',
+      'scripts/lib/supabase.ts',
     ],
   },
   {
@@ -35,9 +38,9 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     name: 'Processing Pipeline',
     markers: [
       'scripts/generate.ts',
-      'packages/core/src/pipeline/index.ts',
-      'packages/core/src/prompts/stage1-artifacts.ts',
-      'packages/core/src/prompts/stage2-research.ts',
+      'scripts/stages/artifacts.ts',
+      'scripts/prompts/clean-transcript.ts',
+      'scripts/prompts/synthesize-research.ts',
     ],
   },
   {
@@ -46,7 +49,7 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     markers: [
       'apps/portal/package.json',
       'apps/portal/src/app/layout.tsx',
-      'apps/portal/src/app/(portal)/dashboard/page.tsx',
+      'apps/portal/src/app/pipeline/page.tsx',
       'apps/portal/src/components/ui/button.tsx',
     ],
   },
@@ -55,22 +58,22 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     name: 'Pipeline Core',
     markers: [
       'supabase/migrations/005_opportunity_pipeline.sql',
-      'apps/portal/src/app/(portal)/pipeline/page.tsx',
+      'apps/portal/src/app/pipeline/kanban/page.tsx',
     ],
   },
   {
     id: '2.5b',
     name: 'Pipeline Advanced',
     markers: [
-      'apps/portal/src/app/(portal)/pipeline/chat/page.tsx',
-      'packages/core/src/prompts/opportunity-strategy.ts',
+      'apps/portal/src/app/pipeline/chat/page.tsx',
+      'scripts/prompts/opportunity-strategy.ts',
     ],
   },
   {
     id: '3',
     name: 'Graph UI',
     markers: [
-      'apps/portal/src/app/(portal)/entities/[slug]/page.tsx',
+      'apps/portal/src/app/entities/[slug]/page.tsx',
       'apps/portal/src/components/entity-graph.tsx',
     ],
   },
@@ -79,14 +82,14 @@ const PHASES: { id: string; name: string; markers: string[] }[] = [
     name: 'Spot Treatment',
     markers: [
       'apps/portal/src/components/spot-editor.tsx',
-      'packages/core/src/prompts/spot-treatment.ts',
+      'scripts/prompts/spot-treatment.ts',
     ],
   },
 ];
 
 function checkPhase(markers: string[]): number {
   if (markers.length === 0) return 100;
-  const found = markers.filter((m) => existsSync(m)).length;
+  const found = markers.filter((m) => existsSync(join(PROJECT_ROOT, m))).length;
   return Math.round((found / markers.length) * 100);
 }
 
