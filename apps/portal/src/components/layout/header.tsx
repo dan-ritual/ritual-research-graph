@@ -61,6 +61,18 @@ export function Header({ user }: HeaderProps) {
             >
               Microsites
             </Link>
+            <Link
+              href="/entities"
+              className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6] transition-colors"
+            >
+              Entities
+            </Link>
+            <Link
+              href="/pipeline"
+              className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6] transition-colors"
+            >
+              Pipeline
+            </Link>
           </nav>
         </div>
         <DropdownMenu>

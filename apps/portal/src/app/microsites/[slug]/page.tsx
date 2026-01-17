@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/ui/section-header";
 import { DeleteMicrositeButton } from "@/components/microsites/delete-button";
+import { RelatedResearchPanel } from "@/components/microsites/related-research-panel";
 import Link from "next/link";
 
 interface MicrositeDetailPageProps {
@@ -179,6 +180,12 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
               )}
             </CardContent>
           </Card>
+        </div>
+
+        {/* Related Research */}
+        <div className="mb-8">
+          <SectionHeader>Related Research</SectionHeader>
+          <RelatedResearchPanel micrositeSlug={slug} />
         </div>
 
         {/* Actions */}
