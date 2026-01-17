@@ -27,6 +27,7 @@ import {
 import { ConfidenceBar } from "@/components/pipeline/confidence-bar";
 import { Workflow } from "@/components/pipeline/workflow-selector";
 import { PipelineStage } from "@/components/pipeline/pipeline-column";
+import { ChatFAB } from "@/components/pipeline/chat-fab";
 
 interface DuplicateResult {
   is_duplicate: boolean;
@@ -279,23 +280,24 @@ function NewOpportunityContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center">
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]">
         <Loading />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFB]">
+    <>
       {/* Header */}
       <header className="border-b border-[rgba(0,0,0,0.08)] bg-white">
-        <div className="flex h-16 items-center px-6">
+        <div className="flex h-16 items-center justify-between px-6">
           <Link
             href="/"
             className="font-display font-semibold text-lg text-[#3B5FE6] tracking-tight"
           >
             Ritual Research Graph
           </Link>
+          <ChatFAB />
         </div>
       </header>
 
@@ -546,20 +548,10 @@ function NewOpportunityContent() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   );
 }
 
 export default function NewOpportunityPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center">
-          <Loading />
-        </div>
-      }
-    >
-      <NewOpportunityContent />
-    </Suspense>
-  );
+  return <NewOpportunityContent />;
 }

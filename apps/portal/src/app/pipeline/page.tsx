@@ -6,10 +6,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
-import { SectionHeader } from "@/components/ui/section-header";
 import { PipelineColumn, PipelineStage } from "@/components/pipeline/pipeline-column";
 import { WorkflowSelector, Workflow } from "@/components/pipeline/workflow-selector";
 import { Opportunity } from "@/components/pipeline/opportunity-card";
+import { ChatFAB } from "@/components/pipeline/chat-fab";
 
 function PipelineContent() {
   const router = useRouter();
@@ -188,14 +188,14 @@ function PipelineContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center">
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]">
         <Loading />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FBFBFB]">
+    <>
       {/* Header */}
       <header className="border-b border-[rgba(0,0,0,0.08)] bg-white">
         <div className="flex h-16 items-center justify-between px-6">
@@ -246,12 +246,13 @@ function PipelineContent() {
               Track opportunities through your workflow
             </p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <WorkflowSelector
               workflows={workflows}
               selectedWorkflowId={selectedWorkflowId}
               onSelect={handleWorkflowChange}
             />
+            <ChatFAB />
             <Link href="/pipeline/new">
               <Button>+ New Opportunity</Button>
             </Link>
@@ -273,20 +274,10 @@ function PipelineContent() {
           </div>
         </div>
       </main>
-    </div>
+    </>
   );
 }
 
 export default function PipelinePage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center">
-          <Loading />
-        </div>
-      }
-    >
-      <PipelineContent />
-    </Suspense>
-  );
+  return <PipelineContent />;
 }

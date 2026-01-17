@@ -18,6 +18,7 @@ import { LinkedEntityList } from "@/components/pipeline/linked-entity-list";
 import { OwnerSelector } from "@/components/pipeline/owner-selector";
 import { OwnerList } from "@/components/pipeline/owner-list";
 import { EmailModal } from "@/components/pipeline/email-modal";
+import { ChatFAB } from "@/components/pipeline/chat-fab";
 
 interface Opportunity {
   id: string;
@@ -349,7 +350,7 @@ export default function OpportunityDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center">
+      <div className="flex items-center justify-center h-[calc(100vh-64px)]">
         <Loading />
       </div>
     );
@@ -357,15 +358,16 @@ export default function OpportunityDetailPage() {
 
   if (error && !opportunity) {
     return (
-      <div className="min-h-screen bg-[#FBFBFB]">
+      <>
         <header className="border-b border-[rgba(0,0,0,0.08)] bg-white">
-          <div className="flex h-16 items-center px-6">
+          <div className="flex h-16 items-center justify-between px-6">
             <Link
               href="/"
               className="font-display font-semibold text-lg text-[#3B5FE6] tracking-tight"
             >
               Ritual Research Graph
             </Link>
+            <ChatFAB />
           </div>
         </header>
         <main className="p-6 max-w-2xl mx-auto">
@@ -382,23 +384,24 @@ export default function OpportunityDetailPage() {
             </CardContent>
           </Card>
         </main>
-      </div>
+      </>
     );
   }
 
   const currentStage = stages.find((s) => s.id === stageId);
 
   return (
-    <div className="min-h-screen bg-[#FBFBFB]">
+    <>
       {/* Header */}
       <header className="border-b border-[rgba(0,0,0,0.08)] bg-white">
-        <div className="flex h-16 items-center px-6">
+        <div className="flex h-16 items-center justify-between px-6">
           <Link
             href="/"
             className="font-display font-semibold text-lg text-[#3B5FE6] tracking-tight"
           >
             Ritual Research Graph
           </Link>
+          <ChatFAB />
         </div>
       </header>
 
@@ -701,7 +704,7 @@ export default function OpportunityDetailPage() {
         onClose={() => setShowEmailModal(false)}
         emailDraft={opportunity?.email_draft || null}
       />
-    </div>
+    </>
   );
 }
 
