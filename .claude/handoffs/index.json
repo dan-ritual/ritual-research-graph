@@ -17,7 +17,7 @@
       "description": "Canonical visual documentation with ASCII/Mermaid diagrams"
     },
     "overview": "docs/project-overview.html",
-    "version": "0.1.2"
+    "version": "1.0.0"
   },
   "aiProviders": {
     "primary": {
@@ -58,28 +58,40 @@
         "1b"
       ]
     },
-    "2.5a": {
-      "name": "Opportunity Pipeline Core",
-      "status": "pending",
-      "dependsOn": ["2"]
-    },
-    "2.5b": {
-      "name": "Opportunity Pipeline Advanced",
-      "status": "pending",
-      "dependsOn": ["2.5a"]
-    },
     "3": {
       "name": "Graph UI",
-      "status": "pending",
+      "status": "complete",
       "dependsOn": [
         "2"
       ]
     },
     "4": {
       "name": "Spot Treatment",
-      "status": "pending",
+      "status": "complete",
       "dependsOn": [
         "3"
+      ]
+    },
+    "5": {
+      "name": "Deployment",
+      "status": "complete",
+      "dependsOn": [
+        "3",
+        "4"
+      ]
+    },
+    "2.5a": {
+      "name": "Opportunity Pipeline Core",
+      "status": "complete",
+      "dependsOn": [
+        "2"
+      ]
+    },
+    "2.5b": {
+      "name": "Opportunity Pipeline Advanced",
+      "status": "complete",
+      "dependsOn": [
+        "2.5a"
       ]
     },
     "1a": {
@@ -96,6 +108,70 @@
     }
   },
   "sessions": [
+    {
+      "id": "rrg-auto-20260117-0224",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-17T02:24:28.579Z",
+      "file": "rrg-auto-20260117-0224.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260117-0156",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-17T01:56:10.400Z",
+      "file": "rrg-auto-20260117-0156.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260117-0142",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-17T01:42:14.268Z",
+      "file": "rrg-auto-20260117-0142.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260116-2236",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T22:36:34.404Z",
+      "file": "rrg-auto-20260116-2236.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-2.5a-complete-20260116",
+      "phase": "2.5a",
+      "status": "complete",
+      "created": "2026-01-16T23:30:00.000Z",
+      "file": "rrg-2.5a-complete-20260116.md",
+      "summary": "Phase 2.5a complete. Opportunity Pipeline Core: migration 006, Kanban board, workflow/stage architecture, CRUD operations, Realtime subscriptions, Making Software aesthetic.",
+      "dependsOn": [
+        "2"
+      ],
+      "blocks": [
+        "2.5b"
+      ]
+    },
+    {
+      "id": "rrg-auto-20260116-2209",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-16T22:09:47.320Z",
+      "file": "rrg-auto-20260116-2209.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
     {
       "id": "rrg-auto-20260116-2141",
       "phase": "auto",
@@ -241,17 +317,7 @@
       "summary": "Completed session linking integration. Handoff system now captures Claude Code native session IDs (UUIDs), slugs, and JSONL transcript paths. This enables bidirectional lookup between our bespoke hand...",
       "dependsOn": [],
       "blocks": []
-    },
-    {
-      "id": "rrg-0-20260116-1655-1",
-      "phase": "0",
-      "status": "complete",
-      "created": "2026-01-16T16:55:14.815Z",
-      "file": "rrg-0-20260116-1655-1.md",
-      "summary": "Completed Ritual Research Graph foundation phase. Created comprehensive specifications for all implementation phases. Made key architecture decisions via elicitation: Supabase for database, Next.js fo...",
-      "dependsOn": [],
-      "blocks": []
     }
   ],
-  "lastUpdated": "2026-01-16T21:41:22.283Z"
+  "lastUpdated": "2026-01-17T02:24:28.579Z"
 }

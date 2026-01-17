@@ -458,7 +458,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v0.4.0-dev · Last Updated: 2026-01-16</div>
+      <div class="eyebrow">Internal Documentation · v1.0.0 · Last Updated: 2026-01-17</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -468,15 +468,15 @@
       <div class="status-bar">
         <div class="status-item">
           <span class="status-dot complete"></span>
-          <span class="status-label">Phase 0–2: Complete</span>
+          <span class="status-label">All Phases Complete</span>
         </div>
         <div class="status-item">
           <span class="status-dot complete"></span>
-          <span class="status-label">Phase 2.5a/b: Pipeline</span>
+          <span class="status-label">v1.0.0 Released</span>
         </div>
         <div class="status-item">
-          <span class="status-dot pending"></span>
-          <span class="status-label">Phase 3: Graph UI</span>
+          <span class="status-dot complete"></span>
+          <span class="status-label">Deployed to Vercel</span>
         </div>
       </div>
     </header>
@@ -562,10 +562,27 @@
             <li>Chat interface + email synthesis</li>
           </ul>
 
-          <h3>Remaining Phases</h3>
+          <h3>Phase 3: Graph UI <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
           <ul>
-            <li>Phase 3: Graph UI (entity pages, co-occurrence viz)</li>
-            <li>Phase 4: Spot Treatment (surgical editing)</li>
+            <li>Entity list page with search/filter</li>
+            <li>Entity detail pages with appearances</li>
+            <li>Co-occurrence visualization</li>
+            <li>Related research panels on microsites</li>
+          </ul>
+
+          <h3>Phase 4: Spot Treatment <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
+          <ul>
+            <li>Artifact section-based editor</li>
+            <li>Spot treatment regeneration with Claude</li>
+            <li>Entity review/merge flow</li>
+            <li>Microsite regeneration</li>
+          </ul>
+
+          <h3>Phase 5: Deployment <span class="tag" style="background: var(--success); color: white;">Complete</span></h3>
+          <ul>
+            <li>Vercel configuration with regions</li>
+            <li>Microsite proxy via Vercel Blob</li>
+            <li>Environment configuration</li>
           </ul>
         </div>
       </div>
@@ -790,13 +807,19 @@
           <span class="phase-id">Phase 3</span>
           <span class="phase-name">Graph UI</span>
           <span class="phase-tasks">Entity pages, backlinks, co-occurrence viz</span>
-          <span class="phase-status pending">Pending</span>
+          <span class="phase-status complete">Complete</span>
         </div>
         <div class="phase-row">
           <span class="phase-id">Phase 4</span>
           <span class="phase-name">Spot Treatment</span>
-          <span class="phase-tasks">Inline editing, entity correction, version history</span>
-          <span class="phase-status pending">Pending</span>
+          <span class="phase-tasks">Section editing, entity merge, microsite regen</span>
+          <span class="phase-status complete">Complete</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-id">Phase 5</span>
+          <span class="phase-name">Deployment</span>
+          <span class="phase-tasks">Vercel config, blob storage, microsite proxy</span>
+          <span class="phase-status complete">Complete</span>
         </div>
       </div>
     </section>
@@ -979,7 +1002,40 @@
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v0.4.0-dev <span class="tag new">Current</span></div>
+        <div class="changelog-version">v1.0.0 <span class="tag new">Current</span></div>
+        <div class="changelog-date">2026-01-17</div>
+
+        <h4>🎉 ALL PHASES COMPLETE</h4>
+
+        <h4>Phase 3: Knowledge Graph UI</h4>
+        <ul>
+          <li>Entity list page with search, filter, pagination</li>
+          <li>Entity detail pages with appearance history</li>
+          <li>Co-occurrence chips linking related entities</li>
+          <li>Related research panel on microsites</li>
+          <li>Navigation integration throughout portal</li>
+        </ul>
+
+        <h4>Phase 4: Spot Treatment Editing</h4>
+        <ul>
+          <li>Artifact section-based editor</li>
+          <li>Spot treatment regeneration via Claude API</li>
+          <li>Entity review with approve/reject flow</li>
+          <li>Entity merge modal for deduplication</li>
+          <li>Microsite regeneration endpoint</li>
+        </ul>
+
+        <h4>Phase 5: Vercel Deployment</h4>
+        <ul>
+          <li>Vercel configuration with regions and function timeouts</li>
+          <li>Microsite proxy via Vercel Blob storage</li>
+          <li>CORS headers for API routes</li>
+          <li>Environment variable configuration</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v0.4.0</div>
         <div class="changelog-date">2026-01-16</div>
 
         <h4>Phase 2 Complete — Portal MVP</h4>
@@ -1059,17 +1115,6 @@
         </ul>
       </div>
 
-      <div class="changelog-entry">
-        <div class="changelog-version">Upcoming: v0.3.0</div>
-        <div class="changelog-date">Planned</div>
-        <ul>
-          <li>Phase 2: Portal MVP (Next.js)</li>
-          <li>3-step generation wizard</li>
-          <li>Job status with Supabase Realtime</li>
-          <li>Entity review before graph write</li>
-          <li>Microsite list/detail views</li>
-        </ul>
-      </div>
     </section>
 
     <!-- 12. Key Decisions -->
@@ -1199,7 +1244,7 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v0.4.0-dev · Updated 2026-01-16 ·
+          Ritual Research Graph · v1.0.0 · Updated 2026-01-17 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">
