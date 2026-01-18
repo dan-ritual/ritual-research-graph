@@ -1,16 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const searchParams = request.nextUrl.searchParams;
   const query = searchParams.get("q");
@@ -19,11 +12,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ entities: [] });
   }
 
-  // Search entities by name (case-insensitive)
+  // Search entities by canonical_name (case-insensitive)
   const { data: entities, error } = await supabase
     .from("entities")
-    .select("id, name, type, slug")
-    .ilike("name", `%${query}%`)
+    .select("id, canonical_name, type, slug")
+    .ilike("canonical_name", `%${query}%`)
     .limit(10);
 
   if (error) {
