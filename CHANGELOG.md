@@ -9,32 +9,147 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
-- `docs/SPEC_MULTI_AI_RESEARCH.md` — **NEW** Multi-AI research chain specification
-  - Grok (xAI) → Perplexity Sonar Pro → bird-cli → Claude synthesis
-  - Provider configuration and API clients
-  - Parallel execution with fallback strategy
-  - Full prompt templates for each step
+- `docs/specs/SPEC_PORTAL_UI.md` — **NEW** Portal UI specification (Phase 2)
+  - Next.js 14+ with App Router
+  - shadcn/ui component library
+  - TanStack Query for state management
+  - Supabase Realtime for job updates
+  - 3-step generation wizard
+  - Entity review before graph write
+
+### Phase 2 Portal Elicitation Decisions (2026-01-16)
+
+| Category | Decision |
+|----------|----------|
+| UI Library | **shadcn/ui** — accessible, customizable, matches Making Software aesthetic |
+| Job Updates | **Supabase Realtime** — already configured, instant updates |
+| Job Trigger | **API route → spawn CLI** — reuses existing Phase 1b pipeline |
+| Site Hosting | **Vercel Blob + proxy** — single deployment, auth check |
+| State Management | **TanStack Query** — async state, caching, Supabase integration |
+| MVP Priority | **Generation-first** — Dashboard → Wizard → Status → List |
+| Entity Review | **Before graph write** — job pauses at `awaiting_entity_review` |
+| Theme | **Light only for MVP** — matches Making Software aesthetic |
+| Repo Structure | **apps/portal in monorepo** — shares types from packages/core |
+| Wizard Steps | **3 steps** — Upload → Configure → Review |
+| Admin Pages | **Skip for MVP** — all @ritual.net users equal in v1 |
+| Design Reference | **Making Software aesthetic** — clean, institutional, minimal |
+| Failure UX | **Show error + retry button** — user stays in flow |
+| Delete Action | **Soft delete (archive)** — hide from list, can restore |
+
+---
+
+## [1.0.0] - 2026-01-17 — Production Deployment
+
+### Added
+
+#### Phase 5: Vercel Deployment
+- Vercel deployment at portal-delta-lilac.vercel.app
+- Internal microsite hosting via Vercel Blob proxy
+- `/sites/[slug]` route with auth check for internal microsites
+- Blob upload script (`scripts/upload-to-blob.ts`)
+- Environment configuration for production
+- Auth callback URL configuration
+
+---
+
+## [0.4.0] - 2026-01-17 — Phase 3: Knowledge Graph UI
+
+### Added
+
+#### Entity Browsing
+- Entity list page (`/entities`) with search, type filter, pagination
+- Entity detail page (`/entities/[slug]`) with appearances, co-occurrences
+- Entity search API (`/api/entities/search`)
+- Related research panel on microsites
+- "Entities" link in header navigation
+
+#### Graph Features
+- Co-occurrence display showing entities that appear together
+- Bidirectional links between entities and microsites
+- Entity type badges (Company, Protocol, Person, etc.)
+
+---
+
+## [0.3.1] - 2026-01-17 — Phase 2.5b: Pipeline Advanced
+
+### Added
+
+#### AI Features
+- AI strategy generation (`/api/opportunities/[id]/generate-strategy`)
+- AI email generation (`/api/opportunities/[id]/generate-email`)
+- Chat interface with Claude (`/api/opportunities/chat`, `ChatPanel` component)
+- Two-mode chat overlay (FAB + panel modes)
+
+#### Entity Linking
+- Entity linking UI in opportunity detail
+- Search and link entities to opportunities
+- Entity badges on opportunity cards
+
+#### Duplicate Detection
+- Duplicate opportunity detection (`/api/opportunities/check-duplicate`)
+- Warning UI when similar opportunities exist
+
+---
+
+## [0.3.0] - 2026-01-16 — Phase 2 + 2.5a: Portal & Pipeline
+
+### Added
+
+#### Portal Foundation (`apps/portal/`)
+- Next.js 14+ with App Router
+- Making Software design system
+- Google OAuth authentication with @ritual.net restriction
+- Dashboard with recent activity
+
+#### Opportunity Pipeline
+- Pipeline Kanban board (`/pipeline`)
+- 6-stage pipeline: Lead → Qualifying → Proposal → Negotiation → Closed Won → Closed Lost
+- Opportunity detail page (`/pipeline/[id]`)
+- Owner assignment for opportunities
+- Realtime updates via Supabase subscriptions
+
+#### Microsite Management
+- Microsite list page (`/microsites`)
+- Microsite detail page (`/microsites/[slug]`)
+- Soft delete with restore capability
+
+#### API Routes
+- Opportunity CRUD (`/api/opportunities/*`)
+- Job management (`/api/jobs/*`)
+- Entity management (`/api/entities/*`)
+
+---
+
+## [0.2.0] - 2026-01-16 — Phase 1b Complete
+
+### Added
+
+#### 6-Stage Processing Pipeline (`scripts/`)
+- `scripts/generate.ts` — Main CLI entry point
+- `scripts/lib/claude.ts` — Claude API client (PRIMARY provider)
+- `scripts/lib/grok.ts` — Grok (xAI) API client (SECONDARY)
+- `scripts/lib/perplexity.ts` — Perplexity API client (SECONDARY)
+- `scripts/lib/bird.ts` — bird-cli SSH wrapper (INTERNAL)
+- `scripts/lib/supabase.ts` — Supabase client
+- `scripts/prompts/` — 6 prompt templates
+- `scripts/stages/` — 6 stage implementations
+
+#### Multi-AI Research Chain
+- Grok → Perplexity → bird-cli → Claude synthesis
+- Graceful degradation (secondaries can fail, pipeline continues)
+- Parallel execution with Promise.allSettled
+
+#### Documentation
+- `docs/SPEC_MULTI_AI_RESEARCH.md` — Multi-AI chain specification
+- `docs/design/API_PROVIDER_HIERARCHY.md` — Provider roles documentation
+- `docs/design/MASTER_MAP.md` — Canonical mapping system
 
 ### Changed
-- **Implementation sequence reordered** — Database (Phase 1a) now comes BEFORE Pipeline (Phase 1b)
-- `docs/SPEC_PROCESSING_PIPELINE.md` — Major update
-  - Now Phase 1b (requires Phase 1a database setup)
-  - Removed local JSON storage, now writes to Supabase
-  - Added multi-AI research chain (Stage 2)
-  - Added Grok, Perplexity, bird-cli API clients
-  - Added microsite template injection (from defi-rwa)
-  - Updated to 6 pipeline stages
-- `docs/SPEC_DATABASE_SCHEMA.md` — Updated
-  - Now Phase 1a (prerequisite for Pipeline)
-  - Added authentication decisions (Google OAuth at Supabase level)
-  - Added CLI authentication (service role key)
-- `docs/MASTER_SPEC.md` — Major update
-  - Status changed to "Complete (Ready for Implementation)"
-  - Implementation phases restructured (1a, 1b, 2, 3, 4)
-  - Child specification registry updated
-  - Added SPEC_MULTI_AI_RESEARCH.md to registry
+- `docs/SPEC_PROCESSING_PIPELINE.md` — Updated to 6 stages
+- `docs/SPEC_DATABASE_SCHEMA.md` — Phase 1a prerequisite
+- `docs/MASTER_SPEC.md` — Status: Ready for Implementation
 
-### Elicitation Decisions (2026-01-16)
+### Phase 1b Elicitation Decisions (2026-01-16)
 | Question | Decision |
 |----------|----------|
 | Microsite template source | Copy from `/Downloads/defi-rwa` |
@@ -112,26 +227,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 | Version | Date | Summary |
 |---------|------|---------|
+| 1.0.0 | 2026-01-17 | Production deployment to Vercel |
+| 0.4.0 | 2026-01-17 | Phase 3: Knowledge Graph UI, entity pages |
+| 0.3.1 | 2026-01-17 | Phase 2.5b: AI features, chat interface, entity linking |
+| 0.3.0 | 2026-01-16 | Phase 2 + 2.5a: Portal MVP, opportunity pipeline, Kanban UI |
+| 0.2.0 | 2026-01-16 | Phase 1b: 6-stage processing pipeline, multi-AI research chain |
 | 0.1.0 | 2026-01-16 | Project foundation, types, import script, master spec, child specs |
 
 ---
 
 ## Upcoming
 
-### 0.2.0 (Planned)
-- Processing pipeline (CLI-based generation)
-- Artifact generation prompts
-- Entity extraction
-
-### 0.3.0 (Planned)
-- Supabase database setup
-- API routes
-- Vercel Blob storage
-
-### 0.4.0 (Planned)
-- Portal MVP (Next.js)
-- Authentication
-- Generation wizard
+### 1.1.0 (Planned)
+- Spot Treatment Editing (Phase 4)
+- Surgical artifact editing
+- Section regeneration with Claude
+- Version history tracking
 
 ---
 

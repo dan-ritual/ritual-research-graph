@@ -322,9 +322,9 @@ SUPABASE_ANON_KEY=eyJ...         # Client key (respects RLS)
 │  ═══════════════════                                                         │
 │  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
-│  • Types, specs, data layer                                                 │
-│  • Example microsite imported                                               │
-│  • Session continuity system                                                │
+│  ✓ Types, specs, data layer                                                 │
+│  ✓ Example microsite imported                                               │
+│  ✓ Session continuity system                                                │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
@@ -352,40 +352,69 @@ SUPABASE_ANON_KEY=eyJ...         # Client key (respects RLS)
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│  Phase 2: Portal MVP           [████████░░] 80% IN PROGRESS                 │
+│  Phase 2: Portal MVP                                                        │
 │  ═══════════════════                                                        │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
 │  ✓ Next.js project setup (apps/portal)                                      │
 │  ✓ Making Software design system                                            │
 │  ✓ Authentication (Google OAuth)                                            │
 │  ✓ Route structure                                                          │
-│  ○ Generation wizard                                                        │
-│  ○ Microsite list/detail views                                              │
+│  ✓ Generation wizard (3-step)                                               │
+│  ✓ Microsite list/detail views                                              │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│  Phase 2.5a: Pipeline Core     ░░░░░░░░░░ PENDING (depends on 2)            │
+│  Phase 2.5a: Pipeline Core                                                  │
 │  ═══════════════════════════                                                │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
-│  ○ Database migrations (pipeline_workflows, pipeline_stages)                │
-│  ○ /pipeline Kanban UI                                                      │
-│  ○ Opportunity CRUD + stage progression                                     │
-│  ○ Supabase Realtime subscriptions                                          │
+│  ✓ Database migrations (pipeline_workflows, pipeline_stages)                │
+│  ✓ /pipeline Kanban UI                                                      │
+│  ✓ Opportunity CRUD + stage progression                                     │
+│  ✓ Supabase Realtime subscriptions                                          │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│  Phase 2.5b: Pipeline Advanced ░░░░░░░░░░ PENDING (depends on 2.5a)         │
+│  Phase 2.5b: Pipeline Advanced                                              │
 │  ═══════════════════════════════                                            │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
 │                                                                              │
-│  ○ AI strategy + email generation                                           │
-│  ○ Entity linking UI                                                        │
-│  ○ Chat interface (query opportunities)                                     │
-│  ○ Opportunity extraction in Stage 3                                        │
+│  ✓ AI strategy + email generation                                           │
+│  ✓ Entity linking UI                                                        │
+│  ✓ Chat interface (query opportunities)                                     │
+│  ✓ Duplicate opportunity detection                                          │
 │                                                                              │
 │  ───────────────────────────────────────────────────────────────────────────│
 │                                                                              │
-│  Phase 3: Graph UI             ░░░░░░░░░░ PENDING (depends on 2.5)          │
-│  Phase 4: Spot Treatment       ░░░░░░░░░░ PENDING (depends on 3)            │
+│  Phase 3: Graph UI                                                          │
+│  ═════════════════                                                          │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
+│                                                                              │
+│  ✓ Entity list page (/entities)                                             │
+│  ✓ Entity detail page (/entities/[slug])                                    │
+│  ✓ Related research panel on microsites                                     │
+│  ✓ Co-occurrence display                                                    │
+│                                                                              │
+│  ───────────────────────────────────────────────────────────────────────────│
+│                                                                              │
+│  Phase 4: Spot Treatment       ░░░░░░░░░░ PENDING                           │
+│  ════════════════════════                                                   │
+│                                                                              │
+│  ○ Surgical artifact editing                                                │
+│  ○ Section regeneration with Claude                                         │
+│  ○ Version history tracking                                                 │
+│                                                                              │
+│  ───────────────────────────────────────────────────────────────────────────│
+│                                                                              │
+│  Phase 5: Deployment                                                        │
+│  ═══════════════════                                                        │
+│  [████████████████████████████████████████] 100% COMPLETE                   │
+│                                                                              │
+│  ✓ Vercel deployment (portal-delta-lilac.vercel.app)                        │
+│  ✓ Internal microsite hosting via Vercel Blob proxy                         │
+│  ✓ Environment configuration                                                │
+│  ✓ Auth callback URL setup                                                  │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

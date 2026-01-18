@@ -43,12 +43,78 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
     notFound();
   }
 
-  // Fetch related entities
-  const { data: entities } = await supabase
-    .from("entities")
-    .select("*")
-    .eq("microsite_id", microsite.id)
-    .order("name");
+  // Fetch entities via entity_appearances junction table
+  const { data: appearances } = await supabase
+    .from("entity_appearances")
+    .select(`
+      entities (
+        id,
+        slug,
+        canonical_name,
+        type,
+        aliases
+      )
+    `)
+    .eq("microsite_id", microsite.id);
+
+  // Extract unique entities from appearances
+  type EntityData = {
+    id: string;
+    slug: string;
+    canonical_name: string;
+    type: string;
+    aliases: string[] | null;
+  };
+
+  const entityMap = new Map<string, EntityData>();
+  appearances?.forEach((app) => {
+    const e = app.entities as EntityData | EntityData[] | null;
+    const entity = Array.isArray(e) ? e[0] : e;
+    if (entity && !entityMap.has(entity.id)) {
+      entityMap.set(entity.id, entity);
+    }
+  });
+  const entities = Array.from(entityMap.values()).sort((a, b) =>
+    a.canonical_name.localeCompare(b.canonical_name)
+  );
+
+  // Fetch opportunities linked to entities in this microsite
+  const entityIds = entities.map((e) => e.id);
+  let linkedOpportunities: Array<{
+    id: string;
+    slug: string;
+    name: string;
+    stage: string;
+    confidence: number | null;
+  }> = [];
+
+  if (entityIds.length > 0) {
+    const { data: oppLinks } = await supabase
+      .from("opportunity_entities")
+      .select(`
+        opportunities (
+          id,
+          slug,
+          name,
+          stage,
+          confidence
+        )
+      `)
+      .in("entity_id", entityIds);
+
+    // Deduplicate opportunities
+    const oppMap = new Map<string, typeof linkedOpportunities[0]>();
+    oppLinks?.forEach((link) => {
+      const opp = link.opportunities as typeof linkedOpportunities[0] | typeof linkedOpportunities[0][] | null;
+      const opportunity = Array.isArray(opp) ? opp[0] : opp;
+      if (opportunity && !oppMap.has(opportunity.id)) {
+        oppMap.set(opportunity.id, opportunity);
+      }
+    });
+    linkedOpportunities = Array.from(oppMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+  }
 
   const userInfo = {
     email: user.email || "",
@@ -78,8 +144,11 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
               {microsite.visibility === "internal" && (
                 <Badge variant="dotted">Internal</Badge>
               )}
-              {microsite.blob_path && (
-                <Link href={`/sites/${microsite.slug}`} target="_blank">
+              {(microsite.blob_path || microsite.url) && (
+                <Link
+                  href={microsite.blob_path ? `/sites/${microsite.slug}` : microsite.url}
+                  target="_blank"
+                >
                   <Button>View Site</Button>
                 </Link>
               )}
@@ -146,21 +215,22 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
         {/* Entities */}
         <div className="mb-8">
-          <SectionHeader>Entities ({entities?.length || 0})</SectionHeader>
+          <SectionHeader>Entities ({entities.length})</SectionHeader>
           <Card>
             <CardContent className="p-0">
-              {entities && entities.length > 0 ? (
+              {entities.length > 0 ? (
                 <div className="divide-y divide-[rgba(0,0,0,0.05)]">
                   {entities.map((entity) => (
-                    <div
+                    <Link
                       key={entity.id}
-                      className="flex items-center justify-between px-6 py-4"
+                      href={`/entities/${entity.slug}`}
+                      className="flex items-center justify-between px-6 py-4 hover:bg-[rgba(0,0,0,0.02)] transition-colors"
                     >
                       <div>
-                        <p className="font-mono text-sm font-medium">{entity.name}</p>
+                        <p className="font-mono text-sm font-medium">{entity.canonical_name}</p>
                         <p className="font-serif text-sm text-[rgba(0,0,0,0.45)] italic">
                           {entity.type}
-                          {entity.aliases?.length > 0 && (
+                          {entity.aliases && entity.aliases.length > 0 && (
                             <span className="ml-2">
                               • Also: {entity.aliases.slice(0, 3).join(", ")}
                             </span>
@@ -168,7 +238,7 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
                         </p>
                       </div>
                       <Badge variant="secondary">{entity.type}</Badge>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               ) : (
@@ -188,14 +258,52 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
           <RelatedResearchPanel micrositeSlug={slug} />
         </div>
 
+        {/* Linked Opportunities */}
+        {linkedOpportunities.length > 0 && (
+          <div className="mb-8">
+            <SectionHeader>Opportunities ({linkedOpportunities.length})</SectionHeader>
+            <Card>
+              <CardContent className="p-0">
+                <div className="divide-y divide-[rgba(0,0,0,0.05)]">
+                  {linkedOpportunities.map((opp) => (
+                    <Link
+                      key={opp.id}
+                      href={`/pipeline/${opp.slug}`}
+                      className="flex items-center justify-between px-6 py-4 hover:bg-[rgba(0,0,0,0.02)] transition-colors"
+                    >
+                      <div>
+                        <p className="font-mono text-sm font-medium">{opp.name}</p>
+                        <p className="font-serif text-sm text-[rgba(0,0,0,0.45)] italic capitalize">
+                          {opp.stage.replace("_", " ")}
+                          {opp.confidence !== null && (
+                            <span className="ml-2">
+                              • {Math.round(opp.confidence * 100)}% confidence
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="capitalize">
+                        {opp.stage.replace("_", " ")}
+                      </Badge>
+                    </Link>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="flex items-center justify-end gap-2">
           <DeleteMicrositeButton
             micrositeId={microsite.id}
             micrositeTitle={microsite.title}
           />
-          {microsite.blob_path && (
-            <Link href={`/sites/${microsite.slug}`} target="_blank">
+          {(microsite.blob_path || microsite.url) && (
+            <Link
+              href={microsite.blob_path ? `/sites/${microsite.slug}` : microsite.url}
+              target="_blank"
+            >
               <Button>Open Site</Button>
             </Link>
           )}
