@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // MIME type mapping for common static assets
@@ -57,17 +57,15 @@ export async function GET(
   { params }: { params: Promise<{ slug: string; path?: string[] }> }
 ) {
   const { slug, path } = await params;
-  const supabase = await createClient();
 
-  // 1. Get current user session
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Use service client for microsite lookup (bypasses RLS)
+  // This is needed because we need to check visibility before knowing if auth is required
+  const serviceClient = createServiceClient();
 
-  // 2. Look up microsite
-  const { data: microsite, error: msError } = await supabase
+  // 1. Look up microsite first (with service client to bypass RLS)
+  const { data: microsite, error: msError } = await serviceClient
     .from("microsites")
-    .select("id, blob_path, visibility, slug")
+    .select("id, blob_path, visibility, slug, url")
     .eq("slug", slug)
     .single();
 
@@ -89,7 +87,15 @@ export async function GET(
     );
   }
 
-  // 3. Check visibility/auth
+  // 2. Check visibility/auth - only fetch user session if needed
+  let user = null;
+  if (microsite.visibility === "internal") {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  }
+
+  // 3. Redirect to login if internal and not authenticated
   if (microsite.visibility === "internal" && !user) {
     // Redirect to login with return URL
     const loginUrl = new URL("/login", request.url);
@@ -97,8 +103,14 @@ export async function GET(
     return NextResponse.redirect(loginUrl);
   }
 
-  // 4. Check if blob_path is configured
+  // 4. Check if blob_path is configured - if not, redirect to external URL
   if (!microsite.blob_path) {
+    // If microsite has an external URL, redirect to it
+    if (microsite.url) {
+      const externalPath = path && path.length > 0 ? `/${path.join("/")}` : "";
+      return NextResponse.redirect(`${microsite.url}${externalPath}`);
+    }
+
     return new NextResponse(
       `<!DOCTYPE html>
 <html>
@@ -144,7 +156,8 @@ export async function GET(
         const indexResponse = await fetch(indexUrl);
 
         if (indexResponse.ok) {
-          return new NextResponse(indexResponse.body, {
+          const indexBody = await indexResponse.arrayBuffer();
+          return new NextResponse(indexBody, {
             status: 200,
             headers: {
               "Content-Type": "text/html",
@@ -177,16 +190,15 @@ export async function GET(
       blobResponse.headers.get("Content-Type") || getMimeType(filePath);
     const cacheControl = getCacheControl(filePath);
 
-    return new NextResponse(blobResponse.body, {
+    // Buffer the response - streaming doesn't work reliably across edge/serverless
+    const body = await blobResponse.arrayBuffer();
+
+    return new NextResponse(body, {
       status: 200,
       headers: {
         "Content-Type": contentType,
         "Cache-Control": cacheControl,
         "X-Microsite-Slug": microsite.slug,
-        // Preserve content encoding if present
-        ...(blobResponse.headers.get("Content-Encoding")
-          ? { "Content-Encoding": blobResponse.headers.get("Content-Encoding")! }
-          : {}),
         // Security headers
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "SAMEORIGIN",
