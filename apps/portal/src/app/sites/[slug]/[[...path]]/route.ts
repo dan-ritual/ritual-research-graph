@@ -63,10 +63,12 @@ export async function GET(
   const serviceClient = createServiceClient();
 
   // 1. Look up microsite first (with service client to bypass RLS)
+  // Filter by deleted_at since service client bypasses RLS policies
   const { data: microsite, error: msError } = await serviceClient
     .from("microsites")
     .select("id, blob_path, visibility, slug, url")
     .eq("slug", slug)
+    .is("deleted_at", null)
     .single();
 
   if (msError || !microsite) {
@@ -191,9 +193,26 @@ export async function GET(
     const cacheControl = getCacheControl(filePath);
 
     // Buffer the response - streaming doesn't work reliably across edge/serverless
-    const body = await blobResponse.arrayBuffer();
+    const rawBody = await blobResponse.arrayBuffer();
 
-    return new NextResponse(body, {
+    // For HTML files, rewrite absolute asset paths to use the blob URL
+    // This handles legacy microsites built without base: './' in vite config
+    let responseBody: BodyInit = rawBody;
+    if (contentType.includes("text/html")) {
+      const html = new TextDecoder().decode(rawBody);
+      // Extract blob folder name for path rewriting (e.g., "microsites/rwa-defi-jan-2026" -> "rwa-defi-jan-2026")
+      const blobFolder = microsite.blob_path?.split('/').pop() || '';
+      const rewrittenHtml = html
+        // Handle /assets/ paths
+        .replace(/src="\/assets\//g, `src="${blobBaseUrl}/${microsite.blob_path}/assets/`)
+        .replace(/href="\/assets\//g, `href="${blobBaseUrl}/${microsite.blob_path}/assets/`)
+        // Handle /sites/{blob-folder}/assets/ paths (some builds use this pattern)
+        .replace(new RegExp(`src="/sites/${blobFolder}/assets/`, 'g'), `src="${blobBaseUrl}/${microsite.blob_path}/assets/`)
+        .replace(new RegExp(`href="/sites/${blobFolder}/assets/`, 'g'), `href="${blobBaseUrl}/${microsite.blob_path}/assets/`);
+      responseBody = rewrittenHtml;
+    }
+
+    return new NextResponse(responseBody, {
       status: 200,
       headers: {
         "Content-Type": contentType,

@@ -24,10 +24,11 @@ export default async function MicrositesPage() {
     .eq("id", user.id)
     .single();
 
-  // Fetch all microsites
+  // Fetch all microsites (excluding soft-deleted)
   const { data: microsites } = await supabase
     .from("microsites")
     .select("*")
+    .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
   const userInfo = {

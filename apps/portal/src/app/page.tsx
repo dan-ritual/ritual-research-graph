@@ -31,13 +31,18 @@ export default async function DashboardPage() {
     { count: micrositeCount },
     { count: entityCount },
     { count: inProgressCount },
+    { count: opportunityCount },
   ] = await Promise.all([
-    supabase.from("microsites").select("*", { count: "exact", head: true }),
-    supabase.from("entities").select("*", { count: "exact", head: true }),
+    supabase.from("microsites").select("*", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.from("entities").select("*", { count: "exact", head: true }).is("deleted_at", null),
     supabase
       .from("generation_jobs")
       .select("*", { count: "exact", head: true })
       .not("status", "in", '("completed","failed")'),
+    supabase
+      .from("opportunities")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "active"),
   ]);
 
   // Fetch recent jobs
@@ -47,10 +52,11 @@ export default async function DashboardPage() {
     .order("created_at", { ascending: false })
     .limit(5);
 
-  // Fetch recent microsites
+  // Fetch recent microsites (excluding soft-deleted)
   const { data: recentMicrosites } = await supabase
     .from("microsites")
     .select("*")
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(4);
 
@@ -78,7 +84,7 @@ export default async function DashboardPage() {
 
         {/* Stats Cards with Grid Background */}
         <div className="bg-grid p-6 -mx-6 mb-10">
-          <div className="max-w-7xl mx-auto grid gap-4 md:grid-cols-3">
+          <div className="max-w-7xl mx-auto grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription className="font-mono text-xs uppercase tracking-[0.08em]">
@@ -99,6 +105,18 @@ export default async function DashboardPage() {
                 </CardTitle>
               </CardHeader>
             </Card>
+            <Link href="/pipeline" className="block">
+              <Card className="h-full hover:border-[#3B5FE6]/30 transition-colors">
+                <CardHeader className="pb-2">
+                  <CardDescription className="font-mono text-xs uppercase tracking-[0.08em]">
+                    Opportunities
+                  </CardDescription>
+                  <CardTitle className="font-display text-5xl font-bold text-[#3B5FE6]">
+                    {opportunityCount ?? 0}
+                  </CardTitle>
+                </CardHeader>
+              </Card>
+            </Link>
             <Card>
               <CardHeader className="pb-2">
                 <CardDescription className="font-mono text-xs uppercase tracking-[0.08em]">

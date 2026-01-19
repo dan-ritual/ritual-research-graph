@@ -200,46 +200,51 @@ async function storeArtifacts(
   jobId: string,
   artifacts: GraphIntegrationOptions['artifacts']
 ): Promise<void> {
-  const artifactRecords = [
+  const artifactRecords: Array<{
+    job_id: string;
+    type: string;
+    file_path: string;
+    file_size: number;
+  }> = [
     {
       job_id: jobId,
-      type: 'cleaned_transcript' as const,
-      file_path: artifacts.cleanedTranscript.path,
+      type: 'cleaned_transcript',
+      file_path: artifacts.cleanedTranscript.path!,
       file_size: artifacts.cleanedTranscript.content.length,
     },
     {
       job_id: jobId,
-      type: 'intelligence_brief' as const,
-      file_path: artifacts.intelligenceBrief.path,
+      type: 'intelligence_brief',
+      file_path: artifacts.intelligenceBrief.path!,
       file_size: artifacts.intelligenceBrief.content.length,
     },
     {
       job_id: jobId,
-      type: 'strategic_questions' as const,
-      file_path: artifacts.strategicQuestions.path,
+      type: 'strategic_questions',
+      file_path: artifacts.strategicQuestions.path!,
       file_size: artifacts.strategicQuestions.content.length,
     },
     {
       job_id: jobId,
-      type: 'site_config' as const,
-      file_path: artifacts.siteConfig.path,
+      type: 'site_config',
+      file_path: artifacts.siteConfig.path!,
       file_size: artifacts.siteConfig.content.length,
     },
   ];
 
-  if (artifacts.narrativeResearch) {
+  if (artifacts.narrativeResearch?.path) {
     artifactRecords.push({
       job_id: jobId,
-      type: 'narrative_research' as const,
+      type: 'narrative_research',
       file_path: artifacts.narrativeResearch.path,
       file_size: artifacts.narrativeResearch.content.length,
     });
   }
 
-  if (artifacts.entities) {
+  if (artifacts.entities?.path) {
     artifactRecords.push({
       job_id: jobId,
-      type: 'entity_extraction' as const,
+      type: 'entity_extraction',
       file_path: artifacts.entities.path,
       file_size: artifacts.entities.content.length,
     });
@@ -308,17 +313,54 @@ async function createMicrosite(
     blobPath?: string;
   }
 ): Promise<string> {
+  // Check for existing microsite with same title (case-insensitive) to prevent duplicates
+  // Use .limit(1) instead of .single() because .single() errors when >1 match exists
+  const { data: existingMatches } = await supabase
+    .from('microsites')
+    .select('id, slug, created_at')
+    .ilike('title', options.title)
+    .is('deleted_at', null)
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  const existingByTitle = existingMatches?.[0] || null;
+
+  // If microsite with same title exists, update it instead of creating duplicate
+  if (existingByTitle) {
+    console.log(`Updating existing microsite ${existingByTitle.slug} instead of creating duplicate`);
+    const { error: updateError } = await supabase
+      .from('microsites')
+      .update({
+        job_id: options.jobId,
+        subtitle: options.subtitle,
+        thesis: options.thesis,
+        config: options.config,
+        entity_count: options.entityCount,
+        blob_path: options.blobPath || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', existingByTitle.id);
+
+    if (updateError) {
+      console.warn(`Failed to update existing microsite: ${updateError.message}, creating new one`);
+    } else {
+      return existingByTitle.id;
+    }
+  }
+
   // Ensure unique slug by appending timestamp if needed
   let slug = options.slug;
   const timestamp = Date.now().toString(36);
 
-  const { data: existing } = await supabase
+  // Use .limit(1) instead of .single() for safe existence check
+  const { data: slugMatches } = await supabase
     .from('microsites')
     .select('id')
     .eq('slug', slug)
-    .single();
+    .is('deleted_at', null)
+    .limit(1);
 
-  if (existing) {
+  if (slugMatches && slugMatches.length > 0) {
     slug = `${options.slug}-${timestamp}`;
   }
 
@@ -470,16 +512,18 @@ async function insertOpportunities(
 
   for (const opp of opportunities) {
     // Insert opportunity
+    const oppSlug = slugify(opp.name);
     const { data: oppData, error: oppError } = await supabase
       .from('opportunities')
       .insert({
+        slug: oppSlug,
         name: opp.name,
-        status: 'new',
+        description: opp.thesis, // Store thesis in description for base schema compatibility
+        status: 'active',
         thesis: opp.thesis,
         angle: opp.angle,
         confidence: opp.confidence,
-        source: 'extraction',
-        job_id: jobId,
+        source_job_id: jobId,
         created_by: userId,
       })
       .select('id')
