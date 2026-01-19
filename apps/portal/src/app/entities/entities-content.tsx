@@ -6,6 +6,8 @@ import { EntityTypeFilter } from "@/components/entities/entity-type-filter";
 import { EntitySearchInput } from "@/components/entities/entity-search-input";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
+import { ErrorState } from "@/components/ui/error-state";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface Entity {
   id: string;
@@ -37,6 +39,7 @@ export function EntitiesContent() {
     totalPages: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [sortBy, setSortBy] = useState("appearance_count");
@@ -45,30 +48,37 @@ export function EntitiesContent() {
 
   const fetchEntities = useCallback(async (page = 1) => {
     setLoading(true);
+    setError(null);
 
-    const params = new URLSearchParams({
-      page: page.toString(),
-      limit: "20",
-      sort: sortBy,
-    });
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: "20",
+        sort: sortBy,
+      });
 
-    if (searchQuery.length >= 2) {
-      params.set("q", searchQuery);
+      if (searchQuery.length >= 2) {
+        params.set("q", searchQuery);
+      }
+
+      if (typeFilter !== "all") {
+        params.set("type", typeFilter);
+      }
+
+      const response = await fetch(`/api/entities?${params}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setEntities(data.entities);
+        setPagination(data.pagination);
+      } else {
+        setError(data.error || "Failed to fetch entities");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection.");
+    } finally {
+      setLoading(false);
     }
-
-    if (typeFilter !== "all") {
-      params.set("type", typeFilter);
-    }
-
-    const response = await fetch(`/api/entities?${params}`);
-    const data = await response.json();
-
-    if (response.ok) {
-      setEntities(data.entities);
-      setPagination(data.pagination);
-    }
-
-    setLoading(false);
   }, [searchQuery, typeFilter, sortBy]);
 
   // Debounced search
@@ -130,12 +140,22 @@ export function EntitiesContent() {
         <div className="flex items-center justify-center py-12">
           <Loading />
         </div>
+      ) : error ? (
+        <ErrorState
+          title="Failed to load entities"
+          message={error}
+          onRetry={() => fetchEntities(pagination.page)}
+        />
       ) : entities.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="font-serif text-sm italic text-[rgba(0,0,0,0.45)]">
-            No entities found matching your criteria.
-          </p>
-        </div>
+        <EmptyState
+          title="No entities found"
+          message={searchQuery || typeFilter !== "all"
+            ? "No entities match your search criteria. Try adjusting your filters."
+            : "No entities in the knowledge graph yet. Generate a microsite to extract entities."
+          }
+          actionLabel={!searchQuery && typeFilter === "all" ? "+ New Research" : undefined}
+          actionHref={!searchQuery && typeFilter === "all" ? "/new" : undefined}
+        />
       ) : (
         <>
           {/* Count */}

@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 interface GenerationConfig {
@@ -16,16 +16,18 @@ interface GenerateRequest {
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
+  // Get authenticated user from session
+  const authClient = await createClient();
+  const { data: { user }, error: authError } = await authClient.auth.getUser();
 
-  // 1. Auth check
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
+  // Validate both user object and user.id exist (SSR auth can fail silently)
+  if (authError || !user?.id) {
+    console.error("Auth failed:", { authError, hasUser: !!user, userId: user?.id });
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // Use service client for DB operations (bypasses RLS for inserts)
+  const supabase = createServiceClient();
 
   let body: GenerateRequest;
   try {
@@ -44,7 +46,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 2. Create job record
+  // Create job record with authenticated user
   const { data: job, error: jobError } = await supabase
     .from("generation_jobs")
     .insert({
@@ -72,8 +74,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 3. Upload transcript to Supabase Storage
-  const transcriptPath = `${user.id}/${job.id}.md`;
+  // Upload transcript to Supabase Storage
+  const transcriptPath = `jobs/${job.id}.md`;
   const { error: uploadError } = await supabase.storage
     .from("transcripts")
     .upload(transcriptPath, transcript, {
@@ -91,12 +93,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // 4. Update job with transcript path
+  // Update job with transcript path (stays "pending" for worker to pick up)
   const { error: updateError } = await supabase
     .from("generation_jobs")
     .update({
       transcript_path: transcriptPath,
-      status: "generating_artifacts", // Move to first processing stage
     })
     .eq("id", job.id);
 
@@ -104,16 +105,8 @@ export async function POST(request: NextRequest) {
     console.error("Failed to update job:", updateError);
   }
 
-  // 5. TODO: Spawn CLI process in background
-  // For now, the CLI will need to be triggered separately or poll for pending jobs
-  // In production, this would use a job queue (e.g., Inngest, Trigger.dev) or
-  // spawn a background process:
-  //
-  // spawn('npm', ['run', 'generate', '--', '--job-id', job.id, ...], {
-  //   cwd: process.env.PROJECT_ROOT,
-  //   detached: true,
-  //   stdio: 'ignore',
-  // }).unref();
+  // Job stays in "pending" status - GCP worker will pick it up via Supabase Realtime
+  console.log(`Created job ${job.id} for user ${user.id}, waiting for worker`);
 
   return NextResponse.json({ jobId: job.id });
 }
