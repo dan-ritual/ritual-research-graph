@@ -118,6 +118,7 @@ export async function uploadToBlob(options: BlobUploadOptions): Promise<BlobUplo
       access: 'public',
       contentType: getMimeType(file),
       addRandomSuffix: false, // Use exact path for predictable URLs
+      allowOverwrite: true, // Allow re-uploading if regenerating microsite
     });
 
     urls.push(blob.url);
