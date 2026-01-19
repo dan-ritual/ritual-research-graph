@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5">
+  <meta name="theme-color" content="#FBFBFB">
+  <meta name="color-scheme" content="light">
+  <title>Ritual Intelligence</title>
+
+  <!-- God-tier fonts: JetBrains Mono + Crimson Text + Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- TradingView Widget Library for Token Charts -->
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+  <style>
+    /* Reset */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 2026 God-tier font rendering */
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+      font-kerning: normal;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      font-optical-sizing: auto;
+      font-synthesis: none;
+      text-wrap: pretty;
+    }
+
+    body {
+      font-family: 'Crimson Text', Georgia, 'Times New Roman', serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.7;
+      background-color: #FBFBFB;
+      color: #171717;
+      letter-spacing: 0.01em;
+      word-spacing: 0.02em;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* JetBrains Mono for all monospace */
+    code, pre, kbd, samp,
+    [style*="monospace"],
+    .mono {
+      font-family: 'JetBrains Mono', 'SF Mono', 'Consolas', monospace;
+      font-feature-settings: "liga" 1, "calt" 1, "zero" 1, "ss01" 1, "ss02" 1;
+      letter-spacing: -0.02em;
+    }
+
+    /* Crimson Text optimizations */
+    p, li, blockquote {
+      font-family: 'Crimson Text', Georgia, serif;
+      font-feature-settings: "kern" 1, "liga" 1, "onum" 1, "pnum" 1;
+      hanging-punctuation: first last;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      text-wrap: pretty;
+    }
+
+    /* Heading hierarchy */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'JetBrains Mono', monospace;
+      font-feature-settings: "liga" 1, "calt" 1;
+      text-rendering: geometricPrecision;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    /* Strong/emphasis refinements */
+    strong, b {
+      font-weight: 600;
+      letter-spacing: 0.005em;
+    }
+
+    em, i {
+      font-style: italic;
+      letter-spacing: 0.01em;
+    }
+
+    /* Selection styling */
+    ::selection {
+      background: rgba(59, 95, 230, 0.2);
+      color: inherit;
+    }
+
+    /* Focus visible for accessibility */
+    :focus-visible {
+      outline: 2px solid #3B5FE6;
+      outline-offset: 2px;
+    }
+
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Mobile responsive improvements */
+    @media (max-width: 768px) {
+      body {
+        font-size: 16px;
+        line-height: 1.65;
+      }
+
+      /* Hide text size controls on mobile - touch gestures are better */
+      .text-size-controls {
+        display: none;
+      }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      button, a {
+        min-height: 44px;
+        min-width: 44px;
+      }
+    }
+
+    /* High DPI display optimizations */
+    @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+      body {
+        -webkit-font-smoothing: subpixel-antialiased;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>
