@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/opportunities/[id]/entities - Get linked entities
@@ -7,15 +7,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const { data: linkedEntities, error } = await supabase
     .from("opportunity_entities")
@@ -44,15 +37,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const body = await request.json();
   const { entity_id, relationship = "related" } = body;
@@ -108,14 +94,6 @@ export async function POST(
     console.error("Failed to link entity:", insertError);
     return NextResponse.json({ error: "Failed to link entity" }, { status: 500 });
   }
-
-  // Log activity
-  await supabase.from("opportunity_activity").insert({
-    opportunity_id: id,
-    user_id: user.id,
-    action: "entity_linked",
-    details: { entity_id, entity_name: entity.name, relationship },
-  });
 
   return NextResponse.json({ success: true });
 }

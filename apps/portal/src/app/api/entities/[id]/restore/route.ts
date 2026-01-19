@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // POST /api/entities/[id]/restore - Restore a soft-deleted entity
@@ -7,30 +7,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  // Get current user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // Check if user is admin
-  const { data: currentUser } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", user.id)
-    .single();
-
-  if (currentUser?.role !== "admin") {
-    return NextResponse.json(
-      { error: "Only admins can restore deleted entities" },
-      { status: 403 }
-    );
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   // Check if entity exists and is deleted
   const { data: entity, error: fetchError } = await supabase

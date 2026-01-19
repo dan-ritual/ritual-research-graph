@@ -24,8 +24,10 @@ export function RetryJobButton({ jobId, onRetry }: RetryJobButtonProps) {
   const router = useRouter();
   const [isRetrying, setIsRetrying] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
-  const handleRetry = async () => {
+  const handleRetry = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent dialog from closing immediately
     setIsRetrying(true);
     setError(null);
 
@@ -39,7 +41,9 @@ export function RetryJobButton({ jobId, onRetry }: RetryJobButtonProps) {
         throw new Error(data.error || "Failed to retry job");
       }
 
-      // Refresh the page to show updated status
+      // Close dialog and refresh
+      setOpen(false);
+      setIsRetrying(false);
       router.refresh();
       onRetry?.();
     } catch (err) {
@@ -49,7 +53,7 @@ export function RetryJobButton({ jobId, onRetry }: RetryJobButtonProps) {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="outline" size="sm">
           Retry
@@ -84,8 +88,10 @@ export function CancelJobButton({ jobId, onCancel }: CancelJobButtonProps) {
   const router = useRouter();
   const [isCancelling, setIsCancelling] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
-  const handleCancel = async () => {
+  const handleCancel = async (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsCancelling(true);
     setError(null);
 
@@ -99,7 +105,9 @@ export function CancelJobButton({ jobId, onCancel }: CancelJobButtonProps) {
         throw new Error(data.error || "Failed to cancel job");
       }
 
-      // Refresh the page to show updated status
+      // Close dialog and refresh
+      setOpen(false);
+      setIsCancelling(false);
       router.refresh();
       onCancel?.();
     } catch (err) {
@@ -109,7 +117,7 @@ export function CancelJobButton({ jobId, onCancel }: CancelJobButtonProps) {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button
           variant="outline"

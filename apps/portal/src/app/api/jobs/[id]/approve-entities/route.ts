@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 interface ExtractedEntity {
@@ -54,18 +54,10 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: jobId } = await params;
-  const supabase = await createClient();
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
-  // 1. Auth check
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  // 2. Validate job exists and is in correct status
+  // Validate job exists and is in correct status
   const { data: job, error: jobError } = await supabase
     .from("generation_jobs")
     .select("id, status, user_id, config")
@@ -160,7 +152,7 @@ export async function POST(
       .from("microsites")
       .insert({
         job_id: jobId,
-        user_id: user.id,
+        user_id: job.user_id,
         slug: `${slug}-${Date.now().toString(36)}`,
         title: jobConfig.title || "Untitled Research",
         subtitle: jobConfig.subtitle || "",

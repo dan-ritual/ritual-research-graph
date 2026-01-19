@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
@@ -6,15 +6,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string; entityId: string }> }
 ) {
   const { id: jobId, entityId } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   // Verify entity exists and belongs to this job
   const { data: entity, error: entityError } = await supabase
@@ -34,7 +27,6 @@ export async function POST(
     .update({
       review_status: "approved",
       reviewed_at: new Date().toISOString(),
-      reviewed_by: user.id,
     })
     .eq("id", entityId)
     .select()

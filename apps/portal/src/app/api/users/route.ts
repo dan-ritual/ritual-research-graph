@@ -1,17 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { createServiceClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
 
 // GET /api/users - Get all users (team members)
-export async function GET(request: NextRequest) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+export async function GET() {
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const { data: users, error } = await supabase
     .from("users")

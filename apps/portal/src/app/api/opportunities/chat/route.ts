@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -7,15 +7,8 @@ const anthropic = new Anthropic({
 });
 
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const body = await request.json();
   const { query } = body;
@@ -39,7 +32,7 @@ export async function POST(request: NextRequest) {
       workflow:pipeline_workflows(name, slug),
       stage:pipeline_stages(name, slug)
     `)
-    .eq("status", "active")
+    .not("status", "eq", "archived")
     .order("updated_at", { ascending: false });
 
   if (fetchError) {

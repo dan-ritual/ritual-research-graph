@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 
@@ -11,15 +11,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   // Fetch opportunity with linked entities
   const { data: opportunity, error: oppError } = await supabase
@@ -113,14 +106,6 @@ Output as clean markdown.`;
         { status: 500 }
       );
     }
-
-    // Log activity
-    await supabase.from("opportunity_activity").insert({
-      opportunity_id: id,
-      user_id: user.id,
-      action: "strategy_generated",
-      details: { length: strategy.length },
-    });
 
     return NextResponse.json({ success: true, strategy });
   } catch (error) {

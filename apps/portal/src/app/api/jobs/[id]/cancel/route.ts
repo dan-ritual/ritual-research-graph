@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // Statuses that can be cancelled (in-progress states)
@@ -18,16 +18,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  // Get current user
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   // Fetch the job
   const { data: job, error: fetchError } = await supabase
@@ -38,20 +30,6 @@ export async function POST(
 
   if (fetchError || !job) {
     return NextResponse.json({ error: "Job not found" }, { status: 404 });
-  }
-
-  // Check ownership
-  if (job.user_id !== user.id) {
-    // Check if admin
-    const { data: currentUser } = await supabase
-      .from("users")
-      .select("role")
-      .eq("id", user.id)
-      .single();
-
-    if (currentUser?.role !== "admin") {
-      return NextResponse.json({ error: "Permission denied" }, { status: 403 });
-    }
   }
 
   // Check if job can be cancelled

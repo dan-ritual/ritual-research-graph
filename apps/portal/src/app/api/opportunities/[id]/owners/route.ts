@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/opportunities/[id]/owners - Get assigned owners
@@ -7,15 +7,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const { data: owners, error } = await supabase
     .from("opportunity_owners")
@@ -44,15 +37,8 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   const body = await request.json();
   const { user_id } = body;
@@ -72,13 +58,6 @@ export async function POST(
     return NextResponse.json({ error: "Opportunity not found" }, { status: 404 });
   }
 
-  // Get user info for activity log
-  const { data: targetUser } = await supabase
-    .from("users")
-    .select("name")
-    .eq("id", user_id)
-    .single();
-
   // Check if already assigned
   const { data: existing } = await supabase
     .from("opportunity_owners")
@@ -97,21 +76,12 @@ export async function POST(
     .insert({
       opportunity_id: id,
       user_id,
-      assigned_by: user.id,
     });
 
   if (insertError) {
     console.error("Failed to assign owner:", insertError);
     return NextResponse.json({ error: "Failed to assign owner" }, { status: 500 });
   }
-
-  // Log activity
-  await supabase.from("opportunity_activity").insert({
-    opportunity_id: id,
-    user_id: user.id,
-    action: "owner_added",
-    details: { added_user_id: user_id, added_user_name: targetUser?.name || "Unknown" },
-  });
 
   return NextResponse.json({ success: true });
 }

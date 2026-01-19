@@ -1,19 +1,18 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
+// Redirect to client-side handler that has access to PKCE verifier in localStorage/cookies
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "/";
 
   if (code) {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
-    }
+    // Redirect to client-side page that will handle code exchange
+    const redirectUrl = new URL("/auth/callback", origin);
+    redirectUrl.searchParams.set("code", code);
+    redirectUrl.searchParams.set("next", next);
+    return NextResponse.redirect(redirectUrl.toString());
   }
 
-  // Return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_error`);
+  return NextResponse.redirect(`${origin}/login?error=no_code`);
 }

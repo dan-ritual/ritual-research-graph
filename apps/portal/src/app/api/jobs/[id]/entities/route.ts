@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -6,15 +6,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id: jobId } = await params;
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // Middleware handles auth - use service client for fast DB access
+  const supabase = createServiceClient();
 
   // Verify job exists
   const { data: job, error: jobError } = await supabase
@@ -43,7 +36,6 @@ export async function GET(
       created_at
     `)
     .eq("extraction_job_id", jobId)
-    .is("deleted_at", null)
     .order("canonical_name", { ascending: true });
 
   if (entitiesError) {
