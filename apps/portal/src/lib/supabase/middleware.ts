@@ -12,6 +12,11 @@ export async function updateSession(request: NextRequest) {
   const publicPaths = ["/login", "/auth/callback", "/sites/"];
   const isPublicPath = publicPaths.some((path) => pathname.startsWith(path));
 
+  // Static HTML files are public
+  if (pathname.endsWith(".html")) {
+    return NextResponse.next({ request });
+  }
+
   // Check for Supabase auth cookie (fast check, no API call)
   const hasAuthCookie = request.cookies.getAll().some((cookie) =>
     cookie.name.startsWith("sb-") && cookie.name.includes("-auth-token")

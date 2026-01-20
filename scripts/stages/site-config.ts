@@ -67,21 +67,21 @@ export async function generateSiteConfig(options: SiteConfigOptions): Promise<Ar
       id: 'transcript-clean',
       title: 'Cleaned Transcript',
       subtitle: 'Processed meeting notes',
-      file: `${slug}_Transcript_Clean.md`,
+      file: `artifacts/${slug}_Transcript_Clean.md`,
       description: 'Original transcript with filler words removed and structure added',
     },
     {
       id: 'intelligence-brief',
       title: 'Intelligence Brief',
       subtitle: 'Executive analysis',
-      file: `${slug}_Intelligence_Brief.md`,
+      file: `artifacts/${slug}_Intelligence_Brief.md`,
       description: 'Comprehensive analysis of the research topic with key insights',
     },
     {
       id: 'strategic-questions',
       title: 'Strategic Questions',
       subtitle: 'Research framework',
-      file: `${slug}_Strategic_Questions.md`,
+      file: `artifacts/${slug}_Strategic_Questions.md`,
       description: 'Key questions for further investigation and analysis',
     },
     ...(narrativeResearch
@@ -90,7 +90,7 @@ export async function generateSiteConfig(options: SiteConfigOptions): Promise<Ar
             id: 'narrative-research',
             title: 'Narrative Research',
             subtitle: 'Multi-source synthesis',
-            file: narrativeResearch.filename,
+            file: `artifacts/${narrativeResearch.filename}`,
             description: 'Research synthesized from Grok, Perplexity, and Twitter sources',
           },
         ]
@@ -99,7 +99,7 @@ export async function generateSiteConfig(options: SiteConfigOptions): Promise<Ar
       id: 'entities',
       title: 'Extracted Entities',
       subtitle: 'Knowledge graph data',
-      file: `${slug}_Entities.json`,
+      file: `artifacts/${slug}_Entities.json`,
       description: `${entities.length} entities extracted with metadata and relationships`,
     },
   ];
@@ -130,9 +130,9 @@ function enhanceConfigWithEntities(config: SiteConfig, entities: ExtractedEntity
     const existingEntity = enhanced.entities[entity.canonicalName];
 
     enhanced.entities[entity.canonicalName] = {
-      website: entity.url || existingEntity?.website || null,
-      twitter: entity.twitter || existingEntity?.twitter || null,
-      tvSymbol: existingEntity?.tvSymbol || null,
+      website: entity.url || existingEntity?.website || undefined,
+      twitter: entity.twitter || existingEntity?.twitter || undefined,
+      tvSymbol: existingEntity?.tvSymbol || undefined,
     };
   }
 

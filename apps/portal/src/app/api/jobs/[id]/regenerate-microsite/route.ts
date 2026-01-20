@@ -1,6 +1,19 @@
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Trigger microsite regeneration for a job.
+ *
+ * This sets the job status to 'pending_regeneration' which the worker
+ * will detect and process. The regeneration flow:
+ * 1. API sets status to 'pending_regeneration'
+ * 2. Worker detects the status change
+ * 3. Worker re-runs SITE_CONFIG (stage 4) and microsite build (stage 5)
+ * 4. Worker uploads to blob storage and updates microsite record
+ * 5. Worker sets status back to 'completed'
+ *
+ * The client should poll the job status to track progress.
+ */
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -16,6 +29,7 @@ export async function POST(
       id,
       title,
       status,
+      config,
       microsites (
         id,
         slug,
@@ -27,6 +41,14 @@ export async function POST(
 
   if (jobError || !job) {
     return NextResponse.json({ error: "Job not found" }, { status: 404 });
+  }
+
+  // Don't allow regeneration of jobs that aren't completed
+  if (job.status !== "completed") {
+    return NextResponse.json(
+      { error: `Cannot regenerate job with status: ${job.status}. Job must be 'completed'.` },
+      { status: 400 }
+    );
   }
 
   type MicrositeInfo = {
@@ -45,10 +67,10 @@ export async function POST(
     );
   }
 
-  // Get updated artifacts
+  // Get updated artifacts to verify they exist
   const { data: artifacts, error: artifactsError } = await supabase
     .from("artifacts")
-    .select("*")
+    .select("id, type, last_edited_at")
     .eq("job_id", jobId);
 
   if (artifactsError || !artifacts || artifacts.length === 0) {
@@ -58,50 +80,51 @@ export async function POST(
     );
   }
 
-  // Update job status to indicate regeneration
-  await supabase
+  // Check which artifacts have been edited
+  const editedArtifacts = artifacts.filter((a) => a.last_edited_at);
+
+  // Update job config to indicate regeneration mode
+  const updatedConfig = {
+    ...(job.config as Record<string, unknown>),
+    regeneration: {
+      triggeredAt: new Date().toISOString(),
+      editedArtifacts: editedArtifacts.map((a) => a.type),
+      micrositeId: microsite.id,
+      micrositeSlug: microsite.slug,
+    },
+  };
+
+  // Set job status to pending_regeneration
+  // The worker will detect this and process the regeneration
+  const { error: updateError } = await supabase
     .from("generation_jobs")
     .update({
-      status: "generating_microsite",
+      status: "pending_regeneration",
+      config: updatedConfig,
       updated_at: new Date().toISOString(),
     })
     .eq("id", jobId);
 
-  // In a full implementation, this would:
-  // 1. Re-run the SITE_CONFIG stage with updated artifacts
-  // 2. Rebuild the microsite HTML/assets
-  // 3. Deploy to blob storage
-  // 4. Update microsite record with new paths
-  //
-  // For now, we mark the job as ready for manual regeneration
-  // and return the artifact data needed
-
-  // Update microsite updated_at
-  await supabase
-    .from("microsites")
-    .update({ updated_at: new Date().toISOString() })
-    .eq("id", microsite.id);
-
-  // Mark job as completed again
-  await supabase
-    .from("generation_jobs")
-    .update({
-      status: "completed",
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", jobId);
+  if (updateError) {
+    console.error("Failed to update job status:", updateError);
+    return NextResponse.json(
+      { error: "Failed to trigger regeneration" },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({
     success: true,
-    message: "Microsite marked for regeneration",
+    message: "Microsite regeneration triggered",
+    jobId,
+    status: "pending_regeneration",
     microsite: {
       id: microsite.id,
       slug: microsite.slug,
     },
-    artifacts: artifacts.map((a) => ({
+    editedArtifacts: editedArtifacts.map((a) => ({
       id: a.id,
       type: a.type,
-      hasEdits: !!a.last_edited_at,
     })),
   });
 }

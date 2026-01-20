@@ -1,53 +1,48 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Loading } from "@/components/ui/loading";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Progress } from "@/components/ui/progress";
+import { EntityReviewCard } from "@/components/entities/entity-review-card";
+import { EntityMergeModal } from "@/components/entities/entity-merge-modal";
+import { CheckCircle2 } from "lucide-react";
 
-interface ExtractedEntity {
-  canonicalName: string;
-  aliases: string[];
-  type: "company" | "protocol" | "person" | "concept" | "opportunity";
-  url?: string;
-  twitter?: string;
-  category?: string;
-  description: string;
-  sentiment: "positive" | "neutral" | "negative";
-  mentions: Array<{
-    context: string;
-    section: string;
-  }>;
+interface PotentialDuplicate {
+  entity_id: string;
+  canonical_name: string;
+  entity_type: string;
+  similarity: number;
+  match_type: string;
+}
+
+interface Entity {
+  id: string;
+  slug: string;
+  canonical_name: string;
+  type: string;
+  metadata: Record<string, unknown> | null;
+  review_status: string;
+  potential_duplicates: PotentialDuplicate[];
+  has_duplicates: boolean;
 }
 
 interface Job {
   id: string;
+  title: string;
   status: string;
-  config: {
-    title: string;
-    subtitle?: string;
-  };
 }
 
-const TYPE_COLORS: Record<string, string> = {
-  company: "bg-blue-100 text-blue-800",
-  protocol: "bg-purple-100 text-purple-800",
-  person: "bg-green-100 text-green-800",
-  concept: "bg-amber-100 text-amber-800",
-  opportunity: "bg-rose-100 text-rose-800",
-};
-
-const SENTIMENT_COLORS: Record<string, string> = {
-  positive: "text-[#22c55e]",
-  neutral: "text-[rgba(0,0,0,0.45)]",
-  negative: "text-[#ef4444]",
-};
+interface StatusCounts {
+  pending: number;
+  approved: number;
+  rejected: number;
+  merged: number;
+}
 
 export default function EntityReviewPage() {
   const params = useParams();
@@ -55,125 +50,146 @@ export default function EntityReviewPage() {
   const jobId = params.id as string;
 
   const [job, setJob] = useState<Job | null>(null);
-  const [entities, setEntities] = useState<ExtractedEntity[]>([]);
-  const [approvedEntities, setApprovedEntities] = useState<Set<string>>(new Set());
+  const [entities, setEntities] = useState<Entity[]>([]);
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    merged: 0,
+  });
   const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [processingEntityId, setProcessingEntityId] = useState<string | null>(null);
 
-  const supabase = createClient();
+  // Merge modal state
+  const [mergeModalOpen, setMergeModalOpen] = useState(false);
+  const [mergeSource, setMergeSource] = useState<Entity | null>(null);
+  const [mergeTarget, setMergeTarget] = useState<{
+    id: string;
+    canonical_name: string;
+    type: string;
+  } | null>(null);
+
+  const fetchEntities = useCallback(async () => {
+    const response = await fetch(`/api/jobs/${jobId}/entities`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch entities");
+    }
+    const data = await response.json();
+    setJob(data.job);
+    setEntities(data.entities);
+    setStatusCounts(data.statusCounts);
+  }, [jobId]);
 
   useEffect(() => {
-    async function fetchData() {
-      // Fetch job details
-      const { data: jobData, error: jobError } = await supabase
-        .from("generation_jobs")
-        .select("id, status, config")
-        .eq("id", jobId)
-        .single();
-
-      if (jobError || !jobData) {
-        setError("Job not found");
-        setLoading(false);
-        return;
-      }
-
-      setJob(jobData);
-
-      // Check if job is in awaiting_entity_review status
-      if (jobData.status !== "awaiting_entity_review") {
-        setError(`Job is not awaiting review (status: ${jobData.status})`);
-        setLoading(false);
-        return;
-      }
-
-      // Fetch entity extraction artifact
-      const { data: artifactData, error: artifactError } = await supabase
-        .from("artifacts")
-        .select("content, file_path")
-        .eq("job_id", jobId)
-        .eq("type", "entity_extraction")
-        .single();
-
-      if (artifactError || !artifactData) {
-        setError("Entity extraction artifact not found");
-        setLoading(false);
-        return;
-      }
-
-      // Parse entities from artifact content or file
+    async function loadData() {
       try {
-        let extractedEntities: ExtractedEntity[] = [];
-
-        if (artifactData.content) {
-          const parsed = JSON.parse(artifactData.content);
-          extractedEntities = parsed.entities || parsed;
-        } else if (artifactData.file_path) {
-          // If content is null, we need to fetch from file path via API
-          const response = await fetch(`/api/artifacts/${jobId}/entities`);
-          if (response.ok) {
-            const data = await response.json();
-            extractedEntities = data.entities || [];
-          }
-        }
-
-        setEntities(extractedEntities);
-        // Default: approve all entities
-        setApprovedEntities(new Set(extractedEntities.map((e) => e.canonicalName)));
-      } catch (parseError) {
-        setError("Failed to parse entity extraction data");
+        await fetchEntities();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load data");
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     }
+    loadData();
+  }, [fetchEntities]);
 
-    fetchData();
-  }, [jobId, supabase]);
-
-  const toggleEntity = (canonicalName: string) => {
-    setApprovedEntities((prev) => {
-      const next = new Set(prev);
-      if (next.has(canonicalName)) {
-        next.delete(canonicalName);
-      } else {
-        next.add(canonicalName);
-      }
-      return next;
-    });
-  };
-
-  const selectAll = () => {
-    setApprovedEntities(new Set(entities.map((e) => e.canonicalName)));
-  };
-
-  const deselectAll = () => {
-    setApprovedEntities(new Set());
-  };
-
-  const handleSubmit = async () => {
-    setSubmitting(true);
-
+  const handleApprove = async (entityId: string) => {
+    setProcessingEntityId(entityId);
     try {
-      const approvedList = entities.filter((e) =>
-        approvedEntities.has(e.canonicalName)
-      );
+      const response = await fetch(`/api/jobs/${jobId}/entities/${entityId}/approve`, {
+        method: "POST",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to approve entity");
+      }
+      await fetchEntities();
+    } catch (err) {
+      console.error("Approve failed:", err);
+    } finally {
+      setProcessingEntityId(null);
+    }
+  };
 
-      const response = await fetch(`/api/jobs/${jobId}/approve-entities`, {
+  const handleReject = async (entityId: string) => {
+    setProcessingEntityId(entityId);
+    try {
+      const response = await fetch(`/api/jobs/${jobId}/entities/${entityId}/reject`, {
+        method: "POST",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to reject entity");
+      }
+      await fetchEntities();
+    } catch (err) {
+      console.error("Reject failed:", err);
+    } finally {
+      setProcessingEntityId(null);
+    }
+  };
+
+  const handleMergeClick = (sourceEntity: Entity, duplicateId: string) => {
+    const duplicate = sourceEntity.potential_duplicates.find(
+      (d) => d.entity_id === duplicateId
+    );
+    if (!duplicate) return;
+
+    setMergeSource(sourceEntity);
+    setMergeTarget({
+      id: duplicate.entity_id,
+      canonical_name: duplicate.canonical_name,
+      type: duplicate.entity_type,
+    });
+    setMergeModalOpen(true);
+  };
+
+  const handleConfirmMerge = async (newCanonicalName: string) => {
+    if (!mergeSource || !mergeTarget) return;
+
+    setProcessingEntityId(mergeSource.id);
+    try {
+      const response = await fetch(`/api/jobs/${jobId}/entities/merge`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ entities: approvedList }),
+        body: JSON.stringify({
+          sourceEntityId: mergeSource.id,
+          targetEntityId: mergeTarget.id,
+          newCanonicalName,
+        }),
       });
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Failed to approve entities");
+        throw new Error("Failed to merge entities");
       }
 
-      // Redirect to job status page
+      await fetchEntities();
+      setMergeModalOpen(false);
+    } catch (err) {
+      console.error("Merge failed:", err);
+      throw err;
+    } finally {
+      setProcessingEntityId(null);
+    }
+  };
+
+  const handleContinue = async () => {
+    // Call the approve-entities endpoint to continue the job
+    try {
+      const response = await fetch(`/api/jobs/${jobId}/approve-entities`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          entities: entities.filter((e) => e.review_status === "approved"),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to continue job");
+      }
+
       router.push(`/jobs/${jobId}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to submit");
-      setSubmitting(false);
+      console.error("Continue failed:", err);
     }
   };
 
@@ -207,8 +223,10 @@ export default function EntityReviewPage() {
     );
   }
 
-  const approvedCount = approvedEntities.size;
   const totalCount = entities.length;
+  const reviewedCount = statusCounts.approved + statusCounts.rejected + statusCounts.merged;
+  const progressPercent = totalCount > 0 ? Math.round((reviewedCount / totalCount) * 100) : 0;
+  const allReviewed = statusCounts.pending === 0 && totalCount > 0;
 
   return (
     <div className="min-h-screen bg-[#FBFBFB]">
@@ -229,45 +247,62 @@ export default function EntityReviewPage() {
             Review Extracted Entities
           </h1>
           <p className="font-serif text-lg text-[rgba(0,0,0,0.65)] italic">
-            {job?.config?.title || "Untitled Research"}
+            {job?.title || "Untitled Research"}
           </p>
         </div>
 
-        {/* Stats & Actions Bar */}
+        {/* Progress Card */}
         <Card className="mb-6">
-          <CardContent className="p-4 flex items-center justify-between">
-            <div className="flex items-center gap-6">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
               <div className="font-mono text-sm">
-                <span className="text-[#3B5FE6] font-semibold">{approvedCount}</span>
-                <span className="text-[rgba(0,0,0,0.45)]"> / {totalCount} approved</span>
+                <span className="text-[#3B5FE6] font-semibold">{reviewedCount}</span>
+                <span className="text-[rgba(0,0,0,0.45)]"> / {totalCount} reviewed</span>
               </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={selectAll}>
-                  Select All
-                </Button>
-                <Button variant="outline" size="sm" onClick={deselectAll}>
-                  Deselect All
-                </Button>
+              <div className="flex items-center gap-4 font-mono text-[10px] uppercase tracking-[0.05em]">
+                <span className="text-green-600">{statusCounts.approved} approved</span>
+                <span className="text-red-600">{statusCounts.rejected} rejected</span>
+                <span className="text-purple-600">{statusCounts.merged} merged</span>
+                <span className="text-[rgba(0,0,0,0.45)]">{statusCounts.pending} pending</span>
               </div>
             </div>
-            <Button
-              onClick={handleSubmit}
-              disabled={submitting || approvedCount === 0}
-            >
-              {submitting ? "Submitting..." : `Approve ${approvedCount} Entities`}
-            </Button>
+            <Progress value={progressPercent} className="h-1" />
           </CardContent>
         </Card>
 
-        {/* Entity Grid */}
+        {/* All Reviewed Banner */}
+        {allReviewed && (
+          <Card className="mb-6 border-[#22c55e]/20 bg-[#22c55e]/5">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className="h-5 w-5 text-[#16a34a]" />
+                <div>
+                  <p className="font-mono text-sm uppercase tracking-[0.05em] text-[#16a34a]">
+                    All Entities Reviewed
+                  </p>
+                  <p className="font-serif text-sm text-[#16a34a]/80 italic">
+                    {statusCounts.approved} entities will be added to the knowledge graph
+                  </p>
+                </div>
+              </div>
+              <Button onClick={handleContinue}>
+                Continue to Graph Integration →
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Entity List */}
         <SectionHeader>Extracted Entities</SectionHeader>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3">
           {entities.map((entity) => (
-            <EntityCard
-              key={entity.canonicalName}
+            <EntityReviewCard
+              key={entity.id}
               entity={entity}
-              isApproved={approvedEntities.has(entity.canonicalName)}
-              onToggle={() => toggleEntity(entity.canonicalName)}
+              onApprove={() => handleApprove(entity.id)}
+              onReject={() => handleReject(entity.id)}
+              onMerge={(duplicateId) => handleMergeClick(entity, duplicateId)}
+              isProcessing={processingEntityId === entity.id}
             />
           ))}
         </div>
@@ -276,27 +311,38 @@ export default function EntityReviewPage() {
           <Card>
             <CardContent className="p-8 text-center">
               <p className="font-mono text-sm text-[rgba(0,0,0,0.45)] uppercase tracking-[0.05em]">
-                No entities extracted
+                No entities to review
               </p>
             </CardContent>
           </Card>
         )}
 
-        {/* Bottom Submit Bar */}
-        {entities.length > 0 && (
+        {/* Bottom Action Bar */}
+        {totalCount > 0 && !allReviewed && (
           <div className="mt-8 flex justify-end">
             <Button
-              onClick={handleSubmit}
-              disabled={submitting || approvedCount === 0}
-              size="lg"
+              variant="outline"
+              onClick={handleContinue}
+              disabled={statusCounts.approved === 0}
             >
-              {submitting
-                ? "Submitting..."
-                : `Continue with ${approvedCount} Entities →`}
+              Skip Remaining & Continue with {statusCounts.approved} →
             </Button>
           </div>
         )}
       </main>
+
+      {/* Merge Modal */}
+      <EntityMergeModal
+        isOpen={mergeModalOpen}
+        onClose={() => setMergeModalOpen(false)}
+        sourceEntity={mergeSource ? {
+          id: mergeSource.id,
+          canonical_name: mergeSource.canonical_name,
+          type: mergeSource.type,
+        } : null}
+        targetEntity={mergeTarget}
+        onConfirmMerge={handleConfirmMerge}
+      />
     </div>
   );
 }
@@ -313,97 +359,5 @@ function Header() {
         </Link>
       </div>
     </header>
-  );
-}
-
-function EntityCard({
-  entity,
-  isApproved,
-  onToggle,
-}: {
-  entity: ExtractedEntity;
-  isApproved: boolean;
-  onToggle: () => void;
-}) {
-  const typeColor = TYPE_COLORS[entity.type] || TYPE_COLORS.concept;
-  const sentimentColor = SENTIMENT_COLORS[entity.sentiment] || SENTIMENT_COLORS.neutral;
-
-  return (
-    <Card
-      className={`cursor-pointer transition-all ${
-        isApproved
-          ? "border-[#3B5FE6]/30 bg-[#3B5FE6]/[0.02]"
-          : "opacity-60 hover:opacity-80"
-      }`}
-      onClick={onToggle}
-    >
-      <CardContent className="p-4">
-        {/* Header Row */}
-        <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={isApproved}
-              onCheckedChange={onToggle}
-              onClick={(e) => e.stopPropagation()}
-            />
-            <div>
-              <h3 className="font-mono text-sm font-semibold uppercase tracking-[0.05em]">
-                {entity.canonicalName}
-              </h3>
-              {entity.aliases.length > 0 && (
-                <p className="font-mono text-xs text-[rgba(0,0,0,0.45)] mt-0.5">
-                  aka: {entity.aliases.slice(0, 2).join(", ")}
-                  {entity.aliases.length > 2 && ` +${entity.aliases.length - 2}`}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge
-              variant="outline"
-              className={`${typeColor} border-0 font-mono text-[10px] uppercase`}
-            >
-              {entity.type}
-            </Badge>
-            <span className={`font-mono text-[10px] uppercase ${sentimentColor}`}>
-              {entity.sentiment}
-            </span>
-          </div>
-        </div>
-
-        {/* Description */}
-        <p className="font-serif text-sm text-[rgba(0,0,0,0.65)] line-clamp-2 mb-3">
-          {entity.description}
-        </p>
-
-        {/* Metadata Row */}
-        <div className="flex items-center gap-4 text-[10px] font-mono text-[rgba(0,0,0,0.45)]">
-          {entity.category && <span>{entity.category}</span>}
-          {entity.url && (
-            <a
-              href={entity.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#3B5FE6] transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              Website ↗
-            </a>
-          )}
-          {entity.twitter && (
-            <a
-              href={`https://twitter.com/${entity.twitter.replace("@", "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-[#3B5FE6] transition-colors"
-              onClick={(e) => e.stopPropagation()}
-            >
-              @{entity.twitter.replace("@", "")}
-            </a>
-          )}
-          <span>{entity.mentions.length} mentions</span>
-        </div>
-      </CardContent>
-    </Card>
   );
 }

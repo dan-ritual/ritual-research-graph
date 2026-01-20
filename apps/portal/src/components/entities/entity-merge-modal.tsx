@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -55,11 +55,11 @@ export function EntityMergeModal({
   const [isMerging, setIsMerging] = useState(false);
 
   // Reset canonical name when entities change
-  useState(() => {
+  useEffect(() => {
     setCanonicalName(
       targetEntity?.canonical_name || sourceEntity?.canonical_name || ""
     );
-  });
+  }, [targetEntity?.canonical_name, sourceEntity?.canonical_name]);
 
   const handleMerge = async () => {
     if (!canonicalName.trim()) return;

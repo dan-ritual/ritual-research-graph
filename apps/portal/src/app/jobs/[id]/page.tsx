@@ -226,9 +226,14 @@ export default function JobStatusPage() {
               <p className="font-serif text-sm text-[#16a34a]/80 mb-4 italic">
                 Your microsite is ready to view.
               </p>
-              <Link href={`/microsites/${job.microsite_id}`}>
-                <Button>View Microsite</Button>
-              </Link>
+              <div className="flex gap-2">
+                <Link href={`/microsites/${job.microsite_id}`}>
+                  <Button>View Microsite</Button>
+                </Link>
+                <Link href={`/jobs/${jobId}/edit`}>
+                  <Button variant="outline">Edit Artifacts</Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         )}
