@@ -12,13 +12,20 @@ export async function GET(
   // Verify job exists
   const { data: job, error: jobError } = await supabase
     .from("generation_jobs")
-    .select("id, title, status")
+    .select("id, config, status")
     .eq("id", jobId)
     .single();
 
   if (jobError || !job) {
     return NextResponse.json({ error: "Job not found" }, { status: 404 });
   }
+
+  // Extract title from config
+  const jobWithTitle = {
+    id: job.id,
+    title: (job.config as { title?: string })?.title || "Untitled",
+    status: job.status,
+  };
 
   // Fetch all artifacts for this job
   const { data: artifacts, error: artifactsError } = await supabase
@@ -35,7 +42,7 @@ export async function GET(
   }
 
   return NextResponse.json({
-    job,
+    job: jobWithTitle,
     artifacts: artifacts || [],
   });
 }
