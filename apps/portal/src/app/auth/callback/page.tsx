@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 function AuthCallbackContent() {
@@ -12,34 +13,47 @@ function AuthCallbackContent() {
   useEffect(() => {
     const supabase = createClient();
     const next = searchParams.get("next") || "/";
+    const code = searchParams.get("code");
 
-    // Listen for auth state changes - this catches when Supabase finishes processing the URL
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    async function handleAuthCallback() {
+      // If we have a code, exchange it for a session (PKCE flow)
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchangeError) {
+          setError(exchangeError.message);
+          return;
+        }
+      }
+
+      // Check if session exists after exchange
+      const { data: { session } } = await supabase.auth.getSession();
       if (session) {
         router.push(next);
+        return;
       }
-    });
 
-    // Also check if session already exists (e.g., on page refresh)
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.push(next);
-      }
-    });
+      // Listen for auth state changes as fallback (handles hash fragments)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          router.push(next);
+        }
+      });
 
-    // Timeout fallback - if no session after 5 seconds, show error
-    const timeout = setTimeout(() => {
-      supabase.auth.getSession().then(({ data: { session } }) => {
+      // Timeout fallback - if no session after 10 seconds, show error
+      const timeout = setTimeout(async () => {
+        const { data: { session } } = await supabase.auth.getSession();
         if (!session) {
           setError("Authentication timed out. Please try again.");
         }
-      });
-    }, 5000);
+      }, 10000);
 
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
-    };
+      return () => {
+        subscription.unsubscribe();
+        clearTimeout(timeout);
+      };
+    }
+
+    handleAuthCallback();
   }, [searchParams, router]);
 
   if (error) {
@@ -48,9 +62,9 @@ function AuthCallbackContent() {
         <div className="text-center">
           <h1 className="font-mono text-sm uppercase tracking-[0.12em] text-destructive mb-2">AUTHENTICATION ERROR</h1>
           <p className="font-mono text-xs text-[rgba(0,0,0,0.45)] mb-4">{error}</p>
-          <a href="/login" className="font-mono text-xs uppercase tracking-[0.1em] text-[var(--mode-accent)] border-b border-dotted border-[var(--mode-accent)]/50 hover:border-solid">
+          <Link href="/login" className="font-mono text-xs uppercase tracking-[0.1em] text-[var(--mode-accent)] border-b border-dotted border-[var(--mode-accent)]/50 hover:border-solid">
             Return to login
-          </a>
+          </Link>
         </div>
       </div>
     );
