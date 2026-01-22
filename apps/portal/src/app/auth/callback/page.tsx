@@ -1,65 +1,25 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 
+/**
+ * Auth callback page - displays errors or loading state.
+ *
+ * The actual PKCE code exchange happens in route.ts (server-side).
+ * This page only renders when:
+ * 1. There's an auth_error query param (error display)
+ * 2. Fallback during redirect (brief loading state)
+ */
 function AuthCallbackContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const supabase = createClient();
-    const next = searchParams.get("next") || "/";
-    const code = searchParams.get("code");
-
-    async function handleAuthCallback() {
-      // If we have a code, exchange it for a session (PKCE flow)
-      if (code) {
-        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-        if (exchangeError) {
-          setError(exchangeError.message);
-          return;
-        }
-      }
-
-      // Check if session exists after exchange
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        router.push(next);
-        return;
-      }
-
-      // Listen for auth state changes as fallback (handles hash fragments)
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        if (session) {
-          router.push(next);
-        }
-      });
-
-      // Timeout fallback - if no session after 10 seconds, show error
-      const timeout = setTimeout(async () => {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          setError("Authentication timed out. Please try again.");
-        }
-      }, 10000);
-
-      return () => {
-        subscription.unsubscribe();
-        clearTimeout(timeout);
-      };
-    }
-
-    handleAuthCallback();
-  }, [searchParams, router]);
+  const error = searchParams.get("auth_error");
 
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]">
-        <div className="text-center">
+        <div className="text-center max-w-md px-4">
           <h1 className="font-mono text-sm uppercase tracking-[0.12em] text-destructive mb-2">AUTHENTICATION ERROR</h1>
           <p className="font-mono text-xs text-[rgba(0,0,0,0.45)] mb-4">{error}</p>
           <Link href="/login" className="font-mono text-xs uppercase tracking-[0.1em] text-[var(--mode-accent)] border-b border-dotted border-[var(--mode-accent)]/50 hover:border-solid">
@@ -70,6 +30,7 @@ function AuthCallbackContent() {
     );
   }
 
+  // Brief loading state shown during redirect
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]">
       <div className="text-center">
