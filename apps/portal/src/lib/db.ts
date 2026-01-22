@@ -19,6 +19,14 @@ export function getSchemaTable(
   return coreGetSchemaTable(table, mode, schemaOverride);
 }
 
+/**
+ * Get the schema-qualified table name for shared tables.
+ * Mode remains explicit even though shared schema ignores it.
+ */
+export function getSharedTable(table: DbTable, mode: ModeId): string {
+  return coreGetSchemaTable(table, mode, SHARED_SCHEMA);
+}
+
 export function getSchemaForMode(mode: ModeId): DbSchema {
   return coreGetSchemaForMode(mode);
 }
