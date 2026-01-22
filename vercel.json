@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build -w @ritual-research/core && npm run build -w portal",
+  "outputDirectory": "apps/portal/.next",
+  "framework": "nextjs",
+  "installCommand": "npm install"
+}
