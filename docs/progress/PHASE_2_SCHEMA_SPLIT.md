@@ -54,14 +54,15 @@
 
 | File | Change Type | Purpose |
 |------|-------------|---------|
-| supabase/migrations/008_create_schemas.sql | Created | Create growth/engineering/skunkworks/shared schemas |
+| supabase/migrations/008_create_schemas.sql | Modified | Create schemas + grant USAGE to app roles |
 | supabase/migrations/009_create_shared_tables.sql | Created | Shared users + cross_links + mode_config |
 | supabase/migrations/010_create_growth_tables.sql | Created | Growth table structure + drop FKs |
 | supabase/migrations/011_create_mode_tables.sql | Created | Engineering/skunkworks table structure |
 | supabase/migrations/012_migrate_public_to_growth.sql | Created | Copy public data into growth |
-| supabase/migrations/013_add_constraints_functions_rls.sql | Created | Rebind FKs, functions, RLS, realtime |
+| supabase/migrations/013_add_constraints_functions_rls.sql | Created | Rebind FKs, functions, RLS, realtime, grants |
 | packages/core/src/db.ts | Modified | Mode schema map + explicit mode helpers |
 | apps/portal/src/lib/db.ts | Modified | Explicit schema helpers + shared schema export |
+| docs/specs/SPEC_1_SCHEMA_SPLIT.md | Modified | Add PostgREST schema exposure requirement |
 
 ---
 

@@ -121,6 +121,10 @@ CREATE SCHEMA IF NOT EXISTS shared;
    - Verify data integrity
    - Drop public tables (after grace period)
 
+### PostgREST Schema Exposure
+
+Ensure Supabase API `db_schema` includes `growth, engineering, skunkworks, shared` so PostgREST can access mode schemas and shared tables. This is a required deployment step after migration, along with a PostgREST reload if needed.
+
 ### Cross-Links Table
 
 ```sql

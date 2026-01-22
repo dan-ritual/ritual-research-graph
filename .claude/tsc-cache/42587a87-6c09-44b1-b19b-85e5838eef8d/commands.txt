@@ -1,0 +1,2 @@
+packages/core:build:cd /Users/danielgosek/dev/projects/ritual/ritual-research-graph/packages/core && npm run build
+packages/core:tsc:cd /Users/danielgosek/dev/projects/ritual/ritual-research-graph/packages/core && npx tsc --noEmit

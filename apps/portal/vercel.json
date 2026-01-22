@@ -1,6 +1,7 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build",
+  "installCommand": "cd ../.. && npm install",
+  "buildCommand": "cd ../.. && npm run build -w @ritual-research/core && cd apps/portal && next build",
   "outputDirectory": ".next",
   "regions": ["iad1"],
   "redirects": [
