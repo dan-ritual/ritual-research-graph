@@ -21,7 +21,10 @@ export default function LoginPage() {
           queryParams: {
             hd: "ritual.net",
             prompt: "select_account",
+            access_type: "offline",
           },
+          // Request Drive scope upfront to avoid incremental auth PKCE issues
+          scopes: "https://www.googleapis.com/auth/drive.readonly",
         },
       });
 

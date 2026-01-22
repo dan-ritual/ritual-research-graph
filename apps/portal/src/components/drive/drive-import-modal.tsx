@@ -73,26 +73,10 @@ export function DriveImportModal({ isOpen, onClose, onImport }: DriveImportModal
   };
 
   const handleAuthWithDrive = async () => {
-    const supabase = createClient();
-
-    // Request incremental authorization with Drive scope
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(window.location.pathname)}`,
-        queryParams: {
-          hd: "ritual.net",
-          prompt: "consent",
-          access_type: "offline",
-        },
-        scopes: "https://www.googleapis.com/auth/drive.readonly",
-      },
-    });
-
-    if (error) {
-      setError(error.message);
-    }
-    // Otherwise, user will be redirected to Google
+    // Drive scope is now requested at initial login.
+    // If we get here, user needs to re-login to grant Drive access.
+    // Redirect to login which will request all scopes including Drive.
+    window.location.href = `/login`;
   };
 
   const loadFolderContents = useCallback(async () => {
