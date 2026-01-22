@@ -1,4 +1,4 @@
-export type EntityType = 'company' | 'person' | 'concept' | 'opportunity' | 'protocol';
+export type EntityType = 'company' | 'person' | 'concept' | 'opportunity' | 'protocol' | 'feature' | 'topic' | 'decision' | 'component' | 'idea' | 'prototype' | 'experiment';
 export interface EntityAppearance {
     micrositeId: string;
     micrositeTitle: string;
@@ -150,3 +150,4 @@ export interface SiteConfig {
         entityBacklinks: Record<string, number>;
     };
 }
+export * from "./types/cross-links.js";

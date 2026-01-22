@@ -2,6 +2,7 @@ import type { ModeId } from "./modes/types.js";
 export type DbSchema = "public" | "growth" | "engineering" | "skunkworks" | "shared";
 export declare const DB_TABLES: {
     readonly users: "users";
+    readonly cross_links: "cross_links";
     readonly entities: "entities";
     readonly entity_appearances: "entity_appearances";
     readonly entity_relations: "entity_relations";

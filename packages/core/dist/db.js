@@ -1,5 +1,6 @@
 export const DB_TABLES = {
     users: "users",
+    cross_links: "cross_links",
     entities: "entities",
     entity_appearances: "entity_appearances",
     entity_relations: "entity_relations",

@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -25,9 +24,10 @@ export async function GET(request: NextRequest) {
     const modeParam = searchParams.get("mode") || undefined;
     const mode = await resolveMode(modeParam);
 
-    // Build query - try without deleted_at filter first to check schema
+    // Build query using schema selector for proper PostgREST schema access
     let dbQuery = supabase
-      .from(getSchemaTable("entities", mode))
+      .schema(mode)
+      .from("entities")
       .select("*", { count: "exact" });
 
     // Apply search filter

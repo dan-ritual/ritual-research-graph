@@ -27,6 +27,7 @@ export interface ModeNavigationConfig {
 export interface ModePipelineStage {
     id: string;
     name: string;
+    description?: string;
     handler: string;
     provider: "claude" | "grok" | "perplexity" | "bird" | "internal";
     required: boolean;
