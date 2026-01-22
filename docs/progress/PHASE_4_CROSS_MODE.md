@@ -4,7 +4,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Status** | In Progress |
+| **Status** | Complete |
 | **Started** | 2026-01-22 |
 | **Target** | 2026-01-29 |
 | **Completed** | |
@@ -17,9 +17,9 @@
 - [x] Cross-link schema exists in shared schema with strict RLS
 - [x] Core type definitions for cross-links are available
 - [x] API endpoints can read/create links with mode gating
-- [ ] Cross-link data integrated into portal views
+- [x] Cross-link data integrated into portal views
 
-**Progress:** 3/4 complete
+**Progress:** 4/4 complete
 
 ---
 
