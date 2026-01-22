@@ -1,4 +1,5 @@
-import { SHARED_SCHEMA, getSchemaTable, resolveMode } from "@/lib/db";
+import { SHARED_SCHEMA, getSchemaTable } from "@/lib/db";
+import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 

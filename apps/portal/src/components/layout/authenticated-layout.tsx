@@ -1,4 +1,4 @@
-import { getSchemaTable } from "@/lib/db";
+import { SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -51,7 +51,7 @@ export async function AuthenticatedLayout({
   }
 
   const { data: profile } = await supabase
-    .from(getSchemaTable("users"))
+    .from(`${SHARED_SCHEMA}.users`)
     .select("*")
     .eq("id", user.id)
     .single();

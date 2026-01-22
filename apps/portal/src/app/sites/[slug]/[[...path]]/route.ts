@@ -1,4 +1,5 @@
-import { getSchemaTable, resolveMode } from "@/lib/db";
+import { getSchemaTable } from "@/lib/db";
+import { resolveMode } from "@/lib/db.server";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
