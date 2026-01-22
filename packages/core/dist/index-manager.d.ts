@@ -1,0 +1,11 @@
+import type { Microsite, MicrositeIndex, MicrositeBacklink } from './types.js';
+export declare function loadIndex(): MicrositeIndex;
+export declare function saveIndex(index: MicrositeIndex): void;
+export declare function addMicrosite(index: MicrositeIndex, microsite: Microsite): void;
+export declare function getMicrosite(index: MicrositeIndex, id: string): Microsite | null;
+export declare function getMicrositesByEntity(index: MicrositeIndex, entitySlug: string): Microsite[];
+export declare function getMicrositesByOpportunity(index: MicrositeIndex, opportunitySlug: string): Microsite[];
+export declare function calculateBacklinks(index: MicrositeIndex): void;
+export declare function getRelatedMicrosites(index: MicrositeIndex, micrositeId: string, limit?: number): MicrositeBacklink[];
+export declare function getEntityBacklinkCounts(index: MicrositeIndex): Record<string, number>;
+export declare function updateStats(index: MicrositeIndex): void;

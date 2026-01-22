@@ -1,0 +1,25 @@
+import type { ModeId } from "./modes/types.js";
+export type DbSchema = "public" | "growth" | "engineering" | "skunkworks" | "shared";
+export declare const DB_TABLES: {
+    readonly users: "users";
+    readonly entities: "entities";
+    readonly entity_appearances: "entity_appearances";
+    readonly entity_relations: "entity_relations";
+    readonly microsites: "microsites";
+    readonly artifacts: "artifacts";
+    readonly generation_jobs: "generation_jobs";
+    readonly opportunities: "opportunities";
+    readonly opportunity_entities: "opportunity_entities";
+    readonly opportunity_activity: "opportunity_activity";
+    readonly opportunity_owners: "opportunity_owners";
+    readonly pipeline_workflows: "pipeline_workflows";
+    readonly pipeline_stages: "pipeline_stages";
+    readonly transcripts: "transcripts";
+    readonly entity_opportunities: "entity_opportunities";
+};
+export type DbTable = keyof typeof DB_TABLES;
+export declare const DEFAULT_SCHEMA: DbSchema;
+export declare const MODE_SCHEMA_MAP: Record<ModeId, DbSchema>;
+export declare const SHARED_SCHEMA: DbSchema;
+export declare function getSchemaForMode(mode: ModeId): DbSchema;
+export declare function getSchemaTable(table: DbTable, mode: ModeId, schemaOverride?: DbSchema): string;

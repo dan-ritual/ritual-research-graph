@@ -8,6 +8,7 @@ node_modules/
 
 # Build outputs
 dist/
+!packages/core/dist/
 build/
 .next/
 out/

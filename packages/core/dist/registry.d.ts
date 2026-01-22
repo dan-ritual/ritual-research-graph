@@ -1,0 +1,11 @@
+import type { Entity, EntityRegistry, EntityAppearance, EntityRelation } from './types.js';
+export declare function loadRegistry(): EntityRegistry;
+export declare function saveRegistry(registry: EntityRegistry): void;
+export declare function slugify(name: string): string;
+export declare function findEntity(registry: EntityRegistry, nameOrAlias: string): Entity | null;
+export declare function addEntity(registry: EntityRegistry, name: string, type: Entity['type'], metadata?: Entity['metadata']): Entity;
+export declare function addAppearance(registry: EntityRegistry, entitySlug: string, appearance: EntityAppearance): void;
+export declare function updateCoOccurrences(registry: EntityRegistry, micrositeId: string, entitySlugs: string[]): void;
+export declare function getTopRelatedEntities(registry: EntityRegistry, entitySlug: string, limit?: number): EntityRelation[];
+export declare function getEntitiesByOpportunity(registry: EntityRegistry, opportunitySlug: string): Entity[];
+export declare function rebuildOpportunityIndex(registry: EntityRegistry): void;
