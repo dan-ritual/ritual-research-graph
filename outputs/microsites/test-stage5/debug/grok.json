@@ -1,0 +1,3 @@
+{
+  "error": "Grok API error: 404 - {\"code\":\"Some requested entity was not found\",\"error\":\"The model grok-2 does not exist or your team 797e9239-4887-4c41-8a06-042d13de0695 does not have access to it. Please ensure you're using the correct API key. If you believe this is a mistake, please contact support and quote your team ID and the model name.\"}"
+}

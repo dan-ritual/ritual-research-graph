@@ -10,6 +10,11 @@ import type { Ora } from 'ora';
 
 const execAsync = promisify(exec);
 
+// Get project root from script location (scripts/stages/microsite.ts -> project root)
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..');
+const TEMPLATE_PATH = path.join(PROJECT_ROOT, 'templates', 'microsite');
+
 interface MicrositeOptions {
   config: GenerationConfig;
   siteConfig: SiteConfig;
@@ -25,8 +30,6 @@ interface MicrositeOptions {
   spinner: Ora;
   outputDir: string;
 }
-
-const TEMPLATE_PATH = '/Users/danielgosek/Downloads/defi-rwa';
 
 export async function buildMicrosite(options: MicrositeOptions): Promise<string> {
   const { config, siteConfig, entities, artifacts, spinner, outputDir } = options;

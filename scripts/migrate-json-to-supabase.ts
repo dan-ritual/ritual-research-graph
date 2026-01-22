@@ -1,4 +1,11 @@
 #!/usr/bin/env npx tsx
+import {
+  DEFAULT_MODE_ID,
+  MODE_CONFIGS,
+  SHARED_SCHEMA,
+  getSchemaTable,
+  type ModeId,
+} from '@ritual-research/core';
 /**
  * Migration script: JSON data → Supabase
  *
@@ -22,6 +29,18 @@ if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+function resolveModeId(value?: string | null): ModeId {
+  if (value && value in MODE_CONFIGS) {
+    return value as ModeId;
+  }
+  return DEFAULT_MODE_ID;
+}
+
+const args = process.argv.slice(2);
+const modeIndex = args.indexOf('--mode');
+const modeArg = modeIndex >= 0 ? args[modeIndex + 1] : undefined;
+const modeId = resolveModeId(modeArg);
 
 // Map JSON section names to DB enum values
 const sectionMap: Record<string, string> = {
@@ -100,7 +119,7 @@ async function migrateOpportunities(opportunities: Record<string, OpportunityJso
   // First pass: insert all without parent references
   for (const [slug, opp] of Object.entries(opportunities)) {
     const { error } = await supabase
-      .from('opportunities')
+    .from(getSchemaTable('opportunities', modeId))
       .upsert({
         slug: opp.slug,
         name: opp.name,
@@ -122,14 +141,14 @@ async function migrateOpportunities(opportunities: Record<string, OpportunityJso
     if (opp.parent) {
       // Get parent ID
       const { data: parent } = await supabase
-        .from('opportunities')
+      .from(getSchemaTable('opportunities', modeId))
         .select('id')
         .eq('slug', opp.parent)
         .single();
 
       if (parent) {
         const { error } = await supabase
-          .from('opportunities')
+          .from(getSchemaTable('opportunities', modeId))
           .update({ parent_id: parent.id })
           .eq('slug', slug);
 
@@ -150,7 +169,7 @@ async function migrateEntities(entities: Record<string, EntityJson>) {
 
   for (const [slug, entity] of Object.entries(entities)) {
     const { data, error } = await supabase
-      .from('entities')
+    .from(getSchemaTable('entities', modeId))
       .upsert({
         slug: entity.slug,
         canonical_name: entity.canonicalName,
@@ -177,7 +196,7 @@ async function migrateEntities(entities: Record<string, EntityJson>) {
 async function getOrCreateSystemUser(): Promise<string> {
   // Check if any user exists (use first admin or create via auth)
   const { data: existing } = await supabase
-    .from('users')
+    .from(getSchemaTable('users', modeId, SHARED_SCHEMA))
     .select('id')
     .eq('role', 'admin')
     .limit(1)
@@ -201,7 +220,7 @@ async function getOrCreateSystemUser(): Promise<string> {
 
   // Update the user to admin role
   const { error: updateError } = await supabase
-    .from('users')
+    .from(getSchemaTable('users', modeId, SHARED_SCHEMA))
     .update({ role: 'admin' })
     .eq('id', authUser.user.id);
 
@@ -222,7 +241,7 @@ async function migrateMicrosites(
 
   for (const [slug, site] of Object.entries(microsites)) {
     const { data, error } = await supabase
-      .from('microsites')
+      .from(getSchemaTable('microsites', modeId))
       .upsert({
         slug: site.id,
         user_id: systemUserId,
@@ -276,7 +295,7 @@ async function migrateEntityAppearances(
       const section = sectionMap[appearance.section] || 'key_findings';
 
       const { error } = await supabase
-        .from('entity_appearances')
+        .from(getSchemaTable('entity_appearances', modeId))
         .upsert({
           entity_id: entityId,
           microsite_id: micrositeId,
@@ -323,7 +342,7 @@ async function migrateEntityRelations(
       seenPairs.add(pairKey);
 
       const { error } = await supabase
-        .from('entity_relations')
+        .from(getSchemaTable('entity_relations', modeId))
         .upsert({
           entity_a_id: id1,
           entity_b_id: id2,
@@ -356,7 +375,7 @@ async function migrateEntityOpportunities(
     for (const oppSlug of entity.opportunities) {
       // Get opportunity ID
       const { data: opp } = await supabase
-        .from('opportunities')
+        .from(getSchemaTable('opportunities', modeId))
         .select('id')
         .eq('slug', oppSlug)
         .single();
@@ -364,7 +383,7 @@ async function migrateEntityOpportunities(
       if (!opp) continue;
 
       const { error } = await supabase
-        .from('entity_opportunities')
+        .from(getSchemaTable('entity_opportunities', modeId))
         .upsert({
           entity_id: entityId,
           opportunity_id: opp.id,

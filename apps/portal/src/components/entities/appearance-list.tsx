@@ -18,6 +18,8 @@ interface Appearance {
 
 interface AppearanceListProps {
   appearances: Appearance[];
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 function formatSection(section: string): string {
@@ -27,7 +29,7 @@ function formatSection(section: string): string {
     .join(" ");
 }
 
-export function AppearanceList({ appearances }: AppearanceListProps) {
+export function AppearanceList({ appearances, modePrefix = "" }: AppearanceListProps) {
   if (appearances.length === 0) {
     return (
       <p className="font-serif text-sm italic text-[rgba(0,0,0,0.45)]">
@@ -45,10 +47,10 @@ export function AppearanceList({ appearances }: AppearanceListProps) {
         return (
           <Link
             key={appearance.id}
-            href={`/microsites/${microsite.slug}`}
+            href={`${modePrefix}/microsites/${microsite.slug}`}
             className="block"
           >
-            <Card className="hover:border-[#3B5FE6]/30 transition-colors">
+            <Card className="hover:border-[var(--mode-accent)]/30 transition-colors">
               <CardContent className="py-4">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">

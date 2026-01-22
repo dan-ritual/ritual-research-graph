@@ -1,3 +1,4 @@
+import { getSchemaForMode, getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -8,6 +9,9 @@ export async function POST(
   const { id: jobId } = await params;
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
+
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
 
   const body = await request.json();
   const { sourceEntityId, targetEntityId, newCanonicalName } = body;
@@ -21,7 +25,7 @@ export async function POST(
 
   // Verify source entity exists and belongs to this job
   const { data: sourceEntity, error: sourceError } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select("id, canonical_name, extraction_job_id")
     .eq("id", sourceEntityId)
     .single();
@@ -35,7 +39,7 @@ export async function POST(
 
   // Verify target entity exists
   const { data: targetEntity, error: targetError } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select("id, canonical_name, type")
     .eq("id", targetEntityId)
     .single();
@@ -48,14 +52,13 @@ export async function POST(
   }
 
   // Call the merge_entities function
-  const { data: mergeResult, error: mergeError } = await supabase.rpc(
-    "merge_entities",
-    {
+  const { data: mergeResult, error: mergeError } = await supabase
+    .schema(getSchemaForMode(mode))
+    .rpc("merge_entities", {
       p_source_id: sourceEntityId,
       p_target_id: targetEntityId,
       p_user_id: null,
-    }
-  );
+    });
 
   if (mergeError) {
     console.error("Merge error:", mergeError);
@@ -68,14 +71,14 @@ export async function POST(
   // Optionally update the canonical name if provided
   if (newCanonicalName && newCanonicalName !== targetEntity.canonical_name) {
     await supabase
-      .from("entities")
+      .from(getSchemaTable("entities", mode))
       .update({ canonical_name: newCanonicalName })
       .eq("id", targetEntityId);
   }
 
   // Fetch updated target entity
   const { data: mergedEntity } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select(`
       id,
       slug,

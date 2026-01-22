@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
@@ -10,6 +11,9 @@ export async function POST(request: NextRequest) {
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   const body = await request.json();
   const { query } = body;
 
@@ -19,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   // Fetch all active opportunities with related data
   const { data: opportunities, error: fetchError } = await supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select(`
       id,
       name,

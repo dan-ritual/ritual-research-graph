@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface Owner {
   id: string;
@@ -23,7 +24,7 @@ export function OwnerList({ opportunityId, owners, onOwnerRemoved }: OwnerListPr
   const handleRemove = async (userId: string) => {
     setRemoving(userId);
     try {
-      const res = await fetch(
+      const res = await fetchWithMode(
         `/api/opportunities/${opportunityId}/owners/${userId}`,
         { method: "DELETE" }
       );

@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -61,11 +62,12 @@ export async function GET(
   // Use service client for microsite lookup (bypasses RLS)
   // This is needed because we need to check visibility before knowing if auth is required
   const serviceClient = createServiceClient();
+  const mode = await resolveMode();
 
   // 1. Look up microsite first (with service client to bypass RLS)
   // Filter by deleted_at since service client bypasses RLS policies
   const { data: microsite, error: msError } = await serviceClient
-    .from("microsites")
+    .from(getSchemaTable("microsites", mode))
     .select("id, blob_path, visibility, slug, url")
     .eq("slug", slug)
     .is("deleted_at", null)

@@ -1,0 +1,46 @@
+# Ritual Research Graph - Job Worker Service
+#
+# Installation:
+#   1. Copy this file to /etc/systemd/system/rrg-worker.service
+#   2. Update paths and user below
+#   3. Run: sudo systemctl daemon-reload
+#   4. Run: sudo systemctl enable rrg-worker
+#   5. Run: sudo systemctl start rrg-worker
+#
+# Commands:
+#   sudo systemctl status rrg-worker   # Check status
+#   sudo systemctl restart rrg-worker  # Restart
+#   sudo journalctl -u rrg-worker -f   # View logs
+
+[Unit]
+Description=Ritual Research Graph Job Worker
+After=network.target
+
+[Service]
+Type=simple
+User=danielgosek
+Group=danielgosek
+
+# Update this path to your project directory
+WorkingDirectory=/home/danielgosek/ritual-research-graph
+
+# Load environment from .env file
+EnvironmentFile=/home/danielgosek/ritual-research-graph/.env
+
+# Run the worker
+ExecStart=/usr/bin/npx tsx scripts/worker.ts
+
+# Restart on failure
+Restart=on-failure
+RestartSec=10
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=rrg-worker
+
+# Security hardening (relaxed to allow tsx temp files)
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

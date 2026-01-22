@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,8 +11,12 @@ export async function GET(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   const { data: owners, error } = await supabase
-    .from("opportunity_owners")
+    .from(getSchemaTable("opportunity_owners", mode))
     .select(`
       assigned_at,
       user:users(id, name, email, avatar_url)
@@ -40,6 +45,9 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   const body = await request.json();
   const { user_id } = body;
 
@@ -49,7 +57,7 @@ export async function POST(
 
   // Check if opportunity exists
   const { data: opportunity } = await supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select("id")
     .eq("id", id)
     .single();
@@ -60,7 +68,7 @@ export async function POST(
 
   // Check if already assigned
   const { data: existing } = await supabase
-    .from("opportunity_owners")
+    .from(getSchemaTable("opportunity_owners", mode))
     .select("opportunity_id")
     .eq("opportunity_id", id)
     .eq("user_id", user_id)
@@ -72,7 +80,7 @@ export async function POST(
 
   // Create assignment
   const { error: insertError } = await supabase
-    .from("opportunity_owners")
+    .from(getSchemaTable("opportunity_owners", mode))
     .insert({
       opportunity_id: id,
       user_id,

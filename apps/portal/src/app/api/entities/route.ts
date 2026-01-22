@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,10 +19,14 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const limit = parseInt(searchParams.get("limit") || "20", 10);
     const offset = (page - 1) * limit;
+    
+    // Resolve mode from query param, header, or cookie
+    const modeParam = searchParams.get("mode") || undefined;
+    const mode = await resolveMode(modeParam);
 
     // Build query - try without deleted_at filter first to check schema
     let dbQuery = supabase
-      .from("entities")
+      .from(getSchemaTable("entities", mode))
       .select("*", { count: "exact" });
 
     // Apply search filter

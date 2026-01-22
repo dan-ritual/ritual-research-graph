@@ -1,3 +1,4 @@
+import { getSchemaForMode, getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,9 +10,13 @@ export async function GET(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   // Verify job exists
   const { data: job, error: jobError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .select("id, config, status")
     .eq("id", jobId)
     .single();
@@ -29,7 +34,7 @@ export async function GET(
 
   // Fetch entities extracted by this job
   const { data: entities, error: entitiesError } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select(`
       id,
       slug,
@@ -56,7 +61,9 @@ export async function GET(
   const entitiesWithDuplicates = await Promise.all(
     (entities || []).map(async (entity) => {
       // Use the find_potential_duplicates function
-      const { data: duplicates } = await supabase.rpc(
+      const { data: duplicates } = await supabase
+        .schema(getSchemaForMode(mode))
+        .rpc(
         "find_potential_duplicates",
         {
           p_name: entity.canonical_name,

@@ -184,12 +184,12 @@ export function StepConfigure({
       <div>
         <button
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="font-mono text-xs uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6] flex items-center gap-1 transition-colors"
+          className="font-mono text-xs uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)] flex items-center gap-1 transition-colors"
         >
           {showAdvanced ? "▼" : "▶"} Advanced Options
         </button>
         {showAdvanced && (
-          <div className="mt-3 pl-4 border-l border-dotted border-[rgba(59,95,230,0.3)] space-y-3">
+          <div className="mt-3 pl-4 border-l border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] space-y-3">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="skipResearch"

@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface DeleteMicrositeButtonProps {
   micrositeId: string;
@@ -33,7 +34,7 @@ export function DeleteMicrositeButton({
     setError(null);
 
     try {
-      const response = await fetch(`/api/microsites/${micrositeId}/delete`, {
+      const response = await fetchWithMode(`/api/microsites/${micrositeId}/delete`, {
         method: "POST",
       });
 

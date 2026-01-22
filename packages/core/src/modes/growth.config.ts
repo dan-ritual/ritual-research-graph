@@ -1,0 +1,94 @@
+import type { ModeConfig } from "./types.js";
+
+export const growthConfig: ModeConfig = {
+  id: "growth",
+  name: "Ritual Growth",
+  shortName: "Growth",
+  description: "BD/CRM, external opportunities, entity tracking.",
+  accent: "#3B5FE6",
+  accentLight: "#9BB3FF",
+  entityTypes: [
+    {
+      id: "company",
+      label: "Company",
+      labelPlural: "Companies",
+      icon: "Building2",
+      fields: [
+        { id: "name", label: "Name", type: "string", required: true },
+        { id: "sector", label: "Sector", type: "enum", required: false, options: ["DeFi", "Infrastructure", "AI", "Gaming", "Other"] },
+        { id: "website", label: "Website", type: "url", required: false },
+        { id: "description", label: "Description", type: "text", required: false },
+      ],
+      searchableFields: ["name", "sector", "description"],
+    },
+    {
+      id: "person",
+      label: "Person",
+      labelPlural: "People",
+      icon: "User",
+      fields: [
+        { id: "name", label: "Name", type: "string", required: true },
+        { id: "role", label: "Role", type: "string", required: false },
+        { id: "twitter", label: "Twitter", type: "url", required: false },
+      ],
+      searchableFields: ["name", "role"],
+    },
+    {
+      id: "protocol",
+      label: "Protocol",
+      labelPlural: "Protocols",
+      icon: "Boxes",
+      fields: [
+        { id: "name", label: "Name", type: "string", required: true },
+        { id: "chain", label: "Chain", type: "enum", required: false, options: ["Ethereum", "Solana", "Polygon", "Other"] },
+        { id: "tvl", label: "TVL", type: "string", required: false },
+      ],
+      searchableFields: ["name", "chain"],
+    },
+    {
+      id: "opportunity",
+      label: "Opportunity",
+      labelPlural: "Opportunities",
+      icon: "Target",
+      fields: [
+        { id: "name", label: "Name", type: "string", required: true },
+        { id: "priority", label: "Priority", type: "enum", required: false, options: ["High", "Medium", "Low"] },
+        { id: "summary", label: "Summary", type: "text", required: false },
+      ],
+      searchableFields: ["name", "summary"],
+    },
+    {
+      id: "concept",
+      label: "Concept",
+      labelPlural: "Concepts",
+      icon: "Lightbulb",
+      fields: [
+        { id: "name", label: "Name", type: "string", required: true },
+        { id: "definition", label: "Definition", type: "text", required: false },
+      ],
+      searchableFields: ["name", "definition"],
+    },
+  ],
+  pipelineStages: [
+    { id: "artifacts", name: "Artifacts", handler: "scripts/stages/artifacts", provider: "claude", required: true, order: 1 },
+    { id: "research", name: "Research Chain", handler: "scripts/stages/research", provider: "grok", required: false, order: 2 },
+    { id: "entities", name: "Entity Extraction", handler: "scripts/stages/entities", provider: "claude", required: true, order: 3 },
+    { id: "site-config", name: "Site Config", handler: "scripts/stages/site-config", provider: "claude", required: true, order: 4 },
+    { id: "microsite", name: "Microsite Build", handler: "scripts/stages/microsite", provider: "internal", required: true, order: 5 },
+    { id: "blob-upload", name: "Blob Upload", handler: "scripts/lib/blob", provider: "internal", required: false, order: 5.5 },
+    { id: "graph", name: "Graph Integration", handler: "scripts/stages/graph", provider: "internal", required: false, order: 6 },
+  ],
+  navigation: {
+    defaultPath: "/dashboard",
+    items: [
+      { label: "Dashboard", path: "/dashboard", icon: "LayoutDashboard" },
+      { label: "Microsites", path: "/microsites", icon: "FileText" },
+      { label: "Entities", path: "/entities", icon: "Users" },
+      { label: "Pipeline", path: "/pipeline", icon: "GitBranch" },
+    ],
+  },
+  features: {
+    crossLinking: true,
+    externalIntegrations: ["bird-cli", "perplexity", "grok"],
+  },
+};

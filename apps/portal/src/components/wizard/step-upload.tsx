@@ -100,8 +100,8 @@ export function StepUpload({ onComplete }: StepUploadProps) {
         onDrop={handleDrop}
         className={`border border-dashed p-8 text-center transition-colors ${
           isDragging
-            ? "border-[#3B5FE6] bg-[#3B5FE6]/5"
-            : "border-[rgba(0,0,0,0.15)] hover:border-[#3B5FE6]/50"
+            ? "border-[var(--mode-accent)] bg-[var(--mode-accent)]/5"
+            : "border-[rgba(0,0,0,0.15)] hover:border-[var(--mode-accent)]/50"
         }`}
       >
         <div className="text-[rgba(0,0,0,0.45)]">
@@ -114,7 +114,7 @@ export function StepUpload({ onComplete }: StepUploadProps) {
               onChange={handleFileSelect}
               className="hidden"
             />
-            <span className="font-mono text-xs uppercase tracking-[0.05em] text-[#3B5FE6] cursor-pointer border-b border-dotted border-[#3B5FE6]/50 hover:border-[#3B5FE6]">
+            <span className="font-mono text-xs uppercase tracking-[0.05em] text-[var(--mode-accent)] cursor-pointer border-b border-dotted border-[var(--mode-accent)]/50 hover:border-[var(--mode-accent)]">
               Browse files
             </span>
           </label>

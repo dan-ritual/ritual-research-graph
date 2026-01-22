@@ -14,7 +14,7 @@ function SectionHeader({
   return (
     <Component
       className={cn(
-        "font-mono text-sm font-semibold uppercase tracking-[0.12em] text-[#3B5FE6] pb-4 mb-6 border-b border-dotted border-[rgba(59,95,230,0.3)]",
+        "font-mono text-xs font-medium uppercase tracking-[0.12em] text-[var(--mode-accent)] pb-3 mb-6 border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]",
         className
       )}
       {...props}

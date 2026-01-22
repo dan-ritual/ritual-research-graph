@@ -49,7 +49,7 @@ export function ArtifactSection({
       className={`border transition-colors ${
         isFrozen
           ? "border-[rgba(0,0,0,0.08)] bg-[#FAFAFA]"
-          : "border-[#3B5FE6]/30 bg-white"
+          : "border-[var(--mode-accent)]/30 bg-white"
       }`}
     >
       {/* Section header */}
@@ -65,7 +65,7 @@ export function ArtifactSection({
             </span>
           )}
           {hasBeenEdited && (
-            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#3B5FE6] bg-[#3B5FE6]/10 px-1.5 py-0.5">
+            <span className="font-mono text-[10px] uppercase tracking-[0.05em] text-[var(--mode-accent)] bg-[var(--mode-accent)]/10 px-1.5 py-0.5">
               Edited
             </span>
           )}
@@ -76,7 +76,7 @@ export function ArtifactSection({
               variant="ghost"
               size="sm"
               onClick={onToggleFreeze}
-              className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6]"
+              className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)]"
             >
               <Lock className="h-3 w-3 mr-1" />
               Frozen
@@ -87,7 +87,7 @@ export function ArtifactSection({
                 variant="ghost"
                 size="sm"
                 onClick={onToggleFreeze}
-                className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6]"
+                className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)]"
               >
                 <Lock className="h-3 w-3 mr-1" />
                 Freeze
@@ -98,7 +98,7 @@ export function ArtifactSection({
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsEditing(true)}
-                    className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6]"
+                    className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)]"
                   >
                     <Edit2 className="h-3 w-3 mr-1" />
                     Edit
@@ -107,7 +107,7 @@ export function ArtifactSection({
                     variant="ghost"
                     size="sm"
                     onClick={onRegenerate}
-                    className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#3B5FE6] hover:bg-[#3B5FE6]/10"
+                    className="font-mono text-[10px] uppercase tracking-[0.05em] text-[var(--mode-accent)] hover:bg-[var(--mode-accent)]/10"
                   >
                     <RefreshCw className="h-3 w-3 mr-1" />
                     Regen
@@ -126,7 +126,7 @@ export function ArtifactSection({
             <Textarea
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
-              className="min-h-[200px] font-serif text-sm leading-relaxed border-[#3B5FE6]/30 focus:border-[#3B5FE6] focus:ring-[#3B5FE6]/20"
+              className="min-h-[200px] font-serif text-sm leading-relaxed border-[var(--mode-accent)]/30 focus:border-[var(--mode-accent)] focus:ring-[var(--mode-accent)]/20"
             />
             <div className="flex items-center gap-2 justify-end">
               <Button
@@ -141,7 +141,7 @@ export function ArtifactSection({
               <Button
                 size="sm"
                 onClick={handleSave}
-                className="font-mono text-xs uppercase tracking-[0.05em] bg-[#3B5FE6] hover:bg-[#3B5FE6]/90"
+                className="font-mono text-xs uppercase tracking-[0.05em] bg-[var(--mode-accent)] hover:bg-[var(--mode-accent)]/90"
               >
                 <Check className="h-3 w-3 mr-1" />
                 Save

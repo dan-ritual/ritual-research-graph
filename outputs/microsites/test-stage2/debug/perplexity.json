@@ -1,0 +1,31 @@
+{
+  "research": "I can provide a comprehensive overview of the RWA DeFi market based on available search results, though the results focus primarily on market-level trends rather than specific entity deep dives.\n\n## Market Context & Overview\n\n**Market Size and Growth**\n\nThe RWA (Real-World Assets) tokenization market has demonstrated significant momentum. The market grew from **$8.5B in early 2024 to $19.7B**, representing substantial institutional adoption beyond speculation[1]. In 2025 specifically, RWAs achieved a **3.4x increase in non-stablecoin AUM**, with projections suggesting RWAs will exceed **4x growth in 2026**[2].\n\nBy 2030, the market is projected to reach **$2–4 trillion in tokenized assets**, requiring a **50–100x increase from current levels**[1]. This growth depends on regulatory stability, cross-chain interoperability, and institutional confidence.\n\n**Key Market Segments**\n\nThe RWA market segments into distinct subsectors with different growth trajectories[1]:\n\n- **Tokenized Treasuries and Money Market Funds**: ~$8–9 billion (45–50% of market), offering 4–6% returns with 24/7 access versus T+2 settlement in traditional markets\n- **Private Credit**: $2–6 billion currently, but projected to reach **$150–200B** (highest growth rate due to small base and 20–30% market share)\n- **Public Stocks**: Over $400 million with rapid growth, primarily driven by Ondo Finance\n- **Real Estate**: Projected to reach **$3–4T** dependent on blockchain-compatible land registry adoption\n\n**Key Growth Drivers**\n\nThree primary factors are accelerating RWA adoption[1]:\n\n- **Yield Arbitrage Appeal**: Tokenized treasury products offering superior returns with continuous access\n- **Institutional Demand**: Banks, asset managers, and treasurers seeking yield and operational efficiency\n- **Infrastructure Maturity**: Security audits, regulatory frameworks, and institutional-grade privacy solutions enabling production deployment\n\n## Stablecoin Infrastructure Context\n\nStablecoins underpin RWA DeFi activity, with **$46 trillion in transaction volume in 2025**—exceeding PayPal by 20x and approaching Visa's volume[3]. This creates infrastructure for tokenized assets to function as settlement layers.\n\n## Major Institutional Players\n\nThe search results identify several leading platforms targeting different market segments[1]:\n\n- **Ondo**: Managing **$1.93B TVL** across three chains, prioritizing liquidity velocity for retail/DeFi markets\n- **Centrifuge**: Focused on **$1.3–1.45B** in institutional credit markets, emphasizing depth over speed\n- **Rayls**: Targeting banks and central banks with institutional-grade privacy; AmFi Consortium committed to tokenizing **$1 billion in assets by June 2027**\n- **Canton Network**: Positioned as Wall Street's blockchain infrastructure\n- **Polymesh**: Focused on security tokens, with planned Ethereum bridge in Q2 2026\n\n## Regulatory and Operational Landscape\n\n**Regulatory Framework Development**\n\nThe industry is transitioning from proof-of-concept to regulated scale[4]. Key developments include:\n\n- Development of regulated exchanges and infrastructure for listing tokenized securities\n- DeFi regulation remains a frontier, with jurisdictions exploring light-touch approaches focused on reporting versus full licensing[4]\n- Regulatory compliance mechanisms are increasingly automated, with protocols adapting to regulatory changes\n\n**Industry Milestones**\n\nA **hundred-billion-dollar milestone** in tokenized assets is expected in **2027–2028**[1]. January 8, 2026 saw Rayls complete a security audit by Halborn, signaling institutional-grade validation[1].\n\n**Limitations of Available Data**\n\nThe search results do not provide specific information about Provenance, Maple Finance, Plume, BlackRock, Compound, Aave, or EtherFi that you requested. To comprehensively research these specific entities, you would need additional sources covering their individual metrics, recent announcements, and competitive positioning within the RWA ecosystem.",
+  "citations": [
+    {
+      "url": "https://www.techflowpost.com/en-US/article/29896",
+      "title": "Source 1",
+      "snippet": ""
+    },
+    {
+      "url": "https://keyrock.com/12-charts-to-watch-in-2026/",
+      "title": "Source 2",
+      "snippet": ""
+    },
+    {
+      "url": "https://a16zcrypto.com/posts/article/trends-stablecoins-rwa-tokenization-payments-finance/",
+      "title": "Source 3",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.walkersglobal.com/Insights/2025/12/Digital-Assets-in-2026",
+      "title": "Source 4",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.rwa.io/post/rwa-investing-trends-for-2026",
+      "title": "Source 5",
+      "snippet": ""
+    }
+  ],
+  "entityInsights": {}
+}

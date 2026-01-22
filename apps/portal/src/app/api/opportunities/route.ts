@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,8 +11,12 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "50");
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   let query = supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select(`
       id, name, stage, priority, created_at, updated_at,
       opportunity_owners(user_id, users(email))

@@ -5,20 +5,20 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive font-mono uppercase tracking-[0.1em]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive font-mono uppercase tracking-[0.1em] rounded-none",
   {
     variants: {
       variant: {
-        default: "bg-[#3B5FE6] text-white hover:bg-[#3B5FE6]/90",
+        default: "bg-[var(--mode-accent)] text-white hover:bg-[var(--mode-accent)]/90",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border border-[rgba(0,0,0,0.08)] bg-white hover:bg-[#F5F5F5] hover:text-foreground",
+          "border border-[rgba(0,0,0,0.08)] bg-white hover:bg-muted hover:text-foreground",
         secondary:
-          "bg-[#F5F5F5] text-foreground hover:bg-[#F5F5F5]/80",
+          "bg-muted text-foreground hover:bg-muted/80",
         ghost:
-          "hover:bg-[#F5F5F5] hover:text-foreground",
-        link: "text-[#3B5FE6] underline-offset-4 hover:underline",
+          "hover:bg-muted hover:text-foreground",
+        link: "text-[var(--mode-accent)] underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

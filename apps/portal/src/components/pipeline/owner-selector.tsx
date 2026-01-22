@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface User {
   id: string;
@@ -31,7 +32,7 @@ export function OwnerSelector({
     async function fetchUsers() {
       setLoading(true);
       try {
-        const res = await fetch("/api/users");
+        const res = await fetchWithMode("/api/users");
         const data = await res.json();
         setUsers(data.users || []);
       } catch (error) {
@@ -60,7 +61,7 @@ export function OwnerSelector({
   const handleAddOwner = async (userId: string) => {
     setAdding(userId);
     try {
-      const res = await fetch(`/api/opportunities/${opportunityId}/owners`, {
+      const res = await fetchWithMode(`/api/opportunities/${opportunityId}/owners`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_id: userId }),

@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -22,9 +23,12 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Verify job exists and has a microsite
   const { data: job, error: jobError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .select(`
       id,
       title,
@@ -69,7 +73,7 @@ export async function POST(
 
   // Get updated artifacts to verify they exist
   const { data: artifacts, error: artifactsError } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .select("id, type, last_edited_at")
     .eq("job_id", jobId);
 
@@ -97,7 +101,7 @@ export async function POST(
   // Set job status to pending_regeneration
   // The worker will detect this and process the regeneration
   const { error: updateError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .update({
       status: "pending_regeneration",
       config: updatedConfig,

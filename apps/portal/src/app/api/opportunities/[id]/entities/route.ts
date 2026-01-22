@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,8 +11,12 @@ export async function GET(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   const { data: linkedEntities, error } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .select(`
       relationship,
       entity:entities(id, name, type, slug)
@@ -40,6 +45,9 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   const body = await request.json();
   const { entity_id, relationship = "related" } = body;
 
@@ -49,7 +57,7 @@ export async function POST(
 
   // Check if opportunity exists
   const { data: opportunity } = await supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select("id")
     .eq("id", id)
     .single();
@@ -60,7 +68,7 @@ export async function POST(
 
   // Check if entity exists
   const { data: entity } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select("id, name")
     .eq("id", entity_id)
     .single();
@@ -71,7 +79,7 @@ export async function POST(
 
   // Check if already linked
   const { data: existing } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .select("opportunity_id")
     .eq("opportunity_id", id)
     .eq("entity_id", entity_id)
@@ -83,7 +91,7 @@ export async function POST(
 
   // Create link
   const { error: insertError } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .insert({
       opportunity_id: id,
       entity_id,

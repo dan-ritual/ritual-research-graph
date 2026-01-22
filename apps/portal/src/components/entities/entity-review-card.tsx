@@ -56,7 +56,7 @@ function getStatusIcon(status: string) {
     case "merged":
       return <GitMerge className="h-4 w-4 text-purple-600" />;
     default:
-      return <div className="h-4 w-4 rounded-full border-2 border-[rgba(0,0,0,0.2)]" />;
+      return <div className="h-4 w-4 rounded-full border-2 border-[rgba(0,0,0,0.2)]" />; /* Status dot: pending state */
   }
 }
 

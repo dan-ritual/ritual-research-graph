@@ -1,9 +1,12 @@
 // Type definitions for the processing pipeline
 
+import type { ModeId } from "@ritual-research/core";
+
 export interface GenerationConfig {
   transcript: string;
   workflow: string;
   output: string;
+  mode?: ModeId;
   title?: string;
   subtitle?: string;
   accent?: string;

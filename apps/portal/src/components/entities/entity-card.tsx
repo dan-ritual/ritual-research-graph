@@ -26,6 +26,8 @@ interface Entity {
 interface EntityCardProps {
   entity: Entity;
   variant?: "default" | "compact";
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 function getTypeColor(type: string): string {
@@ -45,8 +47,9 @@ function getTypeColor(type: string): string {
   }
 }
 
-export function EntityCard({ entity, variant = "default" }: EntityCardProps) {
+export function EntityCard({ entity, variant = "default", modePrefix = "" }: EntityCardProps) {
   const typeColor = getTypeColor(entity.type);
+  const href = `${modePrefix}/entities/${entity.slug}`;
 
   if (variant === "compact") {
     return (
@@ -66,7 +69,7 @@ export function EntityCard({ entity, variant = "default" }: EntityCardProps) {
   }
 
   return (
-    <Card className="hover:border-[#3B5FE6]/30 transition-colors">
+    <Card className="hover:border-[var(--mode-accent)]/30 transition-colors">
       <CardHeader>
         <div className="flex items-start justify-between">
           <CardTitle className="font-display text-lg font-semibold">
@@ -89,7 +92,7 @@ export function EntityCard({ entity, variant = "default" }: EntityCardProps) {
               {entity.appearance_count || 0} appearances
             </span>
           </div>
-          <Link href={`/entities/${entity.slug}`}>
+          <Link href={href}>
             <Button variant="ghost" size="sm">
               View
             </Button>

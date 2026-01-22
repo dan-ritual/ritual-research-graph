@@ -1,0 +1,823 @@
+{
+  "entities": [
+    {
+      "canonicalName": "Real World Assets",
+      "aliases": [
+        "RWA",
+        "RWAs",
+        "tokenized assets"
+      ],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Market Concept",
+      "description": "Financial assets from traditional markets that are tokenized and brought on-chain, representing a $35+ billion market transitioning to sophisticated crypto-native financial primitives.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "RWA DeFi sector has reached critical inflection point with tokenized assets exceeding $35 billion",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "RWA tokenization market expanding from $8.5 billion in early 2024 to $19.7 billion",
+          "section": "Narrative Research - Market Growth"
+        },
+        {
+          "context": "Market projected to reach $2-4 trillion target by 2030",
+          "section": "Narrative Research - Future Projections"
+        }
+      ]
+    },
+    {
+      "canonicalName": "BlackRock",
+      "aliases": [
+        "BUIDL fund"
+      ],
+      "type": "company",
+      "url": "https://blackrock.com",
+      "twitter": "BlackRock",
+      "category": "TradFi - Asset Management",
+      "description": "World's largest asset manager driving institutional adoption of RWA tokenization through their BUIDL fund partnership with Ondo Finance.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "BlackRock's BUIDL fund partnership with Ondo Finance as primary institutional adoption accelerator",
+          "section": "Intelligence Brief - Market Context"
+        },
+        {
+          "context": "BlackRock/Ondo listed as traditional player in institutional tokenization",
+          "section": "Intelligence Brief - Competitive Landscape"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ondo Finance",
+      "aliases": [
+        "Ondo",
+        "ONDO"
+      ],
+      "type": "protocol",
+      "url": "https://ondo.finance",
+      "twitter": "OndoFinance",
+      "category": "DeFi - RWA",
+      "description": "Leading RWA tokenization platform focused on retail and DeFi segments, offering tokenized treasury products with $1.93 billion TVL across three chains.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "BlackRock's BUIDL fund partnership with Ondo Finance as primary institutional adoption accelerator",
+          "section": "Intelligence Brief - Market Context"
+        },
+        {
+          "context": "TVL: $1.93 billion across three chains with over $400 million in public stocks tokenization",
+          "section": "Narrative Research - Ondo Finance"
+        },
+        {
+          "context": "Strategy emphasizes liquidity velocity over depth for mass adoption",
+          "section": "Narrative Research - Competitive Positioning"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Provenance Blockchain",
+      "aliases": [
+        "Provenance"
+      ],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Blockchain - RWA",
+      "description": "Comprehensive RWA ecosystem focusing on legal compliance and KYC integration at chain level, claiming $20 billion TVL with $15 billion in tokenized home equity.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Claims $20 billion TVL (controversial/unverified by DeFi Llama)",
+          "section": "Intelligence Brief - Protocol Deep Dive"
+        },
+        {
+          "context": "$15 billion in tokenized home equity lines of credit and $600 million in tokenized insurance",
+          "section": "Intelligence Brief - Key Products"
+        },
+        {
+          "context": "TVL verification concerns and centralized KYC requirements limiting accessibility",
+          "section": "Intelligence Brief - Weaknesses"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Zivo Protocol",
+      "aliases": [
+        "Zivo"
+      ],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - RWA",
+      "description": "Merchant cash advance tokenization platform with self-repaying debt mechanisms, achieving $1M revenue on $16M deposits with 95% capital utilization.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Small but highly efficient - $1M revenue on $16M deposits (3.6% annualized revenue-to-TVL ratio)",
+          "section": "Intelligence Brief - Market Position"
+        },
+        {
+          "context": "Industry-leading capital efficiency with 95% utilization and innovative self-repaying structure",
+          "section": "Intelligence Brief - Strengths"
+        },
+        {
+          "context": "Prime candidate for AI-powered loan origination automation and risk assessment",
+          "section": "Intelligence Brief - Ritual Relevance"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Credit Coop",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - RWA",
+      "description": "Future cash flow collateralization platform for businesses, serving established clients like Ramp through smart contract streaming mechanisms.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Larger than Zivo, serving established businesses like Ramp through future revenue stream collateralization",
+          "section": "Intelligence Brief - Market Position"
+        },
+        {
+          "context": "Proven with major clients and scalable to salary-based lending with automated cash flow streaming",
+          "section": "Intelligence Brief - Strengths"
+        },
+        {
+          "context": "AI models could enhance cash flow prediction and risk assessment for underwriting",
+          "section": "Intelligence Brief - Ritual Relevance"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ritual",
+      "aliases": [],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "AI Infrastructure",
+      "description": "AI infrastructure company being positioned to provide automation, privacy-preserving computation, and integration services for RWA protocols.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Ritual should focus on AI-powered automation for loan origination and private computation for regulatory compliance",
+          "section": "Intelligence Brief - Critical Recommendations"
+        },
+        {
+          "context": "Privacy-preserving computation could address transparency vs compliance challenge",
+          "section": "Intelligence Brief - Provenance Analysis"
+        },
+        {
+          "context": "Schedule follow-up meeting to discuss specific Ritual prototype development and partnership outreach strategy",
+          "section": "Intelligence Brief - Next Steps"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Maple Finance",
+      "aliases": [
+        "Maple"
+      ],
+      "type": "protocol",
+      "url": "https://maple.finance",
+      "twitter": "maplefinance",
+      "category": "DeFi - Lending",
+      "description": "Established lending protocol that pivoted from undercollateralized lending to asset-backed secured lending after experiencing defaults.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Pivoted from undercollateralized lending to asset-backed secured lending after defaults",
+          "section": "Intelligence Brief - Evolution"
+        },
+        {
+          "context": "Established player with proven risk management demonstrating market maturation",
+          "section": "Intelligence Brief - Current Status"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Centrifuge",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://centrifuge.io",
+      "twitter": "centrifuge",
+      "category": "DeFi - RWA",
+      "description": "RWA protocol targeting asset managers with focus on institutional credit markets, emphasizing depth over speed with $1.3-1.45 billion TVL.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Targets asset managers with focus on institutional credit markets, emphasizing depth over speed",
+          "section": "Narrative Research - Overview"
+        },
+        {
+          "context": "TVL: $1.3-1.45 billion with target APY of 3.8%",
+          "section": "Narrative Research - Key Metrics"
+        },
+        {
+          "context": "3.8% target APY lags behind riskier DeFi opportunities, making it difficult to attract native DeFi liquidity",
+          "section": "Narrative Research - Strategic Challenge"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ethereum",
+      "aliases": [
+        "ETH"
+      ],
+      "type": "protocol",
+      "url": "https://ethereum.org",
+      "twitter": "ethereum",
+      "category": "Blockchain - L1",
+      "description": "Primary blockchain established as institutional security and settlement layer for RWA protocols, providing DeFi liquidity and institutional legitimacy.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Ethereum established as institutional security and settlement layer",
+          "section": "Intelligence Brief - Infrastructure Maturity"
+        },
+        {
+          "context": "Multichain RWA stack development with Ethereum as settlement layer",
+          "section": "Intelligence Brief - Technical Developments"
+        },
+        {
+          "context": "Ethereum provides DeFi liquidity and institutional legitimacy in multi-chain strategy",
+          "section": "Narrative Research - Multi-Chain Strategy"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Figure Markets",
+      "aliases": [
+        "Figure"
+      ],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "TradFi - Fintech",
+      "description": "Financial technology company partnering with Provenance for home equity and insurance tokenization services.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Massive scale and institutional partnerships with Figure Markets and SoFi",
+          "section": "Intelligence Brief - Provenance Strengths"
+        },
+        {
+          "context": "Figure Markets involved in home equity and insurance tokenization data",
+          "section": "Intelligence Brief - Research References"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Alchemix",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://alchemix.fi",
+      "twitter": "AlchemixFi",
+      "category": "DeFi - Lending",
+      "description": "DeFi protocol known for self-repaying debt mechanisms that serve as a model for RWA protocols developing similar structures.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Integration with emerging protocols that demonstrate innovative self-repaying debt structures similar to Alchemix",
+          "section": "Intelligence Brief - Critical Recommendations"
+        },
+        {
+          "context": "Generalized Alchemix-style mechanisms for RWAs as solution for self-repaying debt infrastructure",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Compound",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://compound.finance",
+      "twitter": "compoundfinance",
+      "category": "DeFi - Lending",
+      "description": "Pioneering DeFi lending protocol from the 2021 DeFi Summer era of experimental overcollateralized lending.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "2021 DeFi Summer: Experimental overcollateralized lending (Compound, Aave, Cream Finance)",
+          "section": "Intelligence Brief - Market Evolution"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Aave",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://aave.com",
+      "twitter": "aaveaave",
+      "category": "DeFi - Lending",
+      "description": "Major DeFi lending protocol from the 2021 DeFi Summer era of experimental overcollateralized lending.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "2021 DeFi Summer: Experimental overcollateralized lending (Compound, Aave, Cream Finance)",
+          "section": "Intelligence Brief - Market Evolution"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Morpho",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://morpho.xyz",
+      "twitter": "MorphoLabs",
+      "category": "DeFi - Lending",
+      "description": "DeFi protocol with vaults that automatically allocate assets into lending markets with optimal risk-adjusted yields, part of the risk management era.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "2022-2024 Risk Management Era: Industry maturation following defaults, introduction of compartmentalized risk (Morpho, Euler)",
+          "section": "Intelligence Brief - Market Evolution"
+        },
+        {
+          "context": "Morpho: Vaults automatically allocate assets into lending markets with optimal risk-adjusted yields",
+          "section": "Narrative Research - Other Key Players"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Euler",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://euler.finance",
+      "twitter": "eulerfinance",
+      "category": "DeFi - Lending",
+      "description": "DeFi lending protocol that introduced compartmentalized risk management during the 2022-2024 risk management era.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "2022-2024 Risk Management Era: Industry maturation following defaults, introduction of compartmentalized risk (Morpho, Euler)",
+          "section": "Intelligence Brief - Market Evolution"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Clearpool",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://clearpool.finance",
+      "twitter": "ClearpoolFin",
+      "category": "DeFi - Lending",
+      "description": "Alternative lending platform serving as an established competitor in the institutional lending space.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Clearpool: Alternative lending platform, established competitor in institutional lending space",
+          "section": "Intelligence Brief - Legacy Players"
+        },
+        {
+          "context": "BlackRock/Ondo: Institutional tokenization, Maple/Clearpool: Established lending platforms",
+          "section": "Intelligence Brief - Traditional Players"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Plume",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Blockchain - L2",
+      "description": "RWA-specific Layer 2 blockchain focusing on standardization and chain-level RWA optimization.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Plume: RWA-specific L2 focusing on standardization with chain-level RWA optimization approach",
+          "section": "Intelligence Brief - Infrastructure Competitors"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Bid.io",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "AI - Oracle",
+      "description": "AI oracle service for RWA risk pricing, representing a specialized point solution in the AI infrastructure space.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Bid.io: AI oracle for RWA risk pricing with limitation of specialized oracle function only",
+          "section": "Intelligence Brief - Direct AI Competitors"
+        },
+        {
+          "context": "Analysis of Bid.io's AI oracle approach and limitations recommended for competitive intelligence",
+          "section": "Intelligence Brief - Additional Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ramp",
+      "aliases": [],
+      "type": "company",
+      "url": "https://ramp.com",
+      "twitter": "RampNetwork",
+      "category": "Fintech - Payments",
+      "description": "Crypto card infrastructure company serving as a major client of Credit Coop for future cash flow collateralization.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Proven with major clients (Ramp - crypto card infrastructure)",
+          "section": "Intelligence Brief - Credit Coop Strengths"
+        },
+        {
+          "context": "Businesses collateralize future revenue streams like Ramp through smart contract streaming",
+          "section": "Intelligence Brief - Credit Coop Mechanism"
+        }
+      ]
+    },
+    {
+      "canonicalName": "SoFi",
+      "aliases": [],
+      "type": "company",
+      "url": "https://sofi.com",
+      "twitter": "SoFi",
+      "category": "TradFi - Fintech",
+      "description": "Financial technology company partnering with Provenance for institutional RWA services.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Massive scale and institutional partnerships (Figure Markets, SoFi)",
+          "section": "Intelligence Brief - Provenance Strengths"
+        }
+      ]
+    },
+    {
+      "canonicalName": "DeFi Llama",
+      "aliases": [],
+      "type": "company",
+      "url": "https://defillama.com",
+      "twitter": "DefiLlama",
+      "category": "Analytics - DeFi",
+      "description": "DeFi analytics platform used for protocol TVL and metrics verification, noting concerns about Provenance's unverified TVL claims.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Claims $20 billion TVL (controversial/unverified by DeFi Llama)",
+          "section": "Intelligence Brief - Provenance Analysis"
+        },
+        {
+          "context": "DeFi Llama: Protocol TVL and metrics verification",
+          "section": "Intelligence Brief - Research References"
+        }
+      ]
+    },
+    {
+      "canonicalName": "FIT21 Act",
+      "aliases": [
+        "FIT21"
+      ],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Regulation",
+      "description": "Pro-crypto legislation driving institutional confidence and regulatory clarity in the RWA space.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Regulatory: Pro-crypto administration and FIT21 Act driving institutional confidence",
+          "section": "Intelligence Brief - Recent Developments"
+        },
+        {
+          "context": "Deep dive into FIT21 Act implications for AI integration recommended",
+          "section": "Intelligence Brief - Additional Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "AI-Powered Loan Origination",
+      "aliases": [
+        "automated credit assessment",
+        "loan matching"
+      ],
+      "type": "opportunity",
+      "url": null,
+      "twitter": null,
+      "category": "AI Application",
+      "description": "High-priority opportunity to automate manual loan origination processes that currently bottleneck TVL productivity in RWA protocols.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Problem: Manual processes bottlenecking TVL productivity, Solution: Automated credit assessment and loan matching",
+          "section": "Intelligence Brief - Primary Opportunities"
+        },
+        {
+          "context": "High priority opportunity that directly addresses stated pain points",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Self-Repaying Debt Infrastructure",
+      "aliases": [
+        "self-repaying debt mechanisms"
+      ],
+      "type": "opportunity",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi Innovation",
+      "description": "High-priority opportunity to create generalized Alchemix-style mechanisms for RWAs, offering unique differentiation in the market.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Problem: Current protocols limited to specific use cases, Solution: Generalized Alchemix-style mechanisms for RWAs",
+          "section": "Intelligence Brief - Primary Opportunities"
+        },
+        {
+          "context": "High priority unique differentiation opportunity with medium risk level",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Privacy-Preserving Compliance",
+      "aliases": [
+        "zero-knowledge proofs",
+        "ZK compliance"
+      ],
+      "type": "opportunity",
+      "url": null,
+      "twitter": null,
+      "category": "Privacy Technology",
+      "description": "Medium-priority opportunity using zero-knowledge proofs for KYC/compliance verification to resolve tension between transparency and regulatory requirements.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Problem: Tension between transparency and regulatory requirements, Solution: Zero-knowledge proofs for KYC/compliance verification",
+          "section": "Intelligence Brief - Primary Opportunities"
+        },
+        {
+          "context": "Low risk opportunity that leverages Ritual's core competency and enables broader protocol adoption",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "BNB Chain",
+      "aliases": [
+        "Binance Smart Chain",
+        "BSC"
+      ],
+      "type": "protocol",
+      "url": "https://bnbchain.org",
+      "twitter": "BNBCHAIN",
+      "category": "Blockchain - L1",
+      "description": "Blockchain network used by leading RWA protocols like Ondo Finance to access exchange-native users in multi-chain deployment strategies.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "TVL: $1.93 billion across three chains (Ethereum, BNB Chain, Solana)",
+          "section": "Narrative Research - Ondo Metrics"
+        },
+        {
+          "context": "BNB Chain: Exchange-native users in multi-chain strategy",
+          "section": "Narrative Research - Multi-Chain Strategy"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Solana",
+      "aliases": [
+        "SOL"
+      ],
+      "type": "protocol",
+      "url": "https://solana.com",
+      "twitter": "solana",
+      "category": "Blockchain - L1",
+      "description": "High-performance blockchain used by RWA protocols for scalability and mass consumer adoption in multi-chain strategies.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "TVL: $1.93 billion across three chains (Ethereum, BNB Chain, Solana)",
+          "section": "Narrative Research - Ondo Metrics"
+        },
+        {
+          "context": "Solana: Scalability for mass consumer adoption",
+          "section": "Narrative Research - Multi-Chain Strategy"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Rayls",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Blockchain - Privacy",
+      "description": "Privacy-focused blockchain platform targeting banks and central banks, with AmFi Consortium goal to tokenize $1 billion in assets.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Rayls targets Banks & Central Banks with institutional privacy focus",
+          "section": "Narrative Research - Market Segmentation"
+        },
+        {
+          "context": "January 2026: Halborn security audit of Rayls completed",
+          "section": "Narrative Research - Timeline"
+        },
+        {
+          "context": "AmFi Consortium goal to tokenize $1 billion in assets on Rayls by June 2027",
+          "section": "Narrative Research - Future Projections"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Canton Network",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Blockchain - Enterprise",
+      "description": "Enterprise-focused blockchain infrastructure targeting Wall Street institutions.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Canton Network targets Wall Street with infrastructure focus for enterprise",
+          "section": "Narrative Research - Market Segmentation"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Polymesh",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://polymesh.network",
+      "twitter": "PolymeshNetwork",
+      "category": "Blockchain - Security Tokens",
+      "description": "Compliance-first blockchain platform specializing in regulated security tokens.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Polymesh focuses on Security Tokens with compliance-first approach for regulated tokens",
+          "section": "Narrative Research - Market Segmentation"
+        }
+      ]
+    },
+    {
+      "canonicalName": "AmFi Consortium",
+      "aliases": [],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "Consortium - Brazil",
+      "description": "Brazilian consortium with ambitious goal to tokenize $1 billion in assets on Rayls platform by June 2027 with 5 million RLS token incentive program.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "AmFi Consortium (Brazil): $1 billion tokenization goal with 5 million RLS token incentive program",
+          "section": "Narrative Research - Institutional Commitments"
+        },
+        {
+          "context": "June 2027: AmFi Consortium goal to tokenize $1 billion in assets on Rayls",
+          "section": "Narrative Research - Future Projections"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Halborn",
+      "aliases": [],
+      "type": "company",
+      "url": "https://halborn.com",
+      "twitter": "HalbornSecurity",
+      "category": "Security - Auditing",
+      "description": "Security auditing firm that completed audit of Rayls platform in January 2026, providing institutional-grade validation.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "January 2026: Halborn security audit of Rayls completed",
+          "section": "Narrative Research - Timeline"
+        },
+        {
+          "context": "Security audits providing institutional-grade validation",
+          "section": "Narrative Research - Institutional Commitments"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Sky Ecosystem",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - Ecosystem",
+      "description": "DeFi ecosystem that provides liquidity allocations to protocols like Centrifuge.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Making it difficult to attract native DeFi liquidity beyond existing Sky ecosystem allocations",
+          "section": "Narrative Research - Centrifuge Challenge"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Cream Finance",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - Lending",
+      "description": "DeFi lending protocol from the 2021 DeFi Summer era of experimental overcollateralized lending.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "2021 DeFi Summer: Experimental overcollateralized lending (Compound, Aave, Cream Finance)",
+          "section": "Intelligence Brief - Market Evolution"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Apollo",
+      "aliases": [],
+      "type": "company",
+      "url": "https://apollo.com",
+      "twitter": "ApolloGlobal",
+      "category": "TradFi - Private Credit",
+      "description": "Major private credit firm with $15T+ AUM growth, representing the traditional private credit market opportunity.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Detailed analysis of private credit market ($15T+ AUM growth at Apollo, KKR)",
+          "section": "Intelligence Brief - Market Sizing"
+        }
+      ]
+    },
+    {
+      "canonicalName": "KKR",
+      "aliases": [],
+      "type": "company",
+      "url": "https://kkr.com",
+      "twitter": "KKR_Co",
+      "category": "TradFi - Private Credit",
+      "description": "Major private credit firm with $15T+ AUM growth, representing the traditional private credit market opportunity.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Detailed analysis of private credit market ($15T+ AUM growth at Apollo, KKR)",
+          "section": "Intelligence Brief - Market Sizing"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Arshan",
+      "aliases": [],
+      "type": "person",
+      "url": null,
+      "twitter": null,
+      "category": "Expert - Real Estate",
+      "description": "Subject matter expert in real estate/Parcel market expertise and LLM applications identified for follow-up consultation.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Arshan: Real estate/Parcel market expertise and LLM applications",
+          "section": "Intelligence Brief - Key Contacts"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Qt",
+      "aliases": [],
+      "type": "person",
+      "url": null,
+      "twitter": null,
+      "category": "Expert - DeFi",
+      "description": "Subject matter expert in perpetual DEX integration and funding rate mechanisms identified for follow-up consultation.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Qt: Perp DEX integration and funding rate mechanisms",
+          "section": "Intelligence Brief - Key Contacts"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Parcel",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Real Estate - Tokenization",
+      "description": "Real estate tokenization platform mentioned in context of market expertise and potential collaboration discussions.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Arshan: Real estate/Parcel market expertise and LLM applications",
+          "section": "Intelligence Brief - Key Contacts"
+        },
+        {
+          "context": "Direct outreach to Zivo, Credit Coop, and Parcel for collaboration discussions",
+          "section": "Intelligence Brief - Partnership Opportunities"
+        }
+      ]
+    }
+  ],
+  "extractedAt": "2026-01-16T19:27:34.922Z"
+}

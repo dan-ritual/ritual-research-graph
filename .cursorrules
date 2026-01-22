@@ -1,0 +1,98 @@
+# Ritual Multi-Mode System - Cursor Rules
+
+## Project Context
+
+This is **Ritual Research Graph**, currently being architected into a **three-mode system**:
+
+| Mode | Name | Color | Purpose |
+|------|------|-------|---------|
+| Blue | Ritual Growth | #3B5FE6 | BD/CRM, external opportunities, entity tracking |
+| Green | Ritual Engineering Graph | #3BE65B | Engineering wiki, meeting ingestion, feature tracking |
+| Red | Ritual Skunkworks | #E63B3B | Product ideas, prototypes, internal innovation |
+
+## Current State
+
+- **Built:** Research/Growth mode (partially complete)
+- **Next:** Extract mode abstraction, then build Engineering mode
+- **Architecture:** Monorepo with Next.js portal, Supabase backend, multi-AI pipeline
+
+## Audit Mission
+
+We are conducting a **codebase audit** to identify:
+1. **Coupling points** - Where is "research" hardcoded?
+2. **Entity assumptions** - Where are entity types rigid?
+3. **Pipeline rigidity** - Which execution stages are hardcoded?
+4. **Schema constraints** - What DB assumptions block multi-mode?
+5. **UI assumptions** - What in Portal assumes single mode?
+
+## Key Directories
+
+```
+packages/core/          # Shared types, registry, utilities
+apps/portal/            # Next.js web application
+scripts/                # Pipeline execution scripts
+scripts/stages/         # Individual pipeline stages
+scripts/lib/            # AI provider integrations
+supabase/migrations/    # Database schema
+outputs/microsites/     # Generated static sites
+docs/                   # Specifications and maps
+```
+
+## Audit Output Format
+
+When analyzing, produce findings in this format:
+
+```markdown
+## [Area Name]
+
+### Coupling Points
+| File | Line(s) | Hardcoded Assumption | Extraction Needed |
+|------|---------|---------------------|-------------------|
+
+### Recommendations
+1. [Specific recommendation]
+2. [Specific recommendation]
+
+### Effort Estimate
+- Extraction: [Low/Medium/High]
+- Risk: [Low/Medium/High]
+```
+
+## What We're Building Toward
+
+**Mode System Architecture:**
+- Single Portal with mode selector
+- Shared UI components, mode-specific theming
+- Multi-schema database (research.*, engineering.*, product.*)
+- Configurable execution pipelines per mode
+- Cross-mode entity linking
+
+**Engineering Mode Specifics:**
+- Input: Google Meet transcripts (Gemini-generated)
+- Output: Wiki pages, feature tracking
+- Integration: One-way Asana import
+- Entities: Features, Topics, Decisions, Components
+
+## Code Style
+
+- TypeScript throughout
+- Zod for validation
+- Supabase for database
+- Next.js 14+ App Router
+- Making Software design aesthetic
+
+## Anti-Patterns to Flag
+
+- `as any` or `@ts-ignore`
+- Hardcoded "research" or "entity" without abstraction
+- Direct Supabase queries without RLS consideration
+- Pipeline stages that can't be reordered/skipped
+- UI components with baked-in mode assumptions
+
+## Questions to Answer
+
+1. Can we add a new mode without touching existing mode code?
+2. Can we add a new entity type without schema migration?
+3. Can we swap pipeline stages per mode via config?
+4. Can we theme the UI by changing one config file?
+5. Can cross-mode links be added without breaking isolation?

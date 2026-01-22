@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface RelatedMicrosite {
   id: string;
@@ -15,16 +16,18 @@ interface RelatedMicrosite {
 
 interface RelatedResearchPanelProps {
   micrositeSlug: string;
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
-export function RelatedResearchPanel({ micrositeSlug }: RelatedResearchPanelProps) {
+export function RelatedResearchPanel({ micrositeSlug, modePrefix = "" }: RelatedResearchPanelProps) {
   const [related, setRelated] = useState<RelatedMicrosite[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchRelated = async () => {
       try {
-        const response = await fetch(`/api/microsites/${micrositeSlug}/related`);
+        const response = await fetchWithMode(`/api/microsites/${micrositeSlug}/related`);
         if (response.ok) {
           const data = await response.json();
           setRelated(data.related || []);
@@ -72,7 +75,7 @@ export function RelatedResearchPanel({ micrositeSlug }: RelatedResearchPanelProp
           {related.map((microsite) => (
             <Link
               key={microsite.id}
-              href={`/microsites/${microsite.slug}`}
+              href={`${modePrefix}/microsites/${microsite.slug}`}
               className="block p-3 -mx-3 hover:bg-[rgba(0,0,0,0.02)] transition-colors border-b border-dotted border-[rgba(0,0,0,0.06)] last:border-0"
             >
               <div className="font-display text-sm font-medium">

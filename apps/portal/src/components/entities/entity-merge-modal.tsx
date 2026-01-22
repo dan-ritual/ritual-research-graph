@@ -83,8 +83,8 @@ export function EntityMergeModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-lg bg-white border-none shadow-xl">
-        <DialogHeader className="border-b border-dotted border-[rgba(59,95,230,0.3)] pb-4">
-          <DialogTitle className="font-mono text-sm uppercase tracking-[0.12em] text-[#3B5FE6]">
+        <DialogHeader className="border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] pb-4">
+          <DialogTitle className="font-mono text-sm uppercase tracking-[0.12em] text-[var(--mode-accent)]">
             Merge Entities
           </DialogTitle>
         </DialogHeader>
@@ -112,8 +112,8 @@ export function EntityMergeModal({
             <ArrowRight className="h-5 w-5 text-[rgba(0,0,0,0.25)] flex-shrink-0" />
 
             {/* Target (existing) */}
-            <div className="flex-1 border border-[#3B5FE6]/30 bg-[#3B5FE6]/5 p-4">
-              <div className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#3B5FE6] mb-2">
+            <div className="flex-1 border border-[var(--mode-accent)]/30 bg-[var(--mode-accent)]/5 p-4">
+              <div className="font-mono text-[10px] uppercase tracking-[0.05em] text-[var(--mode-accent)] mb-2">
                 Existing
               </div>
               <div className="font-display text-sm font-semibold">
@@ -129,7 +129,7 @@ export function EntityMergeModal({
           </div>
 
           {/* Merged result */}
-          <div className="border border-dotted border-[rgba(59,95,230,0.3)] p-4 bg-[#FAFAFA]">
+          <div className="border border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] p-4 bg-[#FAFAFA]">
             <div className="font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] mb-3">
               Merged Result
             </div>
@@ -141,7 +141,7 @@ export function EntityMergeModal({
                 <Input
                   value={canonicalName}
                   onChange={(e) => setCanonicalName(e.target.value)}
-                  className="font-display text-sm border-[rgba(0,0,0,0.12)] focus:border-[#3B5FE6] focus:ring-[#3B5FE6]/20"
+                  className="font-display text-sm border-[rgba(0,0,0,0.12)] focus:border-[var(--mode-accent)] focus:ring-[var(--mode-accent)]/20"
                 />
               </div>
               <div>

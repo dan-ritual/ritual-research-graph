@@ -1,13 +1,18 @@
+import { SHARED_SCHEMA, getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/users - Get all users (team members)
-export async function GET() {
+export async function GET(request: NextRequest) {
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   const { data: users, error } = await supabase
-    .from("users")
+    .from(getSchemaTable("users", mode, SHARED_SCHEMA))
     .select("id, name, email, avatar_url")
     .order("name", { ascending: true });
 

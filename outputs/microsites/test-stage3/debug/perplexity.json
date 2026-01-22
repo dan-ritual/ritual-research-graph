@@ -1,0 +1,46 @@
+{
+  "research": "# RWA DeFi Research\n\nReal-world asset (RWA) DeFi tokenizes traditional assets like U.S. Treasuries and equities on blockchain for yield generation and liquidity, with Ondo Finance leading at over **$2 billion TVL** as of January 2026[5][6].\n\n## Entity Deep Dives\n\n### Ondo Finance\n**Official description and mission**: Ondo Finance builds institutional-grade platforms, assets, and infrastructure to bring financial markets onchain, bridging traditional finance (TradFi) with DeFi by tokenizing RWAs like U.S. Treasuries and money market funds for yield and accessibility[1][3][7].\n\n**Key metrics**: TVL exceeds **$2 billion** (11.6% of Ethereum RWA market); annualized fees **$54.37 million**; 30-day fees **$4.46 million**; market cap **$3.31 billion**; Q3 2025 fees **$3.92 million**[2][5][6].\n\n**Recent news (last 90 days)**: Surpassed **$2 billion TVL** driven by tokenized U.S. Treasuries (January 14, 2026); hit **$2 billion trading volume** in tokenized U.S. stocks/ETFs with partnerships including BlackRock and Fidelity[5][6].\n\n**Competitive positioning**: Lower volatility than pure DeFi due to institutional focus; steady TVL growth and revenue from asset management fees position it for tokenized asset market expansion to **$10 trillion by 2030**[1][4].\n\n### Provenance\nLimited data available in search results on Provenance for official description, metrics, news, or positioning; it may refer to Provenance Blockchain (focused on institutional RWAs) but lacks recent RWA DeFi specifics here.\n\n### Plume\nNo specific data found in search results on Plume's description, metrics, recent news, or competitive positioning in RWA DeFi.\n\n### Maple Finance\nNo direct data in results; known generally as a lending platform for institutional credit but absent from provided RWA-focused sources.\n\n### BlackRock\n**Context in RWA DeFi**: Partners with Ondo Finance on tokenized assets; involved in tokenized U.S. stocks/ETFs contributing to Ondo's **$2 billion TVL/volume** milestone[5]. BlackRock provides institutional credibility and capital for RWA growth, emphasizing regulated, scalable tokenization[1][5].\n\n## Market Context\n\n**Market size and growth**: Ondo holds **11.6%** of Ethereum RWA market; overall tokenized asset market projected to exceed **$10 trillion by 2030**, driven by TVL surges like Ondo's **$2 billion**[4][6].\n\n**Key trends**: Rising adoption of on-chain RWAs for yield (e.g., Treasuries, pre-IPO equity like Figma via tokens such as FIGON, GME shares as GMEON); composability in DeFi (collateral, liquidity provision); institutional inflows for stability amid crypto volatility[3][5][6].\n\n**Regulatory landscape**: Emphasis on compliance and security in tokenization (e.g., Ondo's regulated framework for securities); monitors developments in major markets to enable TradFi-DeFi bridges[1][3].\n\n## Competitive Analysis\n\n| Entity          | Main Competitors                          | Differentiation Factors |\n|-----------------|-------------------------------------------|------------------------|\n| **Ondo Finance** | Traditional RWA platforms; pure DeFi tokens | Institutional-grade tokenization of Treasuries/money markets; ONDO governance/staking utility; moderate premium valuation with revenue from fees/yields; lower volatility[1][2][4]. |\n| **Provenance**  | Limited data; potentially Centrifuge, RealT | No specifics available. |\n| **Plume**       | No data.                                  | No specifics available. |\n| **Maple Finance** | No data; competes with institutional lenders like Goldfinch | No specifics available. |\n| **BlackRock**   | Other TradFi giants (e.g., Fidelity) in tokenization | Provides credibility/capital via partnerships; focuses on regulated RWAs rather than native DeFi[5]. |\n\nOndo leads via **TVL growth** and institutional ties, with revenue models (fees **$54.37M annualized**) supporting sustainability over speculative peers[2][4]. Search results emphasize Ondo heavily, indicating data gaps for others.",
+  "citations": [
+    {
+      "url": "https://www.mexc.fm/news/374285",
+      "title": "Source 1",
+      "snippet": ""
+    },
+    {
+      "url": "https://defillama.com/protocol/ondo-finance",
+      "title": "Source 2",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.weex.com/learn/articles/ondoondo-price-prediction-2026-13176",
+      "title": "Source 3",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.mexc.com/news/425630",
+      "title": "Source 4",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.ainvest.com/news/ondo-finance-2-billion-tvl-rise-tokenized-real-world-assets-2601/",
+      "title": "Source 5",
+      "snippet": ""
+    },
+    {
+      "url": "https://stabledash.com/news/2026-01-14-ondo-finance-surpasses-2-billion-in-tvl-driven-by-tokenized-us-treasuries",
+      "title": "Source 6",
+      "snippet": ""
+    },
+    {
+      "url": "https://ondo.finance",
+      "title": "Source 7",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.cryptoninjas.net/news/crypto-market-snapshot-monero-ondo-and-blockdag-trends-heading-into-2026/",
+      "title": "Source 8",
+      "snippet": ""
+    }
+  ],
+  "entityInsights": {}
+}

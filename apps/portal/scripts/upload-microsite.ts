@@ -1,3 +1,4 @@
+import { DEFAULT_MODE_ID, MODE_CONFIGS, getSchemaTable, type ModeId } from "@ritual-research/core";
 import { put, list } from "@vercel/blob";
 import { createClient } from "@supabase/supabase-js";
 import * as fs from "fs";
@@ -6,7 +7,18 @@ import * as path from "path";
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-async function uploadMicrosite(sourceDir: string, micrositeSlug: string) {
+function resolveModeId(value?: string | null): ModeId {
+  if (value && value in MODE_CONFIGS) {
+    return value as ModeId;
+  }
+  return DEFAULT_MODE_ID;
+}
+
+async function uploadMicrosite(
+  sourceDir: string,
+  micrositeSlug: string,
+  modeId: ModeId
+) {
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     console.error("Missing BLOB_READ_WRITE_TOKEN");
     process.exit(1);
@@ -45,7 +57,7 @@ async function uploadMicrosite(sourceDir: string, micrositeSlug: string) {
 
   // Update microsite record with blob_path
   const { error } = await supabase
-    .from("microsites")
+    .from(getSchemaTable("microsites", modeId))
     .update({ blob_path: blobPath })
     .eq("slug", micrositeSlug);
 
@@ -73,12 +85,20 @@ function getContentType(filename: string): string {
 }
 
 // Run
-const sourceDir = process.argv[2];
-const slug = process.argv[3];
+const args = process.argv.slice(2);
+const modeIndex = args.indexOf("--mode");
+const modeArg = modeIndex >= 0 ? args[modeIndex + 1] : undefined;
+if (modeIndex >= 0) {
+  args.splice(modeIndex, 2);
+}
+
+const sourceDir = args[0];
+const slug = args[1];
+const modeId = resolveModeId(modeArg);
 
 if (!sourceDir || !slug) {
-  console.log("Usage: npx tsx scripts/upload-microsite.ts <source-dir> <microsite-slug>");
+  console.log("Usage: npx tsx scripts/upload-microsite.ts <source-dir> <microsite-slug> [--mode <mode>]");
   process.exit(1);
 }
 
-uploadMicrosite(sourceDir, slug);
+uploadMicrosite(sourceDir, slug, modeId);

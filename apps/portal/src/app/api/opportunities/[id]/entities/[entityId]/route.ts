@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,9 +11,12 @@ export async function DELETE(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Delete link
   const { error: deleteError } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .delete()
     .eq("opportunity_id", id)
     .eq("entity_id", entityId);

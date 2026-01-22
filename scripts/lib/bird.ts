@@ -8,7 +8,7 @@ import type { BirdOutput } from './types.js';
 const execAsync = promisify(exec);
 
 const SSH_HOST = process.env.BIRD_SSH_HOST || 'gcp-agentic';
-const BIRD_PROJECT_PATH = process.env.BIRD_PROJECT_PATH || '~/rite';
+const BIRD_PROJECT_PATH = process.env.BIRD_PROJECT_PATH || '/home/danielgosek/rite';
 const SSH_TIMEOUT = 60000; // 60 seconds per elicitation decision
 
 export interface BirdOptions {

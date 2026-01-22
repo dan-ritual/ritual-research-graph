@@ -90,7 +90,7 @@ export function EmailModal({ isOpen, onClose, emailDraft }: EmailModalProps) {
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-dotted border-[rgba(59,95,230,0.3)]">
+        <div className="flex justify-end pt-4 border-t border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]">
           <Button variant="outline" onClick={onClose} className="text-xs">
             Close
           </Button>

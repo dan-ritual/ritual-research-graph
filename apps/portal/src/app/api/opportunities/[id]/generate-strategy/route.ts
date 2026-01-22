@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
@@ -14,9 +15,12 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Fetch opportunity with linked entities
   const { data: opportunity, error: oppError } = await supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select("*")
     .eq("id", id)
     .single();
@@ -27,7 +31,7 @@ export async function POST(
 
   // Fetch linked entities
   const { data: linkedEntities } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .select(`
       relationship,
       entity:entities(name, type, slug)
@@ -50,7 +54,7 @@ export async function POST(
   let micrositeContext = "";
   if (opportunity.source_microsite_id) {
     const { data: microsite } = await supabase
-      .from("microsites")
+      .from(getSchemaTable("microsites", mode))
       .select("title, thesis")
       .eq("id", opportunity.source_microsite_id)
       .single();
@@ -95,7 +99,7 @@ Output as clean markdown.`;
 
     // Store result in database
     const { error: updateError } = await supabase
-      .from("opportunities")
+      .from(getSchemaTable("opportunities", mode))
       .update({ strategy })
       .eq("id", id);
 

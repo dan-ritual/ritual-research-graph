@@ -31,7 +31,7 @@ export async function generateWithGrok(options: GrokOptions): Promise<string> {
           'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: 'grok-2',
+          model: 'grok-3',
           messages: [{ role: 'user', content: prompt }],
           max_tokens: maxTokens,
           temperature,
@@ -43,7 +43,7 @@ export async function generateWithGrok(options: GrokOptions): Promise<string> {
         throw new Error(`Grok API error: ${response.status} - ${error}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as { choices: Array<{ message: { content: string } }> };
       return data.choices[0].message.content;
     },
     GenerationErrorType.GROK_API_ERROR

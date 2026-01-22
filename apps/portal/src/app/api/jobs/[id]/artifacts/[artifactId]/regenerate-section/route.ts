@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
@@ -59,6 +60,9 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   const body = await request.json();
   const { sectionId, instructions } = body;
 
@@ -78,7 +82,7 @@ export async function POST(
 
   // Fetch artifact
   const { data: artifact, error } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .select("*")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -186,7 +190,7 @@ Output the new section content:`;
 
     // Update artifact in database
     const { data: updated, error: updateError } = await supabase
-      .from("artifacts")
+      .from(getSchemaTable("artifacts", mode))
       .update({
         content: assembledContent,
         sections: updatedSections,

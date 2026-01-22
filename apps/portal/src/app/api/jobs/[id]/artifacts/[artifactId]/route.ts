@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -81,9 +82,13 @@ export async function GET(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   // Fetch artifact
   const { data: artifact, error } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .select("*")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -115,6 +120,9 @@ export async function PATCH(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   const body = await request.json();
   const { content, sections } = body;
 
@@ -128,7 +136,7 @@ export async function PATCH(
 
   // Get current artifact for original_content tracking
   const { data: current } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .select("content, original_content")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -165,7 +173,7 @@ export async function PATCH(
 
   // Update artifact
   const { data: updated, error: updateError } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .update(update)
     .eq("id", artifactId)
     .eq("job_id", jobId)

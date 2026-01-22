@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface LinkedEntity {
   id: string;
@@ -15,19 +17,22 @@ interface LinkedEntityListProps {
   opportunityId: string;
   entities: LinkedEntity[];
   onEntityRemoved: () => void;
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 export function LinkedEntityList({
   opportunityId,
   entities,
   onEntityRemoved,
+  modePrefix = "",
 }: LinkedEntityListProps) {
   const [removing, setRemoving] = useState<string | null>(null);
 
   const handleRemove = async (entityId: string) => {
     setRemoving(entityId);
     try {
-      const res = await fetch(
+      const res = await fetchWithMode(
         `/api/opportunities/${opportunityId}/entities/${entityId}`,
         { method: "DELETE" }
       );
@@ -63,7 +68,7 @@ export function LinkedEntityList({
   const getRelationshipBadge = (relationship: string) => {
     switch (relationship) {
       case "primary":
-        return "bg-[#3B5FE6] text-white";
+        return "bg-[var(--mode-accent)] text-white";
       case "competitor":
         return "bg-red-100 text-red-800";
       default:
@@ -88,7 +93,12 @@ export function LinkedEntityList({
             entity.type
           )}`}
         >
-          <span className="font-mono text-xs">{entity.name}</span>
+          <Link
+            href={`${modePrefix}/entities/${entity.slug}`}
+            className="font-mono text-xs hover:underline"
+          >
+            {entity.name}
+          </Link>
           <span
             className={`font-mono text-[8px] uppercase px-1 py-0.5 ${getRelationshipBadge(
               entity.relationship

@@ -1,14 +1,19 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   const [microsites, entities, opportunities, jobs] = await Promise.all([
-    supabase.from("microsites").select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from("entities").select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from("opportunities").select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from("generation_jobs").select("id", { count: "exact", head: true })
+    supabase.from(getSchemaTable("microsites", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.from(getSchemaTable("entities", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.from(getSchemaTable("opportunities", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.from(getSchemaTable("generation_jobs", mode)).select("id", { count: "exact", head: true })
   ]);
 
   return NextResponse.json({

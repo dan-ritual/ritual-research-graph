@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface RetryJobButtonProps {
   jobId: string;
@@ -32,7 +33,7 @@ export function RetryJobButton({ jobId, onRetry }: RetryJobButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/jobs/${jobId}/retry`, {
+      const response = await fetchWithMode(`/api/jobs/${jobId}/retry`, {
         method: "POST",
       });
 
@@ -96,7 +97,7 @@ export function CancelJobButton({ jobId, onCancel }: CancelJobButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch(`/api/jobs/${jobId}/cancel`, {
+      const response = await fetchWithMode(`/api/jobs/${jobId}/cancel`, {
         method: "POST",
       });
 

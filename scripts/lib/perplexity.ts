@@ -44,7 +44,10 @@ export async function searchWithPerplexity(options: PerplexityOptions): Promise<
         throw new Error(`Perplexity API error: ${response.status} - ${error}`);
       }
 
-      const data = await response.json();
+      const data = await response.json() as {
+        choices: Array<{ message: { content: string } }>;
+        citations?: string[];
+      };
       return {
         content: data.choices[0].message.content,
         citations: data.citations || [],

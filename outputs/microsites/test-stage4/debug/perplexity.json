@@ -1,0 +1,41 @@
+{
+  "research": "# RWA DeFi Research\n\nReal-world asset (RWA) DeFi integrates traditional assets like equities, treasuries, and loans onto blockchains for on-chain lending, trading, and yield generation, with BlackRock and others scaling tokenized offerings amid regulatory clarity.[1]\n\n## 1. Entity Deep Dives\n\n### Provenance\n**Official description and mission**: Provenance Blockchain hosts Figure's On-Chain Public Equity Network (OPEN), enabling companies to list equity natively on-chain for trading on a limit order book via Figure’s ATS, with self-custody, continuous trading, and DeFi lending/borrowing against shares via Democratized Prime.[2][6]  \n**Key metrics**: Supports Figure's prior origination of $20 billion in on-chain loans; OPEN launch includes planned two-way exchangeability with Nasdaq shares.[2]  \n**Recent news (last 90 days)**: Figure launched OPEN on Provenance on January 14, 2026, reducing DTCC costs and enabling portfolio margining across assets including crypto.[2][6]  \n**Competitive positioning**: Focuses on public equity tokenization with blockchain registry and transparent stock loans, differentiating from DTCC-based systems by democratizing access and cutting broker needs.[2]\n\n### Plume\nLimited data available in search results on Plume's specific RWA DeFi activities, TVL, or recent developments; no direct mentions found.[web:0-6]\n\n### Ondo Finance\n**Official description and mission**: Ondo provides tokenized U.S. Treasuries like OUSG, powering RWA yield products integrated with DeFi lending.[2]  \n**Key metrics**: Received $25M strategic investment from Ondo in November 2025 for $YLDS stablecoin to support OUSG.[2]  \n**Recent news (last 90 days)**: No specific updates post-November 2025 in results; part of broader RWA momentum.[2]  \n**Competitive positioning**: Emphasizes stablecoin-backed tokenized treasuries for institutional DeFi liquidity.[2]\n\n### Maple Finance\nNo direct mentions or data in search results on Maple Finance's RWA DeFi specifics, metrics, news, or positioning.[web:0-6]\n\n### BlackRock\n**Official description and mission**: BlackRock scales tokenized real-world assets (RWA) like real estate, commodities, and corporate debt on blockchain for DeFi integration.[1]  \n**Key metrics**: Actively expanding RWA offerings with institutional adoption.[1]  \n**Recent news (last 90 days)**: Highlighted in 2026 supercycle analysis as a leader in compliant RWA tokenization alongside Fidelity.[1]  \n**Competitive positioning**: Leverages regulatory clarity (e.g., GENIUS Act, MiCA) for institutional-grade RWA, prioritizing stablecoins and tokenization over speculative assets.[1]\n\n## 2. Market Context\n\n**Market size and growth**: DeFi lending TVL reached $58.27B in early 2026, up 6.6% week-over-week, with Aave v3 at $46.32B (79.5% dominance).[3] Total crypto market cap nears $3.3T amid ETF inflows and BTC at $94K.[5] RWA benefits from 40% YoY growth in MiCA-compliant stablecoin cross-border transactions.[1]  \n**Key trends**: Shift to \"On-Chain Finance\" (OnFi) with tokenized assets, institutional credit pools, cross-chain interoperability, and AI risk management; RWA and stablecoins central to DeFi evolution.[1][4] L2 rotations (e.g., Arbitrum +$266M inflows) address scalability.[3]  \n**Regulatory landscape**: U.S. GENIUS Act and EU MiCA drive 2026 growth via stablecoin oversight and compliance, curbing speculation while enabling institutional RWA/DeFi adoption; focus on regulated institutions in DeFi.[1][7]\n\n## 3. Competitive Analysis\n\n| Entity       | Main Competitors                  | Differentiation Factors |\n|--------------|-----------------------------------|--------------------------|\n| **Provenance** | DTCC-based equity systems, other blockchains (e.g., Solana RWA) | Native on-chain equity listing, self-custody ATS, DeFi portfolio margining, $20B loan history.[2] |\n| **Plume**    | Insufficient data                | Insufficient data       |\n| **Ondo Finance** | Other treasury tokenizers (e.g., Figure-linked) | $25M $YLDS investment for OUSG stablecoin integration in DeFi.[2] |\n| **Maple Finance** | Aave, Compound, MakerDAO        | Insufficient data       |\n| **BlackRock** | Fidelity, traditional finance tokenizers | Institutional RWA scale with MiCA/GENIUS compliance, focus on real estate/debt.[1] |\n\n**Broader competitors**: Aave ($46.32B TVL), Compound ($2.37B), MakerDAO dominate lending; emerging perpetual DEXs like Hyperliquid, Lighter challenge DeFi trading.[3][5] RWA platforms differentiate via tokenization (e.g., cross-chain, compliant stables) vs. pure crypto lending.[1][4]",
+  "citations": [
+    {
+      "url": "https://www.ainvest.com/news/2026-defi-memecoin-supercycle-regulatory-clarity-infrastructure-innovation-catalysts-growth-2601/",
+      "title": "Source 1",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.stocktitan.net/news/FIGR/figure-announces-the-on-chain-public-equity-network-open-running-on-sr3068q2wom0.html",
+      "title": "Source 2",
+      "snippet": ""
+    },
+    {
+      "url": "https://blog.amberdata.io/crypto-markets-in-early-2026-rally-builds-as-etf-flows-return",
+      "title": "Source 3",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.chainup.com/blog/10-predictions-for-global-crypto-industry/",
+      "title": "Source 4",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.talos.com/insights/state-of-the-network-345",
+      "title": "Source 5",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.nasdaq.com/press-release/figure-announces-chain-public-equity-network-open-running-provenance-blockchain-2026",
+      "title": "Source 6",
+      "snippet": ""
+    },
+    {
+      "url": "https://www.elliptic.co/blog/regulatory-and-policy-crypto-trends-to-except-in-2026",
+      "title": "Source 7",
+      "snippet": ""
+    }
+  ],
+  "entityInsights": {}
+}

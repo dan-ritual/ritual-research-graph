@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,10 +11,13 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Check if microsite exists and is deleted
   // Admin policy allows viewing deleted records
   const { data: microsite, error: fetchError } = await supabase
-    .from("microsites")
+    .from(getSchemaTable("microsites", mode))
     .select("id, deleted_at")
     .eq("id", id)
     .single();
@@ -31,7 +35,7 @@ export async function POST(
 
   // Restore
   const { error: restoreError } = await supabase
-    .from("microsites")
+    .from(getSchemaTable("microsites", mode))
     .update({ deleted_at: null })
     .eq("id", id);
 

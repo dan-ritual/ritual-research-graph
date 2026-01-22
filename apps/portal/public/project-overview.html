@@ -23,6 +23,13 @@
       --success: #22c55e;
       --warning: #eab308;
       --pending: rgba(0,0,0,0.3);
+      /* Mode accent colors */
+      --mode-growth: #3B5FE6;
+      --mode-engineering: #3BE65B;
+      --mode-skunkworks: #E63B3B;
+      --mode-growth-light: #9BB3FF;
+      --mode-engineering-light: #9BFFB3;
+      --mode-skunkworks-light: #FF9B9B;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -130,6 +137,7 @@
       padding: 16px 20px;
       background: var(--cobalt-50);
       border: 1px solid var(--cobalt-200);
+      flex-wrap: wrap;
     }
 
     .status-item {
@@ -158,6 +166,23 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
+
+    /* Mode indicator cluster */
+    .mode-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .mode-dot.growth { background: var(--mode-growth); }
+    .mode-dot.engineering { background: var(--mode-engineering); }
+    .mode-dot.skunkworks { background: var(--mode-skunkworks); }
 
     /* Sections */
     section {
@@ -241,6 +266,68 @@
       color: var(--muted);
       font-weight: 300;
       line-height: 1.5;
+    }
+
+    /* Mode Cards */
+    .mode-card {
+      padding: 24px;
+      background: white;
+      border: 1px solid var(--muted-lighter);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .mode-card.growth::before { background: var(--mode-growth); }
+    .mode-card.engineering::before { background: var(--mode-engineering); }
+    .mode-card.skunkworks::before { background: var(--mode-skunkworks); }
+
+    .mode-card .mode-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .mode-card .mode-short {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+
+    .mode-card.growth .mode-short { color: var(--mode-growth); }
+    .mode-card.engineering .mode-short { color: var(--mode-engineering); }
+    .mode-card.skunkworks .mode-short { color: var(--mode-skunkworks); }
+
+    .mode-card .mode-desc {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .mode-entities {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .entity-tag {
+      font-size: 9px;
+      padding: 3px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--muted-lighter);
+      background: var(--bg);
     }
 
     /* Tables */
@@ -345,6 +432,7 @@
 
     .tag.new { background: var(--cobalt-100); color: var(--cobalt-600); }
     .tag.changed { background: #fef3c7; color: #92400e; }
+    .tag.audit { background: #fce7f3; color: #9d174d; }
 
     /* Lists */
     ul { list-style: none; padding-left: 0; }
@@ -383,6 +471,42 @@
     .spec-desc { font-size: 10px; color: var(--muted); font-weight: 300; }
     .spec-path { font-size: 9px; color: var(--cobalt-600); margin-top: 8px; }
 
+    /* Audit Finding Card */
+    .finding-card {
+      padding: 16px;
+      border-left: 3px solid;
+      background: white;
+      margin-bottom: 12px;
+    }
+
+    .finding-card.high { border-color: var(--mode-skunkworks); }
+    .finding-card.medium { border-color: var(--warning); }
+    .finding-card.low { border-color: var(--mode-engineering); }
+
+    .finding-title {
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .finding-severity {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+    }
+
+    .finding-card.high .finding-severity { color: var(--mode-skunkworks); }
+    .finding-card.medium .finding-severity { color: var(--warning); }
+    .finding-card.low .finding-severity { color: var(--mode-engineering); }
+
+    .finding-desc {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.5;
+    }
+
     /* Divider */
     .divider { border-top: 1px dotted var(--muted-light); margin: 48px 0; }
 
@@ -410,6 +534,48 @@
 
     /* Decision Table */
     .decision-table td:first-child { width: 40%; }
+
+    /* Route Pattern */
+    .route-pattern {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      background: var(--fg);
+      color: var(--bg);
+      border-radius: 2px;
+    }
+
+    .route-pattern .param { color: var(--cobalt-300); }
+
+    /* Effort Summary */
+    .effort-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .effort-item {
+      padding: 16px;
+      background: white;
+      border: 1px solid var(--muted-lighter);
+      text-align: center;
+    }
+
+    .effort-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--cobalt-600);
+    }
+
+    .effort-label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-top: 4px;
+    }
   </style>
 </head>
 <body>
@@ -429,12 +595,13 @@
       <div class="nav-section-title">System</div>
       <a href="#pipeline" class="nav-link">Processing Pipeline</a>
       <a href="#knowledge-graph" class="nav-link">Knowledge Graph</a>
-      <a href="#modes" class="nav-link">Operational Modes</a>
+      <a href="#modes" class="nav-link">Mode System</a>
     </div>
 
     <div class="nav-section">
       <div class="nav-section-title">Implementation</div>
       <a href="#phases" class="nav-link">Build Phases</a>
+      <a href="#audit" class="nav-link">Architecture Audit</a>
       <a href="#database" class="nav-link">Database Schema</a>
       <a href="#apis" class="nav-link">APIs & Integrations</a>
     </div>
@@ -458,7 +625,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v1.1.0 · Last Updated: 2026-01-19</div>
+      <div class="eyebrow">Internal Documentation · v1.2.0 · Last Updated: 2026-01-22</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -477,6 +644,14 @@
         <div class="status-item">
           <span class="status-dot complete"></span>
           <span class="status-label">Portal on Vercel</span>
+        </div>
+        <div class="status-item">
+          <div class="mode-cluster">
+            <span class="mode-dot growth"></span>
+            <span class="mode-dot engineering"></span>
+            <span class="mode-dot skunkworks"></span>
+          </div>
+          <span class="status-label">3 Modes Active</span>
         </div>
       </div>
     </header>
@@ -497,9 +672,10 @@
             unified knowledge graph.
           </p>
           <p>
-            The system supports two operational modalities: a <span class="highlight">web-app GUI</span>
-            for general contributors, and a <span class="highlight">Claude Code interface</span> for
-            administrators requiring direct pipeline access.
+            The system supports <span class="highlight">three operational modes</span> (Growth, Engineering, Skunkworks),
+            each with distinct entity types, pipeline configurations, and navigation. A <span class="highlight">web-app GUI</span>
+            serves general contributors, while a <span class="highlight">Claude Code interface</span> provides
+            administrators direct pipeline access.
           </p>
         </div>
         <div>
@@ -509,6 +685,7 @@
             <tr><td>Entities Extracted</td><td>64</td></tr>
             <tr><td>Generation Time</td><td>~6 minutes</td></tr>
             <tr><td>AI Providers in Chain</td><td>4</td></tr>
+            <tr><td>Operational Modes</td><td>3</td></tr>
           </table>
         </div>
       </div>
@@ -603,6 +780,11 @@
         </div>
         <div class="arch-connector"></div>
         <div class="arch-layer">
+          <span class="arch-layer-name">Mode Layer</span>
+          <span class="arch-layer-tech">Growth · Engineering · Skunkworks</span>
+        </div>
+        <div class="arch-connector"></div>
+        <div class="arch-layer">
           <span class="arch-layer-name">Worker</span>
           <span class="arch-layer-tech">GCP VM · Supabase Realtime · Background Jobs</span>
         </div>
@@ -635,6 +817,7 @@
           <tr><td>Database</td><td>Supabase (Postgres)</td><td>Entities, microsites, jobs</td></tr>
           <tr><td>Auth</td><td>Google OAuth</td><td>@ritual.net restriction</td></tr>
           <tr><td>Portal</td><td>Next.js App Router</td><td>Web GUI</td></tr>
+          <tr><td>Mode System</td><td>TypeScript config</td><td>Multi-mode abstraction</td></tr>
           <tr><td>Worker</td><td>GCP VM + systemd</td><td>Background job processing</td></tr>
           <tr><td>Microsites</td><td>React + Vite</td><td>Static site generation</td></tr>
           <tr><td>Hosting</td><td>Vercel + Blob</td><td>Portal + microsite storage</td></tr>
@@ -721,45 +904,95 @@
       </div>
     </section>
 
-    <!-- 06. Operational Modes -->
+    <!-- 06. Mode System -->
     <section id="modes">
       <div class="section-header">
         <span class="section-number">06</span>
-        <h2>Operational Modes</h2>
+        <h2>Mode System</h2>
+        <span class="tag new">v1.2</span>
       </div>
 
-      <p>Two interaction modalities producing identical outputs through different interfaces.</p>
+      <p>
+        Three operational modes with distinct entity types, pipelines, and navigation.
+        Mode-prefixed routing enables seamless context switching.
+      </p>
 
-      <div class="grid-2" style="margin-top: 24px;">
-        <div class="card">
-          <div class="card-label">Primary Interface</div>
-          <div class="card-title">Web Portal (GUI)</div>
-          <div class="card-desc">
-            Next.js application for contributors. Upload transcripts, configure settings,
-            review entities, deploy microsites. Google OAuth (@ritual.net).
+      <h3>Route Pattern</h3>
+      <p style="margin-bottom: 16px;">
+        All portal routes follow the mode-prefixed pattern:
+        <span class="route-pattern">/<span class="param">[mode]</span>/dashboard</span>
+        <span class="route-pattern">/<span class="param">[mode]</span>/entities</span>
+        <span class="route-pattern">/<span class="param">[mode]</span>/jobs/<span class="param">[id]</span></span>
+      </p>
+
+      <div class="grid-3" style="margin-top: 24px;">
+        <div class="mode-card growth">
+          <div class="mode-short">Growth</div>
+          <div class="mode-name">Ritual Growth</div>
+          <div class="mode-desc">
+            BD/CRM workflows, external opportunities, entity tracking.
+            The primary mode for research aggregation and microsite generation.
           </div>
-          <div style="margin-top: 12px;"><span class="tag">Phase 2+</span></div>
+          <div class="mode-entities">
+            <span class="entity-tag">Company</span>
+            <span class="entity-tag">Protocol</span>
+            <span class="entity-tag">Person</span>
+            <span class="entity-tag">Concept</span>
+            <span class="entity-tag">Opportunity</span>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-label">Admin Interface</div>
-          <div class="card-title">Claude Code (CLI)</div>
-          <div class="card-desc">
-            Direct pipeline access for administrators. Same capabilities as portal,
-            with conversational and command-driven modes.
+        <div class="mode-card engineering">
+          <div class="mode-short">Engineering</div>
+          <div class="mode-name">Ritual Engineering Graph</div>
+          <div class="mode-desc">
+            Engineering wiki, meeting ingestion, feature tracking.
+            Internal documentation and decision records.
           </div>
-          <div style="margin-top: 12px;">
-            <span class="tag">/dev-mode</span>
-            <span class="tag">/op-mode</span>
+          <div class="mode-entities">
+            <span class="entity-tag">Feature</span>
+            <span class="entity-tag">Decision</span>
+            <span class="entity-tag">Topic</span>
+            <span class="entity-tag">Component</span>
+          </div>
+        </div>
+        <div class="mode-card skunkworks">
+          <div class="mode-short">Skunkworks</div>
+          <div class="mode-name">Ritual Skunkworks</div>
+          <div class="mode-desc">
+            Product ideas, prototypes, internal innovation.
+            Experiment tracking and hypothesis validation.
+          </div>
+          <div class="mode-entities">
+            <span class="entity-tag">Idea</span>
+            <span class="entity-tag">Prototype</span>
+            <span class="entity-tag">Experiment</span>
           </div>
         </div>
       </div>
 
-      <h3>Mode Capabilities</h3>
+      <h3>Mode Configuration</h3>
+      <p>Each mode is defined by a <code>ModeConfig</code> TypeScript interface:</p>
+
+      <div class="code-block">
+<span class="key">interface</span> ModeConfig {
+  id: ModeId;               <span class="comment">// "growth" | "engineering" | "skunkworks"</span>
+  name: string;             <span class="comment">// Display name</span>
+  description: string;      <span class="comment">// Mode purpose</span>
+  accent: string;           <span class="comment">// Primary color (#3B5FE6, #3BE65B, #E63B3B)</span>
+  entityTypes: EntityType[];
+  pipelineStages: Stage[];
+  navigation: NavConfig;
+  features: FeatureFlags;
+}
+      </div>
+
+      <h3>Mode Accent Colors</h3>
       <table>
-        <thead><tr><th>Mode</th><th>Purpose</th><th>Access</th></tr></thead>
+        <thead><tr><th>Mode</th><th>Accent</th><th>Light</th><th>Usage</th></tr></thead>
         <tbody>
-          <tr><td>/dev-mode</td><td>Building the system</td><td>Full codebase, specs, migrations</td></tr>
-          <tr><td>/op-mode</td><td>Using the system</td><td>Pipeline, entities, research workflows</td></tr>
+          <tr><td>Growth</td><td style="color: var(--mode-growth); font-weight: 500;">#3B5FE6</td><td>#9BB3FF</td><td>Cobalt blue — primary brand</td></tr>
+          <tr><td>Engineering</td><td style="color: var(--mode-engineering); font-weight: 500;">#3BE65B</td><td>#9BFFB3</td><td>Green — technical/dev</td></tr>
+          <tr><td>Skunkworks</td><td style="color: var(--mode-skunkworks); font-weight: 500;">#E63B3B</td><td>#FF9B9B</td><td>Red — experimental</td></tr>
         </tbody>
       </table>
     </section>
@@ -831,14 +1064,103 @@
       </div>
     </section>
 
-    <!-- 08. Database Schema -->
-    <section id="database">
+    <!-- 08. Architecture Audit -->
+    <section id="audit">
       <div class="section-header">
         <span class="section-number">08</span>
+        <h2>Architecture Audit</h2>
+        <span class="tag audit">Phase 0 Audit</span>
+      </div>
+
+      <p>
+        Comprehensive audit completed 2026-01-20 assessing multi-mode readiness.
+        The system requires mode abstraction, schema split, and pipeline configuration
+        to support Engineering and Skunkworks modes alongside Growth.
+      </p>
+
+      <h3>Effort Estimate</h3>
+      <div class="effort-summary">
+        <div class="effort-item">
+          <div class="effort-value">~46</div>
+          <div class="effort-label">Total Days</div>
+        </div>
+        <div class="effort-item">
+          <div class="effort-value">10</div>
+          <div class="effort-label">Type System</div>
+        </div>
+        <div class="effort-item">
+          <div class="effort-value">12</div>
+          <div class="effort-label">Schema Split</div>
+        </div>
+        <div class="effort-item">
+          <div class="effort-value">8</div>
+          <div class="effort-label">Portal Mode</div>
+        </div>
+      </div>
+
+      <h3>Key Findings</h3>
+      <div class="grid-2">
+        <div>
+          <div class="finding-card high">
+            <div class="finding-title">Schema Coupling in public.*</div>
+            <div class="finding-severity">High Severity</div>
+            <div class="finding-desc">
+              All tables in public schema blocks mode isolation and safe RLS separation.
+              Requires split to growth/engineering/product/shared schemas.
+            </div>
+          </div>
+          <div class="finding-card high">
+            <div class="finding-title">Fixed Entity Types</div>
+            <div class="finding-severity">High Severity</div>
+            <div class="finding-desc">
+              Entity types hardcoded for Growth (Company, Protocol, Person).
+              Prevents adding Engineering or Skunkworks entity types without code change.
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="finding-card medium">
+            <div class="finding-title">Portal Single-Mode Assumptions</div>
+            <div class="finding-severity">Medium Severity</div>
+            <div class="finding-desc">
+              Routes, nav, UI copy, and queries assume microsites + growth.
+              Needs mode selector, mode-prefixed routes, and config-driven UI.
+            </div>
+          </div>
+          <div class="finding-card low">
+            <div class="finding-title">Pipeline Hardcoding</div>
+            <div class="finding-severity">Low Severity</div>
+            <div class="finding-desc">
+              Pipeline stages optimized for Growth workflow. Engineering mode
+              would need different artifact types and processing stages.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Audit Reports</h3>
+      <table>
+        <thead><tr><th>Report</th><th>Purpose</th><th>Path</th></tr></thead>
+        <tbody>
+          <tr><td>Summary</td><td>Executive overview</td><td><code>docs/audit/AUDIT_SUMMARY.md</code></td></tr>
+          <tr><td>Coupling</td><td>Hardcoded assumptions</td><td><code>docs/audit/AUDIT_COUPLING.md</code></td></tr>
+          <tr><td>Types</td><td>Entity/type architecture</td><td><code>docs/audit/AUDIT_TYPES.md</code></td></tr>
+          <tr><td>Pipeline</td><td>Execution chain analysis</td><td><code>docs/audit/AUDIT_PIPELINE.md</code></td></tr>
+          <tr><td>Portal</td><td>UI/UX assumptions</td><td><code>docs/audit/AUDIT_PORTAL.md</code></td></tr>
+          <tr><td>Schema</td><td>Database structure</td><td><code>docs/audit/AUDIT_SCHEMA.md</code></td></tr>
+          <tr><td>Effort</td><td>Time estimates</td><td><code>docs/audit/AUDIT_EFFORT.md</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 09. Database Schema -->
+    <section id="database">
+      <div class="section-header">
+        <span class="section-number">09</span>
         <h2>Database Schema</h2>
       </div>
 
-      <p>9 interconnected tables supporting the full research workflow.</p>
+      <p>9 interconnected tables supporting the full research workflow. Currently in <code>public.*</code> schema, planned split to mode-specific schemas.</p>
 
       <table>
         <thead><tr><th>Table</th><th>Purpose</th><th>Key Fields</th></tr></thead>
@@ -854,12 +1176,24 @@
           <tr><td>entity_opportunities</td><td>Entity ↔ Opportunity</td><td>junction table</td></tr>
         </tbody>
       </table>
+
+      <h3>Planned Schema Split</h3>
+      <p>Future migration will split to mode-isolated schemas:</p>
+      <table>
+        <thead><tr><th>Schema</th><th>Contents</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td><code>shared</code></td><td>users, cross_links</td><td>Mode-agnostic tables</td></tr>
+          <tr><td><code>growth</code></td><td>entities, microsites, jobs</td><td>Growth mode data</td></tr>
+          <tr><td><code>engineering</code></td><td>features, decisions, wiki</td><td>Engineering mode data</td></tr>
+          <tr><td><code>product</code></td><td>ideas, prototypes, experiments</td><td>Skunkworks mode data</td></tr>
+        </tbody>
+      </table>
     </section>
 
-    <!-- 09. APIs & Integrations -->
+    <!-- 10. APIs & Integrations -->
     <section id="apis">
       <div class="section-header">
-        <span class="section-number">09</span>
+        <span class="section-number">10</span>
         <h2>APIs & Integrations</h2>
       </div>
 
@@ -912,10 +1246,10 @@
 
     <div class="divider"></div>
 
-    <!-- 10. Specifications -->
+    <!-- 11. Specifications -->
     <section id="specs">
       <div class="section-header">
-        <span class="section-number">10</span>
+        <span class="section-number">11</span>
         <h2>Specifications</h2>
       </div>
 
@@ -923,6 +1257,18 @@
         <div class="spec-title">Master Specification</div>
         <div class="spec-desc">Complete architecture, all decisions, implementation phases, open questions.</div>
         <div class="spec-path">docs/MASTER_SPEC.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Mode System Specification <span class="tag new">New</span></div>
+        <div class="spec-desc">ModeConfig interface, entity types, navigation, accent colors, feature flags.</div>
+        <div class="spec-path">docs/specs/SPEC_1_MODE_SYSTEM.md</div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Schema Split Specification <span class="tag new">New</span></div>
+        <div class="spec-desc">Migration from public.* to growth/engineering/product/shared schemas.</div>
+        <div class="spec-path">docs/specs/SPEC_1_SCHEMA_SPLIT.md</div>
       </div>
 
       <div class="spec-card">
@@ -950,7 +1296,7 @@
       </div>
 
       <div class="spec-card">
-        <div class="spec-title">Opportunity Pipeline Specification <span class="tag new">New</span></div>
+        <div class="spec-title">Opportunity Pipeline Specification</div>
         <div class="spec-desc">Kanban board for BD opportunities. Configurable stages, entity linking, AI actions.</div>
         <div class="spec-path">docs/specs/SPEC_OPPORTUNITY_PIPELINE.md</div>
       </div>
@@ -995,24 +1341,59 @@
       </div>
 
       <div class="spec-card">
-        <div class="spec-title">Opportunity Map <span class="tag new">New</span></div>
+        <div class="spec-title">Opportunity Map</div>
         <div class="spec-desc">Kanban UI layout, stage progression, AI action flows, Realtime collaboration.</div>
         <div class="spec-path">docs/maps/MAP_OPPORTUNITY.md</div>
       </div>
     </section>
 
-    <!-- 11. Changelog -->
+    <!-- 12. Changelog -->
     <section id="changelog">
       <div class="section-header">
-        <span class="section-number">11</span>
+        <span class="section-number">12</span>
         <h2>Changelog</h2>
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v1.1.0 <span class="tag new">Current</span></div>
+        <div class="changelog-version">v1.2.0 <span class="tag new">Current</span></div>
+        <div class="changelog-date">2026-01-22</div>
+
+        <h4>Mode System Implementation</h4>
+        <ul>
+          <li><strong>3 operational modes</strong> — Growth, Engineering, Skunkworks</li>
+          <li><strong>ModeConfig TypeScript interface</strong> — entity types, navigation, accent colors, feature flags</li>
+          <li><strong>Mode-prefixed routing</strong> — /[mode]/dashboard, /[mode]/entities, etc.</li>
+          <li><strong>Mode-aware UI</strong> — dynamic accent colors via CSS custom properties</li>
+          <li><strong>Mode configs</strong> in packages/core/src/modes/</li>
+        </ul>
+
+        <h4>Phase 0 Architecture Audit</h4>
+        <ul>
+          <li><strong>Comprehensive audit</strong> — 6 detailed reports in docs/audit/</li>
+          <li><strong>~46 days effort</strong> estimated for full multi-mode support</li>
+          <li><strong>Key findings</strong> — schema coupling, fixed entity types, portal assumptions</li>
+          <li><strong>Extraction priority</strong> — type system → schema split → pipeline config → portal mode</li>
+        </ul>
+
+        <h4>New Specifications</h4>
+        <ul>
+          <li><strong>SPEC_1_MODE_SYSTEM.md</strong> — Mode configuration, entity types, navigation</li>
+          <li><strong>SPEC_1_SCHEMA_SPLIT.md</strong> — Schema migration plan</li>
+        </ul>
+
+        <h4>Design System</h4>
+        <ul>
+          <li><strong>Making Software aesthetic</strong> fully applied to portal</li>
+          <li><strong>Mode accent colors</strong> — Growth (#3B5FE6), Engineering (#3BE65B), Skunkworks (#E63B3B)</li>
+          <li><strong>Sharp edges, dotted borders</strong> — consistent design language</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v1.1.0</div>
         <div class="changelog-date">2026-01-19</div>
 
-        <h4>🚀 Production Deployment</h4>
+        <h4>Production Deployment</h4>
 
         <h4>Live Microsites</h4>
         <ul>
@@ -1041,7 +1422,7 @@
         <div class="changelog-version">v1.0.0</div>
         <div class="changelog-date">2026-01-17</div>
 
-        <h4>🎉 ALL PHASES COMPLETE</h4>
+        <h4>ALL PHASES COMPLETE</h4>
 
         <h4>Phase 3: Knowledge Graph UI</h4>
         <ul>
@@ -1153,10 +1534,10 @@
 
     </section>
 
-    <!-- 12. Key Decisions -->
+    <!-- 13. Key Decisions -->
     <section id="decisions">
       <div class="section-header">
-        <span class="section-number">12</span>
+        <span class="section-number">13</span>
         <h2>Key Decisions</h2>
       </div>
 
@@ -1174,6 +1555,18 @@
           <tr><td>AI Provider Hierarchy</td><td>Claude PRIMARY, Grok/Perplexity SECONDARY</td></tr>
           <tr><td>Microsite Template</td><td>Copy from defi-rwa</td></tr>
           <tr><td>Storage</td><td>Supabase from start (not local JSON)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Mode System Decisions</h3>
+      <table class="decision-table">
+        <thead><tr><th>Decision</th><th>Choice</th></tr></thead>
+        <tbody>
+          <tr><td>Mode Count</td><td>3 modes (Growth, Engineering, Skunkworks)</td></tr>
+          <tr><td>Entity Types</td><td>Config-driven per mode</td></tr>
+          <tr><td>Route Pattern</td><td>/[mode]/* prefix</td></tr>
+          <tr><td>Accent Colors</td><td>Blue (Growth), Green (Eng), Red (Skunk)</td></tr>
+          <tr><td>Cross-Mode Linking</td><td>Future via shared schema</td></tr>
         </tbody>
       </table>
 
@@ -1196,10 +1589,10 @@
 
     <div class="divider"></div>
 
-    <!-- 13. Workflows -->
+    <!-- 14. Workflows -->
     <section id="workflows">
       <div class="section-header">
-        <span class="section-number">13</span>
+        <span class="section-number">14</span>
         <h2>Workflows</h2>
       </div>
 
@@ -1239,10 +1632,10 @@ EOF
       </div>
     </section>
 
-    <!-- 14. File Structure -->
+    <!-- 15. File Structure -->
     <section id="files">
       <div class="section-header">
-        <span class="section-number">14</span>
+        <span class="section-number">15</span>
         <h2>File Structure</h2>
       </div>
 
@@ -1256,6 +1649,7 @@ ritual-research-graph/
 ├── <span class="key">docs/</span>                  <span class="comment"># Specifications</span>
 │   ├── MASTER_SPEC.md
 │   ├── MASTER_MAP.md       <span class="comment"># System topology</span>
+│   ├── audit/              <span class="comment"># Architecture audit reports</span>
 │   ├── specs/              <span class="comment"># Phase specs</span>
 │   ├── maps/               <span class="comment"># Visual docs (ERD, flows)</span>
 │   └── design/             <span class="comment"># Design docs</span>
@@ -1266,12 +1660,14 @@ ritual-research-graph/
 │   ├── prompts/            <span class="comment"># 6 prompt templates</span>
 │   └── stages/             <span class="comment"># 6 stage implementations</span>
 ├── <span class="key">packages/</span>             <span class="comment"># Monorepo packages</span>
-│   └── core/               <span class="comment"># Types, registry</span>
+│   └── core/               <span class="comment"># Types, registry, modes</span>
+│       └── src/modes/      <span class="comment"># Mode configs (growth, eng, skunk)</span>
 ├── <span class="key">apps/</span>                 <span class="comment"># Applications</span>
 │   └── portal/             <span class="comment"># Next.js (Phase 2)</span>
+│       └── src/app/(modes)/[mode]/  <span class="comment"># Mode-prefixed routes</span>
 ├── <span class="key">inputs/</span>               <span class="comment"># Source transcripts</span>
 ├── <span class="key">outputs/</span>              <span class="comment"># Generated microsites</span>
-├── <span class="key">supabase/</span>             <span class="comment"># Migrations (001-004)</span>
+├── <span class="key">supabase/</span>             <span class="comment"># Migrations (001-007)</span>
 ├── CLAUDE.md               <span class="comment"># Project instructions</span>
 └── CHANGELOG.md            <span class="comment"># Version history</span>
       </div>
@@ -1281,7 +1677,7 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v1.1.0 · Updated 2026-01-19 ·
+          Ritual Research Graph · v1.2.0 · Updated 2026-01-22 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">

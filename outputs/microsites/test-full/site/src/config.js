@@ -1,0 +1,337 @@
+// Generated SITE_CONFIG - DO NOT EDIT
+// Generated at: 2026-01-16T19:28:43.670Z
+
+export const PROJECTS = {
+  "BlackRock": {
+    "website": "https://blackrock.com",
+    "twitter": "BlackRock",
+    "tvSymbol": "BLK"
+  },
+  "Ondo Finance": {
+    "website": "https://ondo.finance",
+    "twitter": "OndoFinance",
+    "tvSymbol": null
+  },
+  "Provenance Blockchain": {
+    "website": "https://provenance.io",
+    "twitter": "provenancefdn",
+    "tvSymbol": null
+  },
+  "Zivo Protocol": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Credit Coop": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Maple Finance": {
+    "website": "https://maple.finance",
+    "twitter": "maplefinance",
+    "tvSymbol": null
+  },
+  "Centrifuge": {
+    "website": "https://centrifuge.io",
+    "twitter": "centrifuge",
+    "tvSymbol": null
+  },
+  "Ethereum": {
+    "website": "https://ethereum.org",
+    "twitter": "ethereum",
+    "tvSymbol": "ETHUSD"
+  },
+  "Alchemix": {
+    "website": "https://alchemix.fi",
+    "twitter": "AlchemixFi",
+    "tvSymbol": null
+  },
+  "Compound": {
+    "website": "https://compound.finance",
+    "twitter": "compoundfinance",
+    "tvSymbol": null
+  },
+  "Aave": {
+    "website": "https://aave.com",
+    "twitter": "aaveaave",
+    "tvSymbol": null
+  },
+  "Morpho": {
+    "website": "https://morpho.xyz",
+    "twitter": "MorphoLabs",
+    "tvSymbol": null
+  },
+  "Clearpool": {
+    "website": "https://clearpool.finance",
+    "twitter": "ClearpoolFin",
+    "tvSymbol": null
+  },
+  "Plume": {
+    "website": "https://plumenetwork.xyz",
+    "twitter": "plumenetwork",
+    "tvSymbol": null
+  },
+  "Bid.io": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Real World Assets": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Ritual": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Figure Markets": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Euler": {
+    "website": "https://euler.finance",
+    "twitter": "eulerfinance",
+    "tvSymbol": null
+  },
+  "Ramp": {
+    "website": "https://ramp.com",
+    "twitter": "RampNetwork",
+    "tvSymbol": null
+  },
+  "SoFi": {
+    "website": "https://sofi.com",
+    "twitter": "SoFi",
+    "tvSymbol": null
+  },
+  "DeFi Llama": {
+    "website": "https://defillama.com",
+    "twitter": "DefiLlama",
+    "tvSymbol": null
+  },
+  "FIT21 Act": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "AI-Powered Loan Origination": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Self-Repaying Debt Infrastructure": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Privacy-Preserving Compliance": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "BNB Chain": {
+    "website": "https://bnbchain.org",
+    "twitter": "BNBCHAIN",
+    "tvSymbol": null
+  },
+  "Solana": {
+    "website": "https://solana.com",
+    "twitter": "solana",
+    "tvSymbol": null
+  },
+  "Rayls": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Canton Network": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Polymesh": {
+    "website": "https://polymesh.network",
+    "twitter": "PolymeshNetwork",
+    "tvSymbol": null
+  },
+  "AmFi Consortium": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Halborn": {
+    "website": "https://halborn.com",
+    "twitter": "HalbornSecurity",
+    "tvSymbol": null
+  },
+  "Sky Ecosystem": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Cream Finance": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Apollo": {
+    "website": "https://apollo.com",
+    "twitter": "ApolloGlobal",
+    "tvSymbol": null
+  },
+  "KKR": {
+    "website": "https://kkr.com",
+    "twitter": "KKR_Co",
+    "tvSymbol": null
+  },
+  "Arshan": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Qt": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  },
+  "Parcel": {
+    "website": null,
+    "twitter": null,
+    "tvSymbol": null
+  }
+};
+
+export const EXECUTIVE_SUMMARY = {
+  "title": "RWA DeFi Market Intelligence",
+  "subtitle": "Q1 2026 Strategic Analysis",
+  "thesis": "The Real World Assets (RWA) DeFi sector has reached a critical inflection point, with tokenized assets exceeding $35 billion and the market transitioning from simple asset tokenization to sophisticated crypto-native financial primitives. The convergence of macro regulatory tailwinds, institutional adoption led by BlackRock's BUIDL fund, and emerging AI integration opportunities creates a compelling landscape for next-generation RWA protocols focused on self-repaying debt mechanisms and automated loan origination.",
+  "keyFindings": [
+    {
+      "title": "Market Scale and Institutional Adoption",
+      "content": "Tokenized assets have exceeded $35 billion with BlackRock's BUIDL fund serving as the primary institutional adoption catalyst. The Fed's normalization of risk-free rates to 4-5% is creating immediate demand for on-chain treasury exposure, driving significant institutional capital allocation."
+    },
+    {
+      "title": "Self-Repaying Debt Innovation",
+      "content": "Protocols like Zivo and Credit Coop are pioneering self-repaying debt mechanisms with superior unit economics, achieving 3.6% revenue-to-TVL ratios compared to traditional 1-3% annualized returns. These Alchemix-style mechanisms for RWAs represent the next evolution beyond simple asset tokenization."
+    },
+    {
+      "title": "Automation Bottlenecks",
+      "content": "Most RWA protocols rely on manual processes for loan origination and risk assessment, creating significant scaling bottlenecks. High-performing protocols like Zivo achieve 95% capital utilization but are constrained by manual underwriting processes."
+    },
+    {
+      "title": "Multichain Infrastructure Evolution",
+      "content": "The RWA stack has become multichain with Ethereum as the institutional settlement layer and specialized L2s like Provenance and Plume emerging. This creates opportunities for cross-chain AI services while requiring complex integration strategies."
+    },
+    {
+      "title": "Regulatory Tailwinds",
+      "content": "The pro-crypto administration and FIT21 Act are driving institutional confidence, while creating opportunities for privacy-preserving compliance solutions that address the tension between transparency and regulatory requirements."
+    },
+    {
+      "title": "AI Integration Gap",
+      "content": "Only Bid.io is attempting AI integration as a specialized oracle, leaving significant opportunities for comprehensive AI automation across loan origination, risk assessment, and cash flow prediction for RWA protocols."
+    }
+  ],
+  "recommendations": [
+    {
+      "title": "Focus on AI-Powered Loan Origination",
+      "content": "Priority partnership with high-performing protocols like Zivo to provide automated credit assessment and loan matching, directly addressing manual process bottlenecks that limit TVL productivity."
+    },
+    {
+      "title": "Develop Self-Repaying Debt Infrastructure",
+      "content": "Build generalized AI models for cash flow prediction and monitoring across different self-repaying debt applications, enabling protocols to scale these high-efficiency mechanisms automatically."
+    },
+    {
+      "title": "Position as Horizontal AI Layer",
+      "content": "Rather than building comprehensive RWA infrastructure, focus on becoming the AI automation layer for existing protocols through API integrations and specialized services."
+    },
+    {
+      "title": "Pursue Strategic Partnerships",
+      "content": "Initiate direct outreach to Zivo, Credit Coop, and Provenance for collaboration discussions, with Zivo as the highest priority due to clear automation needs and proven unit economics."
+    },
+    {
+      "title": "Develop Privacy-Preserving Compliance",
+      "content": "Leverage core competencies in zero-knowledge proofs to create compliance solutions that enable broader protocol adoption while maintaining regulatory requirements."
+    }
+  ]
+};
+
+export const DEEP_DIVES = [
+  {
+    "id": "market-overview",
+    "title": "FIG.001 · Market Overview",
+    "subtitle": "Current state and evolution of the RWA DeFi sector",
+    "isContent": true,
+    "content": "# Market Overview\n\nThe Real World Assets (RWA) DeFi sector has reached a critical inflection point, with **tokenized assets exceeding $35 billion** and the market transitioning from simple asset tokenization to sophisticated crypto-native financial primitives.\n\n## Current Market State\n- **Total Market Size:** $35+ billion in tokenized assets\n- **Growth Driver:** Fed normalization of risk-free rates to 4-5%, creating immediate demand for on-chain treasury exposure\n- **Institutional Catalyst:** BlackRock's BUIDL fund partnership with Ondo Finance as the primary institutional adoption accelerator\n- **Infrastructure Maturity:** Ethereum established as institutional security and settlement layer, with specialized L2s emerging\n\n## Market Evolution Phases\nThe sector has undergone three distinct phases:\n1. **2021 DeFi Summer:** Experimental overcollateralized lending (Compound, Aave, Cream Finance)\n2. **2022-2024 Risk Management Era:** Industry maturation following defaults, introduction of compartmentalized risk (Morpho, Euler)\n3. **2025-2026 Institutional Integration:** Regulatory clarity, institutional adoption, and crypto-native primitive development\n\n## Recent Developments\n- **Regulatory:** Pro-crypto administration and FIT21 Act driving institutional confidence\n- **Technical:** Multichain RWA stack development with Ethereum as settlement layer\n- **Business Model:** Shift from simple tokenization to complex cash flow collateralization and self-repaying debt mechanisms"
+  },
+  {
+    "id": "key-players",
+    "title": "FIG.002 · Key Players Analysis",
+    "subtitle": "Deep dive into leading RWA protocols and their positioning",
+    "isContent": true,
+    "content": "# Key Players Analysis\n\n## Provenance Blockchain\n**Position:** Comprehensive RWA ecosystem with legal compliance focus\n**Scale:** Claims $20 billion TVL (controversial/unverified by DeFi Llama)\n**Key Products:**\n- $15 billion in tokenized home equity lines of credit\n- $600 million in tokenized insurance (up from $100 million in 2025)\n- Prime lending platform for real asset collateral\n- Recently launched tokenized stock lending\n\n**Strengths:** Massive scale, institutional partnerships (Figure Markets, SoFi), comprehensive compliance infrastructure\n**Weaknesses:** TVL verification concerns, centralized KYC requirements\n\n## Zivo Protocol\n**Position:** Merchant cash advance tokenization with self-repaying mechanisms\n**Performance:** $1M revenue on $16M deposits (3.6% annualized revenue-to-TVL ratio)\n**Mechanism:** Loans repaid through percentage of borrower sales rather than fixed schedules\n\n**Strengths:** Industry-leading capital efficiency (95% utilization), innovative self-repaying structure\n**Weaknesses:** Extremely new (less than one year operational), manual loan origination\n\n## Credit Coop\n**Position:** Future cash flow collateralization platform\n**Scale:** Larger than Zivo, serving established businesses like Ramp\n**Mechanism:** Businesses collateralize future revenue streams through smart contract streaming\n\n**Strengths:** Proven with major clients, scalable to salary-based lending, automated cash flow streaming\n**Weaknesses:** KYC requirements limiting accessibility, dependent on cash flow predictability"
+  },
+  {
+    "id": "opportunities",
+    "title": "FIG.003 · Strategic Opportunities",
+    "subtitle": "Key areas for AI integration and market capture",
+    "isContent": true,
+    "content": "# Strategic Opportunities\n\n## Primary Opportunities\n\n### 1. AI-Powered Loan Origination\n- **Problem:** Manual processes bottlenecking TVL productivity\n- **Solution:** Automated credit assessment and loan matching\n- **Risk Level:** Medium - requires regulatory compliance integration\n- **Priority:** High - directly addresses stated pain points\n\n### 2. Self-Repaying Debt Infrastructure\n- **Problem:** Current protocols limited to specific use cases\n- **Solution:** Generalized Alchemix-style mechanisms for RWAs\n- **Risk Level:** Medium - complex smart contract development\n- **Priority:** High - unique differentiation opportunity\n\n### 3. Privacy-Preserving Compliance\n- **Problem:** Tension between transparency and regulatory requirements\n- **Solution:** Zero-knowledge proofs for KYC/compliance verification\n- **Risk Level:** Low - leverages core competency\n- **Priority:** Medium - enables broader protocol adoption\n\n### 4. Cross-Protocol Analytics\n- **Problem:** Limited transparent, on-chain risk assessment\n- **Solution:** Standardized risk assessment APIs across protocols\n- **Risk Level:** Medium - requires multiple protocol integrations\n- **Priority:** Medium - significant market differentiation potential\n\n## Market Gaps\n1. **Automation Layer:** Most protocols rely on manual processes\n2. **Cross-Protocol Analytics:** Limited transparent, on-chain risk assessment\n3. **Privacy Infrastructure:** KYC/compliance creating accessibility barriers\n4. **Standardization:** Each protocol building custom infrastructure"
+  },
+  {
+    "id": "competitive-analysis",
+    "title": "FIG.004 · Competitive Landscape",
+    "subtitle": "Analysis of direct and indirect competitors",
+    "isContent": true,
+    "content": "# Competitive Landscape\n\n## Direct AI Competitors\n### Bid.io\n**Position:** AI oracle for RWA risk pricing\n**Limitation:** Specialized oracle function only\n**Differentiation Opportunity:** Full-stack AI infrastructure vs. point solution\n\n## Infrastructure Competitors\n### Plume\n**Approach:** RWA-specific L2 focusing on standardization\n**Position:** Chain-level RWA optimization\n**Differentiation:** AI-layer services vs. infrastructure play\n\n## Traditional Players\n- **BlackRock/Ondo:** Institutional tokenization leaders\n- **Maple/Clearpool:** Established lending platforms\n- **Differentiation Opportunity:** AI-native approach vs. traditional financial services ported to blockchain\n\n## Competitive Positioning Strategy\n\n### Ritual's Advantages\n1. **Comprehensive AI Infrastructure:** Full-stack capabilities vs. point solutions\n2. **Privacy-Preserving Technology:** Zero-knowledge proofs for compliance\n3. **Cross-Protocol Integration:** Horizontal AI layer vs. vertical integration\n4. **Automation Focus:** Addressing manual process bottlenecks across the sector\n\n### Key Differentiators\n- **Horizontal Integration:** Partner with multiple protocols rather than building competing infrastructure\n- **AI-Native Approach:** Built for crypto-native features rather than traditional finance ported on-chain\n- **Privacy-First Compliance:** Enable regulatory compliance without sacrificing accessibility\n- **Automation at Scale:** Address manual bottlenecks across loan origination, risk assessment, and portfolio management"
+  },
+  {
+    "id": "strategic-implications",
+    "title": "FIG.005 · Strategic Implications",
+    "subtitle": "Key strategic questions and recommendations for market entry",
+    "isContent": true,
+    "content": "# Strategic Implications\n\n## Key Strategic Questions\n\n### Positioning Strategy\n**Question:** How should Ritual position itself in the AI-powered RWA automation stack versus building comprehensive RWA infrastructure?\n\n**Recommendation:** Position as the horizontal AI automation layer, partnering with multiple protocols rather than competing with infrastructure providers. This leverages Ritual's core AI capabilities while avoiding regulatory complexity of becoming a financial services provider.\n\n### Regulatory Framework\n**Question:** What regulatory and compliance framework does Ritual need to operate in RWA markets without becoming a financial services entity?\n\n**Recommendation:** Develop a compliance framework positioning Ritual as a technology service provider rather than financial services entity. Focus on privacy-preserving AI services that enhance protocol capabilities without making underwriting decisions.\n\n### Value Capture Strategy\n**Question:** How can Ritual capture value from the self-repaying debt mechanism trend without building protocol-specific infrastructure?\n\n**Recommendation:** Develop specialized AI models for cash flow prediction and monitoring across different self-repaying debt applications. Focus on providing analytical infrastructure that enables protocols to scale these mechanisms automatically.\n\n## Partnership Strategy\n\n### Priority Partnerships\n1. **Zivo Protocol:** Highest priority due to clear automation needs and proven unit economics\n2. **Credit Coop:** Focus on enhanced cash flow prediction capabilities for established business clients\n3. **Provenance:** Approach cautiously, focusing on privacy-preserving compliance solutions\n\n### Integration Approach\n- Develop standardized APIs for cash flow analysis across multiple protocols\n- Focus on real-time cash flow monitoring and prediction capabilities\n- Build chain-agnostic AI infrastructure deployable across multiple environments\n\n## Next Steps\n1. **Direct Protocol Outreach:** Initiate partnership discussions with Zivo, Credit Coop, and Provenance\n2. **Technical Assessment:** Evaluate integration requirements across target protocols\n3. **Regulatory Consultation:** Develop compliant positioning strategy for AI service provision\n4. **Prototype Development:** Build proof-of-concept integrations with highest-priority protocols"
+  }
+];
+
+export const SOURCE_ARTIFACTS = [
+  {
+    "id": "transcript-clean",
+    "title": "Cleaned Transcript",
+    "subtitle": "Processed meeting notes",
+    "file": "rwa_defi_research_Transcript_Clean.md",
+    "description": "Original transcript with filler words removed and structure added"
+  },
+  {
+    "id": "intelligence-brief",
+    "title": "Intelligence Brief",
+    "subtitle": "Executive analysis",
+    "file": "rwa_defi_research_Intelligence_Brief.md",
+    "description": "Comprehensive analysis of the research topic with key insights"
+  },
+  {
+    "id": "strategic-questions",
+    "title": "Strategic Questions",
+    "subtitle": "Research framework",
+    "file": "rwa_defi_research_Strategic_Questions.md",
+    "description": "Key questions for further investigation and analysis"
+  },
+  {
+    "id": "narrative-research",
+    "title": "Narrative Research",
+    "subtitle": "Multi-source synthesis",
+    "file": "rwa_defi_research_Narrative_Research.md",
+    "description": "Research synthesized from Grok, Perplexity, and Twitter sources"
+  },
+  {
+    "id": "entities",
+    "title": "Extracted Entities",
+    "subtitle": "Knowledge graph data",
+    "file": "rwa_defi_research_Entities.json",
+    "description": "40 entities extracted with metadata and relationships"
+  }
+];
+
+export const ACCENT_COLOR = '#3B5FE6';

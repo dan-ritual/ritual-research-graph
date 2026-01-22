@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Save, RefreshCw, Loader2 } from "lucide-react";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface Section {
   id: string;
@@ -145,7 +146,7 @@ export function ArtifactEditor({
     async (instructions: string) => {
       if (!selectedSection) return;
 
-      const response = await fetch(
+      const response = await fetchWithMode(
         `/api/jobs/${jobId}/artifacts/${artifact.id}/regenerate-section`,
         {
           method: "POST",
@@ -194,7 +195,7 @@ export function ArtifactEditor({
 
   return (
     <Card className="border-[rgba(0,0,0,0.08)]">
-      <CardHeader className="border-b border-dotted border-[rgba(59,95,230,0.3)]">
+      <CardHeader className="border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <CardTitle className="font-mono text-sm uppercase tracking-[0.08em] text-[rgba(0,0,0,0.65)]">
@@ -203,7 +204,7 @@ export function ArtifactEditor({
             {editedCount > 0 && (
               <Badge
                 variant="outline"
-                className="font-mono text-[10px] uppercase tracking-[0.05em] text-[#3B5FE6] border-[#3B5FE6]/30"
+                className="font-mono text-[10px] uppercase tracking-[0.05em] text-[var(--mode-accent)] border-[var(--mode-accent)]/30"
               >
                 {editedCount} section{editedCount !== 1 ? "s" : ""} edited
               </Badge>
@@ -233,7 +234,7 @@ export function ArtifactEditor({
               size="sm"
               onClick={handleSave}
               disabled={isSaving || !hasUnsavedChanges}
-              className="font-mono text-xs uppercase tracking-[0.05em] bg-[#3B5FE6] hover:bg-[#3B5FE6]/90"
+              className="font-mono text-xs uppercase tracking-[0.05em] bg-[var(--mode-accent)] hover:bg-[var(--mode-accent)]/90"
             >
               {isSaving ? (
                 <>

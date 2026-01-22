@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,9 +10,13 @@ export async function GET(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   // Verify job exists
   const { data: job, error: jobError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .select("id, config, status")
     .eq("id", jobId)
     .single();
@@ -29,7 +34,7 @@ export async function GET(
 
   // Fetch all artifacts for this job
   const { data: artifacts, error: artifactsError } = await supabase
-    .from("artifacts")
+    .from(getSchemaTable("artifacts", mode))
     .select("*")
     .eq("job_id", jobId)
     .order("created_at", { ascending: true });

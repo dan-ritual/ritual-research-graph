@@ -11,6 +11,8 @@ interface CoOccurrence {
 
 interface CoOccurrenceChipsProps {
   coOccurrences: CoOccurrence[];
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 function getTypeColor(type: string): string {
@@ -30,7 +32,7 @@ function getTypeColor(type: string): string {
   }
 }
 
-export function CoOccurrenceChips({ coOccurrences }: CoOccurrenceChipsProps) {
+export function CoOccurrenceChips({ coOccurrences, modePrefix = "" }: CoOccurrenceChipsProps) {
   if (coOccurrences.length === 0) {
     return (
       <p className="font-serif text-sm italic text-[rgba(0,0,0,0.45)]">
@@ -42,7 +44,7 @@ export function CoOccurrenceChips({ coOccurrences }: CoOccurrenceChipsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {coOccurrences.map((entity) => (
-        <Link key={entity.id} href={`/entities/${entity.slug}`}>
+        <Link key={entity.id} href={`${modePrefix}/entities/${entity.slug}`}>
           <Badge
             className={`${getTypeColor(entity.type)} font-mono text-xs cursor-pointer transition-colors`}
           >

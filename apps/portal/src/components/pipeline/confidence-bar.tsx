@@ -21,7 +21,7 @@ export function ConfidenceBar({
             key={i}
             className={`flex-1 ${
               i < filledSegments
-                ? "bg-[#3B5FE6]"
+                ? "bg-[var(--mode-accent)]"
                 : "bg-[rgba(0,0,0,0.08)]"
             }`}
           />

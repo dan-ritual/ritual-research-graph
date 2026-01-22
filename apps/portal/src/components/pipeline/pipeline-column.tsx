@@ -16,6 +16,8 @@ interface PipelineColumnProps {
   opportunities: Opportunity[];
   onAdvanceStage: (opportunityId: string) => void;
   isLastStage?: boolean;
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 export function PipelineColumn({
@@ -23,6 +25,7 @@ export function PipelineColumn({
   opportunities,
   onAdvanceStage,
   isLastStage = false,
+  modePrefix = "",
 }: PipelineColumnProps) {
   return (
     <div className="flex flex-col min-w-[280px] max-w-[320px] bg-[#FBFBFB]">
@@ -52,6 +55,7 @@ export function PipelineColumn({
               opportunity={opp}
               onAdvanceStage={onAdvanceStage}
               isLastStage={isLastStage}
+              modePrefix={modePrefix}
             />
           ))
         ) : (

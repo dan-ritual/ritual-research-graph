@@ -59,8 +59,8 @@ export function SpotTreatmentModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-white border-none shadow-xl">
-        <DialogHeader className="border-b border-dotted border-[rgba(59,95,230,0.3)] pb-4">
-          <DialogTitle className="font-mono text-sm uppercase tracking-[0.12em] text-[#3B5FE6]">
+        <DialogHeader className="border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] pb-4">
+          <DialogTitle className="font-mono text-sm uppercase tracking-[0.12em] text-[var(--mode-accent)]">
             Regenerate Section
           </DialogTitle>
         </DialogHeader>
@@ -91,7 +91,7 @@ export function SpotTreatmentModal({
               value={instructions}
               onChange={(e) => setInstructions(e.target.value)}
               placeholder="Describe how you want this section changed..."
-              className="min-h-[100px] font-serif text-sm border-[rgba(0,0,0,0.12)] focus:border-[#3B5FE6] focus:ring-[#3B5FE6]/20"
+              className="min-h-[100px] font-serif text-sm border-[rgba(0,0,0,0.12)] focus:border-[var(--mode-accent)] focus:ring-[var(--mode-accent)]/20"
             />
             <p className="font-mono text-[10px] text-[rgba(0,0,0,0.35)] mt-1">
               Example: &quot;Focus more on the technical implementation details&quot; or
@@ -103,7 +103,7 @@ export function SpotTreatmentModal({
           <div>
             <button
               onClick={() => setShowContext(!showContext)}
-              className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6] transition-colors"
+              className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)] transition-colors"
             >
               {showContext ? (
                 <ChevronUp className="h-3 w-3" />
@@ -152,7 +152,7 @@ export function SpotTreatmentModal({
             <Button
               onClick={handleRegenerate}
               disabled={!instructions.trim() || isRegenerating}
-              className="font-mono text-xs uppercase tracking-[0.05em] bg-[#3B5FE6] hover:bg-[#3B5FE6]/90"
+              className="font-mono text-xs uppercase tracking-[0.05em] bg-[var(--mode-accent)] hover:bg-[var(--mode-accent)]/90"
             >
               {isRegenerating ? (
                 <>

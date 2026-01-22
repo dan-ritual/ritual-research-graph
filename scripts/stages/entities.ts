@@ -90,7 +90,7 @@ export async function extractEntities(options: EntityExtractionOptions): Promise
 
   if (!config.dryRun) {
     await writeFile(entitiesArtifact.path, entitiesArtifact.content);
-    if (opportunitiesArtifact) {
+    if (opportunitiesArtifact?.path) {
       await writeFile(opportunitiesArtifact.path, opportunitiesArtifact.content);
     }
   }

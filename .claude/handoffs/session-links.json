@@ -2,6 +2,15 @@
   "project": "ritual-research-graph",
   "links": [
     {
+      "handoffId": "rrg-2-design-20260116-2058-1",
+      "claudeSessionId": "6db70bd3-8af9-4402-9e1a-7572a6ad9832",
+      "claudeSlug": "snoopy-exploring-sketch",
+      "jsonlPath": "/Users/danielgosek/.claude/projects/-Users-danielgosek-dev-projects-ritual-ritual-research-graph/6db70bd3-8af9-4402-9e1a-7572a6ad9832.jsonl",
+      "projectPath": "/Users/danielgosek/.claude/projects/-Users-danielgosek-dev-projects-ritual-ritual-research-graph",
+      "created": "2026-01-16T20:58:54.354Z",
+      "lastAccessed": "2026-01-16T20:58:54.354Z"
+    },
+    {
       "handoffId": "rrg-0-20260116-1702-3",
       "claudeSessionId": "4b93520e-4552-4816-88bf-77fa8b4d161e",
       "claudeSlug": "melodic-swinging-tarjan",
@@ -11,5 +20,5 @@
       "lastAccessed": "2026-01-16T17:02:35.929Z"
     }
   ],
-  "lastUpdated": "2026-01-16T17:02:35.929Z"
+  "lastUpdated": "2026-01-16T20:58:54.354Z"
 }

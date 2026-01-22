@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface Message {
   id: string;
@@ -41,7 +42,7 @@ export function OpportunityChat() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/opportunities/chat", {
+      const res = await fetchWithMode("/api/opportunities/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: userMessage.content }),
@@ -111,7 +112,7 @@ export function OpportunityChat() {
               <div
                 className={`max-w-[80%] px-4 py-3 ${
                   message.role === "user"
-                    ? "bg-[#3B5FE6] text-white"
+                    ? "bg-[var(--mode-accent)] text-white"
                     : "bg-white border border-[rgba(0,0,0,0.08)]"
                 }`}
               >

@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -21,9 +22,12 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Fetch the job
   const { data: job, error: fetchError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .select("id, user_id, status")
     .eq("id", id)
     .single();
@@ -42,7 +46,7 @@ export async function POST(
 
   // Cancel the job
   const { error: updateError } = await supabase
-    .from("generation_jobs")
+    .from(getSchemaTable("generation_jobs", mode))
     .update({
       status: "failed",
       error_message: "Cancelled by user",

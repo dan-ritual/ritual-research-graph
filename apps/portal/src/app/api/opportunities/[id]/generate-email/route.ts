@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
@@ -14,9 +15,12 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Fetch opportunity with stage info
   const { data: opportunity, error: oppError } = await supabase
-    .from("opportunities")
+    .from(getSchemaTable("opportunities", mode))
     .select(`
       *,
       stage:pipeline_stages(name, slug)
@@ -30,7 +34,7 @@ export async function POST(
 
   // Fetch linked entities
   const { data: linkedEntities } = await supabase
-    .from("opportunity_entities")
+    .from(getSchemaTable("opportunity_entities", mode))
     .select(`
       relationship,
       entity:entities(name, type, slug)
@@ -101,7 +105,7 @@ Return ONLY valid JSON in this exact format, no other text:
 
     // Store result in database
     const { error: updateError } = await supabase
-      .from("opportunities")
+      .from(getSchemaTable("opportunities", mode))
       .update({ email_draft: emailDraft })
       .eq("id", id);
 

@@ -24,6 +24,8 @@ interface MicrositeCardProps {
   microsite: Microsite;
   /** Variant for different display contexts */
   variant?: "default" | "compact";
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 /**
@@ -33,8 +35,10 @@ interface MicrositeCardProps {
 export function MicrositeCard({
   microsite,
   variant = "default",
+  modePrefix = "",
 }: MicrositeCardProps) {
   const isInternal = microsite.visibility === "internal";
+  const href = `${modePrefix}/microsites/${microsite.slug}`;
 
   if (variant === "compact") {
     return (
@@ -52,7 +56,7 @@ export function MicrositeCard({
             <span className="font-mono text-xs text-[rgba(0,0,0,0.45)] uppercase tracking-[0.05em]">
               {microsite.entity_count || 0} entities
             </span>
-            <Link href={`/microsites/${microsite.slug}`}>
+            <Link href={href}>
               <Button variant="ghost" size="sm">
                 View
               </Button>
@@ -64,7 +68,7 @@ export function MicrositeCard({
   }
 
   return (
-    <Card className="hover:border-[#3B5FE6]/30 transition-colors">
+    <Card className="hover:border-[var(--mode-accent)]/30 transition-colors">
       <CardHeader>
         <div className="flex items-start justify-between">
           <CardTitle className="font-display text-lg font-semibold">
@@ -85,7 +89,7 @@ export function MicrositeCard({
             <span className="mx-2">·</span>
             <span>{new Date(microsite.created_at).toLocaleDateString()}</span>
           </div>
-          <Link href={`/microsites/${microsite.slug}`}>
+          <Link href={href}>
             <Button variant="ghost" size="sm">
               View
             </Button>

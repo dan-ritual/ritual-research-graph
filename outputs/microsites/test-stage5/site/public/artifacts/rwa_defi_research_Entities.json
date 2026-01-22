@@ -1,0 +1,610 @@
+{
+  "entities": [
+    {
+      "canonicalName": "Ritual",
+      "aliases": [
+        "Ritual Protocol"
+      ],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "AI Infrastructure",
+      "description": "AI platform being positioned to provide AI-powered loan origination automation and risk analytics for RWA DeFi protocols.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Ritual should immediately engage with high-performing protocols like Zivo and Credit Coop to provide AI-powered loan origination automation",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Unlike point solutions, provide comprehensive AI stack combining risk assessment, loan origination, and compliance",
+          "section": "Intelligence Brief - Competitive Landscape"
+        },
+        {
+          "context": "Multi-Modal Capabilities including real estate image analysis and document processing for credit applications",
+          "section": "Intelligence Brief - Differentiation Opportunities"
+        }
+      ]
+    },
+    {
+      "canonicalName": "BlackRock",
+      "aliases": [
+        "BlackRock BUIDL",
+        "BUIDL fund"
+      ],
+      "type": "company",
+      "url": "https://blackrock.com",
+      "twitter": "BlackRock",
+      "category": "TradFi - Asset Management",
+      "description": "World's largest asset manager leading institutional adoption of RWA tokenization through their BUIDL fund and legitimizing on-chain settlement.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Institutional adoption led by BlackRock's BUIDL fund legitimizing on-chain settlement",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "BlackRock's BUIDL fund sparked 2025-2026 RWA acceleration with institutional credibility",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "BlackRock is tokenizing real-world assets including real estate, commodities, and corporate debt for DeFi integration",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Provenance Blockchain",
+      "aliases": [
+        "Provenance"
+      ],
+      "type": "protocol",
+      "url": "https://provenance.io",
+      "twitter": null,
+      "category": "Blockchain - RWA",
+      "description": "Compliance-focused RWA chain with integrated KYC, specializing in home equity lines of credit and insurance tokenization with $20 billion claimed TVL.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Provenance scaled from $100M to $600M in tokenized insurance (2025-2026) with $20 billion claimed TVL",
+          "section": "Intelligence Brief - Market Context"
+        },
+        {
+          "context": "Transparency issues with TVL verification and limited DeFi composability despite massive scale",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "Hosts Figure's On-Chain Public Equity Network (OPEN) enabling companies to list equity natively on-chain",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Zivo Protocol",
+      "aliases": [
+        "Zivo"
+      ],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - Credit",
+      "description": "Synthetic credit derivatives platform enabling on-chain lending to small businesses with exceptional 3.6% revenue-to-TVL ratio and 95% capital deployment rate.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Zivo (3.6% revenue-to-TVL ratio) represents highest priority for AI-powered loan origination automation",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Exceptional capital efficiency with 95% utilization rates but manual loan origination bottleneck",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "Perfect fit for AI-powered loan origination automation and idle capital optimization",
+          "section": "Intelligence Brief - Ritual Relevance"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Credit Coop",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - Credit",
+      "description": "Cash flow collateralization platform allowing businesses to borrow against future revenue streams with smart contract-based cash flow streaming.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Ritual should immediately engage with Credit Coop to provide AI-powered loan origination automation",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Notable clients include Rain (crypto card infrastructure provider) with innovative cash flow collateralization",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "AI could automate cash flow analysis, credit scoring, and expand to salary-based lending",
+          "section": "Intelligence Brief - Ritual Relevance"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ondo Finance",
+      "aliases": [
+        "Ondo",
+        "OUSG"
+      ],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "DeFi - RWA",
+      "description": "Tokenization infrastructure partner with BlackRock focusing on tokenized U.S. Treasuries and institutional asset distribution.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "BlackRock + Ondo Finance partnership for institutional asset tokenization and on-chain distribution",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "Invested $25M into $YLDS stablecoin to power OUSG tokenized Treasuries in November 2025",
+          "section": "Narrative Research"
+        },
+        {
+          "context": "Focuses on tokenized U.S. Treasuries (OUSG) and RWA yield products integrated with DeFi lending protocols",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Figure Markets",
+      "aliases": [
+        "Figure",
+        "FIGR"
+      ],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "TradFi - Lending",
+      "description": "SoFi-backed RWA platform operating on Provenance with $20 billion in originated loans and launching OPEN platform for on-chain equity trading.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Figure Markets as key product on Provenance with $15B home equity credit lines",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "Figure originated $20 billion in prior on-chain loans with FIGR market cap of $13.82B post-launch",
+          "section": "Narrative Research"
+        },
+        {
+          "context": "Launched OPEN platform on January 14, 2026 with BitGo and Jump Trading partnerships",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Plume Network",
+      "aliases": [
+        "Plume"
+      ],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "Blockchain - L2",
+      "description": "RWA-focused Layer 2 blockchain specializing in compliance and standardization for real-world asset tokenization.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Specialized L2s like Provenance and Plume focus on compliance and standardization",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Specialized RWA L2s launching with compliance-first approaches",
+          "section": "Intelligence Brief - Market Context"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Bid.io",
+      "aliases": [],
+      "type": "protocol",
+      "url": null,
+      "twitter": null,
+      "category": "AI - Risk Oracle",
+      "description": "The only identified AI-focused RWA risk oracle protocol, representing limited competition in AI-powered risk pricing for RWA markets.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Massive untapped AI integration opportunity with only one protocol (Bid.io) attempting AI-powered risk pricing",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Only identified AI-focused RWA risk oracle with narrow specialization vs. Ritual's broad platform",
+          "section": "Intelligence Brief - Competitive Landscape"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Rain",
+      "aliases": [],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "Fintech - Infrastructure",
+      "description": "Crypto card infrastructure provider that serves as a notable client of Credit Coop's cash flow collateralization platform.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Notable clients include Rain (crypto card infrastructure provider) using Credit Coop's cash flow collateralization",
+          "section": "Intelligence Brief - Protocol Deep Dives"
+        },
+        {
+          "context": "Rain (Credit Coop Client) identified for use case validation and expansion",
+          "section": "Intelligence Brief - Key Contacts"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Ethereum",
+      "aliases": [
+        "ETH"
+      ],
+      "type": "protocol",
+      "url": "https://ethereum.org",
+      "twitter": "ethereum",
+      "category": "Blockchain - L1",
+      "description": "Primary blockchain serving as institutional settlement layer for RWA tokenization while specialized L2s handle compliance and standardization.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Ethereum serving as institutional settlement layer while specialized L2s focus on compliance",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "Multichain infrastructure maturity with Ethereum as institutional settlement backbone",
+          "section": "Intelligence Brief - Market Context"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Real World Assets",
+      "aliases": [
+        "RWA",
+        "RWAs"
+      ],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Market Concept",
+      "description": "Tokenized traditional assets including real estate, credit, and securities that have reached $35+ billion in market size and represent the next major DeFi growth vector.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Real World Asset (RWA) DeFi sector has reached critical inflection point with over $35 billion in tokenized assets",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "RWA represents the next major DeFi growth vector with regulatory compliance essential for institutional adoption",
+          "section": "Narrative Research"
+        },
+        {
+          "context": "Market evolving from simple asset tokenization to crypto-native composable primitives",
+          "section": "Intelligence Brief - Key Thesis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "AI-Powered Loan Origination",
+      "aliases": [
+        "Automated Underwriting",
+        "Loan Origination Automation"
+      ],
+      "type": "opportunity",
+      "url": null,
+      "twitter": null,
+      "category": "AI Application",
+      "description": "Critical priority opportunity to automate manual underwriting bottlenecks limiting protocol growth, with protocols paying 1-3% fees on billions in volume.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "AI-Powered Loan Origination identified as Critical priority with manual bottlenecks limiting protocol growth",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        },
+        {
+          "context": "Target protocols Zivo and Credit Coop with revenue potential from 1-3% fees on billions in volume",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        },
+        {
+          "context": "Automated underwriting and loan matching as solution to market gap",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Private Credit Democratization",
+      "aliases": [
+        "Private Credit Access"
+      ],
+      "type": "opportunity",
+      "url": null,
+      "twitter": null,
+      "category": "Market Opportunity",
+      "description": "High priority opportunity to provide AI-powered access to 15% return private credit markets for $1,000+ retail investors currently locked out.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Private credit democratization opportunity represents clear path to capture institutional-grade returns for retail participants",
+          "section": "Intelligence Brief - Executive Summary"
+        },
+        {
+          "context": "$1,000+ retail investors locked out of 15% return private credit with massive institutional overflow seeking retail distribution",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        },
+        {
+          "context": "AI-powered access and risk assessment with multi-modal analysis for real estate and credit assessment",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Parcel",
+      "aliases": [],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "Real Estate - Platform",
+      "description": "Real estate platform identified as target for LLM-powered multi-modal real estate analysis enhancement to compete against legacy models.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Target Parcel and similar platforms for LLM-powered multi-modal real estate analysis",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        },
+        {
+          "context": "Legacy real estate platforms with poor analytics representing market gap for modern AI solutions",
+          "section": "Intelligence Brief - Opportunity Analysis"
+        },
+        {
+          "context": "Parcel Platform identified for real estate analytics enhancement outreach",
+          "section": "Intelligence Brief - Key Contacts"
+        }
+      ]
+    },
+    {
+      "canonicalName": "BitGo",
+      "aliases": [],
+      "type": "company",
+      "url": "https://bitgo.com",
+      "twitter": "BitGo",
+      "category": "Crypto - Custody",
+      "description": "Cryptocurrency custody provider partnering with Figure's OPEN platform launch for institutional-grade custody services.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Launched OPEN platform with partners BitGo and Jump Trading for custody and market making",
+          "section": "Narrative Research"
+        },
+        {
+          "context": "January 14, 2026 launch with BitGo and Jump Trading partnerships",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Jump Trading",
+      "aliases": [
+        "Jump"
+      ],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "Trading - Market Making",
+      "description": "Market making firm partnering with Figure's OPEN platform launch to provide liquidity and trading services for on-chain equity.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Launched OPEN platform with partners BitGo and Jump Trading for custody and market making",
+          "section": "Narrative Research"
+        },
+        {
+          "context": "January 14, 2026 launch with BitGo and Jump Trading partnerships",
+          "section": "Narrative Research"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Aave",
+      "aliases": [
+        "Aave v3"
+      ],
+      "type": "protocol",
+      "url": "https://aave.com",
+      "twitter": "AaveAave",
+      "category": "DeFi - Lending",
+      "description": "Leading DeFi lending protocol with $46.32B TVL representing 79.5% of DeFi lending market share and integration with RWA tokenization.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Aave v3 Ethereum with $46.32B TVL representing 79.5% of DeFi lending market",
+          "section": "Narrative Research - Competitive Landscape"
+        },
+        {
+          "context": "Other Treasury tokenizers via Aave as competitors to Ondo Finance",
+          "section": "Narrative Research - RWA-Specific Positioning"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Federal Reserve",
+      "aliases": [
+        "Fed"
+      ],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Monetary Policy",
+      "description": "U.S. central bank whose normalization of risk-free rates to 4-5% is creating yield arbitrage opportunities driving RWA DeFi growth.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Fed normalization of risk-free rates to 4-5% creating yield arbitrage opportunities",
+          "section": "Intelligence Brief - Market Drivers"
+        }
+      ]
+    },
+    {
+      "canonicalName": "GENIUS Act",
+      "aliases": [],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Regulation",
+      "description": "U.S. legislative initiative providing regulatory clarity that is curtailing speculation while boosting legitimate RWA applications.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "The U.S. GENIUS Act creating framework for institutional adoption through regulatory clarity",
+          "section": "Narrative Research - Key Themes"
+        },
+        {
+          "context": "2026: Regulatory clarity from GENIUS Act drives institutional RWA adoption",
+          "section": "Narrative Research - Timeline"
+        }
+      ]
+    },
+    {
+      "canonicalName": "MiCA",
+      "aliases": [
+        "EU MiCA"
+      ],
+      "type": "concept",
+      "url": null,
+      "twitter": null,
+      "category": "Regulation",
+      "description": "EU regulatory framework creating compliance mechanisms for cross-border stablecoin transactions, with 40% YoY increase in compliant transactions.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "EU MiCA regulations creating framework for institutional adoption through cross-border compliance mechanisms",
+          "section": "Narrative Research - Key Themes"
+        },
+        {
+          "context": "40% YoY increase in MiCA-compliant stablecoin transactions",
+          "section": "Narrative Research - Market Dynamics"
+        }
+      ]
+    },
+    {
+      "canonicalName": "DTCC",
+      "aliases": [],
+      "type": "company",
+      "url": null,
+      "twitter": null,
+      "category": "TradFi - Infrastructure",
+      "description": "Traditional financial infrastructure that Figure's OPEN platform aims to bypass, reducing costs and enabling direct on-chain equity trading.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Figure's OPEN platform bypassing traditional intermediaries like the DTCC",
+          "section": "Narrative Research - Infrastructure Evolution"
+        },
+        {
+          "context": "Mission focuses on reducing DTCC costs and democratizing access",
+          "section": "Narrative Research - Provenance Overview"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Arbitrum",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://arbitrum.io",
+      "twitter": "arbitrum",
+      "category": "Blockchain - L2",
+      "description": "Layer 2 scaling solution experiencing significant capital inflows of $266M as part of L2 rotation trend in RWA DeFi markets.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "L2 rotation with significant capital flows (Arbitrum +$266M inflows)",
+          "section": "Narrative Research - Emerging Trends"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Compound",
+      "aliases": [],
+      "type": "protocol",
+      "url": "https://compound.finance",
+      "twitter": "compoundfinance",
+      "category": "DeFi - Lending",
+      "description": "Major DeFi lending protocol with $2.37B TVL, representing significant market share in the $58.27B total DeFi lending market.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Compound with $2.37B TVL as major DeFi lending protocol",
+          "section": "Narrative Research - Market Leaders"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Nasdaq",
+      "aliases": [],
+      "type": "company",
+      "url": "https://nasdaq.com",
+      "twitter": "Nasdaq",
+      "category": "TradFi - Exchange",
+      "description": "Traditional stock exchange enabling two-way exchangeability with Figure's FIGR token, bridging traditional and on-chain equity markets.",
+      "sentiment": "positive",
+      "mentions": [
+        {
+          "context": "Two-way exchangeability with Nasdaq shares for FIGR token",
+          "section": "Narrative Research - Provenance Metrics"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Solana",
+      "aliases": [
+        "SOL"
+      ],
+      "type": "protocol",
+      "url": "https://solana.com",
+      "twitter": "solana",
+      "category": "Blockchain - L1",
+      "description": "Blockchain platform with existing RWA initiatives that Provenance is integrating with through their OPEN platform development.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Integration with prior Solana RWA initiatives",
+          "section": "Narrative Research - Provenance Activity"
+        },
+        {
+          "context": "Solana RWA protocols as competitors to Provenance's native on-chain equity listing",
+          "section": "Narrative Research - RWA Positioning"
+        }
+      ]
+    },
+    {
+      "canonicalName": "Fidelity",
+      "aliases": [],
+      "type": "company",
+      "url": "https://fidelity.com",
+      "twitter": "Fidelity",
+      "category": "TradFi - Asset Management",
+      "description": "Major asset manager competing with BlackRock in scaling RWA tokenization offerings for institutional clients.",
+      "sentiment": "neutral",
+      "mentions": [
+        {
+          "context": "Scaling RWA offerings alongside competitors like Fidelity",
+          "section": "Narrative Research - BlackRock Activity"
+        },
+        {
+          "context": "Fidelity as key competitor to BlackRock in traditional asset management RWA tokenization",
+          "section": "Narrative Research - RWA Positioning"
+        }
+      ]
+    }
+  ],
+  "extractedAt": "2026-01-16T19:17:13.634Z"
+}

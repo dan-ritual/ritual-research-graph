@@ -2,6 +2,13 @@
 
 import path from 'path';
 import { getSupabaseClient, isSupabaseConfigured } from '../lib/supabase.js';
+import {
+  DEFAULT_MODE_ID,
+  SHARED_SCHEMA,
+  getSchemaForMode,
+  getSchemaTable,
+  type ModeId,
+} from '@ritual-research/core';
 import { slugify } from '../utils/files.js';
 import { entityNameToSlug, resolveLinkedEntities } from './entities.js';
 import type { Artifact, GenerationConfig, ExtractedEntity, ExtractedOpportunity, SiteConfig } from '../lib/types.js';
@@ -64,10 +71,11 @@ export async function integrateWithGraph(
   }
 
   const supabase = getSupabaseClient();
+  const mode = config.mode ?? DEFAULT_MODE_ID;
 
   // Step 1: Get or create system user for CLI operations
   spinner.text = 'Stage 6/6: Setting up database connection...';
-  const userId = options.userId || await getOrCreateSystemUser(supabase);
+  const userId = options.userId || await getOrCreateSystemUser(supabase, mode);
 
   // Step 2: Create generation job record
   spinner.text = 'Stage 6/6: Creating generation job...';
@@ -75,21 +83,21 @@ export async function integrateWithGraph(
     userId,
     config,
     transcriptPath: config.transcript,
-  });
+  }, mode);
 
   // Step 3: Create artifacts in database
   spinner.text = 'Stage 6/6: Storing artifacts...';
-  await storeArtifacts(supabase, jobId, artifacts);
+  await storeArtifacts(supabase, jobId, artifacts, mode);
 
   // Step 4: Upsert entities to global registry
   spinner.text = 'Stage 6/6: Upserting entities...';
-  const entityIds = await upsertEntities(supabase, entities);
+  const entityIds = await upsertEntities(supabase, entities, mode);
 
   // Step 4b: Insert opportunities into pipeline (if any)
   let opportunityCount = 0;
   if (opportunities.length > 0) {
     spinner.text = 'Stage 6/6: Creating opportunities...';
-    opportunityCount = await insertOpportunities(supabase, opportunities, entities, entityIds, jobId, userId);
+    opportunityCount = await insertOpportunities(supabase, opportunities, entities, entityIds, jobId, userId, mode);
   }
 
   // Step 5: Create microsite record
@@ -105,19 +113,19 @@ export async function integrateWithGraph(
     config: siteConfig,
     entityCount: entities.length,
     blobPath: options.blobPath,
-  });
+  }, mode);
 
   // Step 6: Link entities to microsite via appearances
   spinner.text = 'Stage 6/6: Creating entity appearances...';
-  await createEntityAppearances(supabase, micrositeId, entities, entityIds);
+  await createEntityAppearances(supabase, micrositeId, entities, entityIds, mode);
 
   // Step 7: Update entity relations (co-occurrences)
   spinner.text = 'Stage 6/6: Updating entity relations...';
-  const relationCount = await updateEntityRelations(supabase, Object.values(entityIds));
+  const relationCount = await updateEntityRelations(supabase, Object.values(entityIds), mode);
 
   // Step 8: Mark job as completed
   spinner.text = 'Stage 6/6: Finalizing...';
-  await completeGenerationJob(supabase, jobId, micrositeId);
+  await completeGenerationJob(supabase, jobId, micrositeId, mode);
 
   return {
     micrositeId,
@@ -127,12 +135,15 @@ export async function integrateWithGraph(
   };
 }
 
-async function getOrCreateSystemUser(supabase: ReturnType<typeof getSupabaseClient>): Promise<string> {
+async function getOrCreateSystemUser(
+  supabase: ReturnType<typeof getSupabaseClient>,
+  mode: ModeId
+): Promise<string> {
   const systemEmail = 'system@ritual.net';
 
   // Check if system user exists
   const { data: existing } = await supabase
-    .from('users')
+    .from(getSchemaTable('users', mode, SHARED_SCHEMA))
     .select('id')
     .eq('email', systemEmail)
     .single();
@@ -143,7 +154,7 @@ async function getOrCreateSystemUser(supabase: ReturnType<typeof getSupabaseClie
   // For now, just use a generated UUID for CLI operations
   const systemId = crypto.randomUUID();
 
-  const { error } = await supabase.from('users').insert({
+  const { error } = await supabase.from(getSchemaTable('users', mode, SHARED_SCHEMA)).insert({
     id: systemId,
     email: systemEmail,
     name: 'CLI System',
@@ -153,7 +164,7 @@ async function getOrCreateSystemUser(supabase: ReturnType<typeof getSupabaseClie
   if (error) {
     // If the insert fails (e.g., foreign key to auth.users), try to find any existing admin user
     const { data: adminUser } = await supabase
-      .from('users')
+      .from(getSchemaTable('users', mode, SHARED_SCHEMA))
       .select('id')
       .eq('role', 'admin')
       .limit(1)
@@ -169,10 +180,11 @@ async function getOrCreateSystemUser(supabase: ReturnType<typeof getSupabaseClie
 
 async function createGenerationJob(
   supabase: ReturnType<typeof getSupabaseClient>,
-  options: { userId: string; config: GenerationConfig; transcriptPath: string }
+  options: { userId: string; config: GenerationConfig; transcriptPath: string },
+  mode: ModeId
 ): Promise<string> {
   const { data, error } = await supabase
-    .from('generation_jobs')
+    .from(getSchemaTable('generation_jobs', mode))
     .insert({
       user_id: options.userId,
       workflow_type: options.config.workflow,
@@ -198,7 +210,8 @@ async function createGenerationJob(
 async function storeArtifacts(
   supabase: ReturnType<typeof getSupabaseClient>,
   jobId: string,
-  artifacts: GraphIntegrationOptions['artifacts']
+  artifacts: GraphIntegrationOptions['artifacts'],
+  mode: ModeId
 ): Promise<void> {
   const artifactRecords: Array<{
     job_id: string;
@@ -250,13 +263,14 @@ async function storeArtifacts(
     });
   }
 
-  const { error } = await supabase.from('artifacts').insert(artifactRecords);
+  const { error } = await supabase.from(getSchemaTable('artifacts', mode)).insert(artifactRecords);
   if (error) throw new Error(`Failed to store artifacts: ${error.message}`);
 }
 
 async function upsertEntities(
   supabase: ReturnType<typeof getSupabaseClient>,
-  entities: ExtractedEntity[]
+  entities: ExtractedEntity[],
+  mode: ModeId
 ): Promise<Record<string, string>> {
   const entityIds: Record<string, string> = {};
 
@@ -266,7 +280,7 @@ async function upsertEntities(
 
     // Upsert entity
     const { data, error } = await supabase
-      .from('entities')
+      .from(getSchemaTable('entities', mode))
       .upsert(
         {
           slug,
@@ -311,12 +325,13 @@ async function createMicrosite(
     config: SiteConfig;
     entityCount: number;
     blobPath?: string;
-  }
+  },
+  mode: ModeId
 ): Promise<string> {
   // Check for existing microsite with same title (case-insensitive) to prevent duplicates
   // Use .limit(1) instead of .single() because .single() errors when >1 match exists
   const { data: existingMatches } = await supabase
-    .from('microsites')
+    .from(getSchemaTable('microsites', mode))
     .select('id, slug, created_at')
     .ilike('title', options.title)
     .is('deleted_at', null)
@@ -329,7 +344,7 @@ async function createMicrosite(
   if (existingByTitle) {
     console.log(`Updating existing microsite ${existingByTitle.slug} instead of creating duplicate`);
     const { error: updateError } = await supabase
-      .from('microsites')
+      .from(getSchemaTable('microsites', mode))
       .update({
         job_id: options.jobId,
         subtitle: options.subtitle,
@@ -354,7 +369,7 @@ async function createMicrosite(
 
   // Use .limit(1) instead of .single() for safe existence check
   const { data: slugMatches } = await supabase
-    .from('microsites')
+    .from(getSchemaTable('microsites', mode))
     .select('id')
     .eq('slug', slug)
     .is('deleted_at', null)
@@ -365,7 +380,7 @@ async function createMicrosite(
   }
 
   const { data, error } = await supabase
-    .from('microsites')
+    .from(getSchemaTable('microsites', mode))
     .insert({
       job_id: options.jobId,
       user_id: options.userId,
@@ -389,7 +404,8 @@ async function createEntityAppearances(
   supabase: ReturnType<typeof getSupabaseClient>,
   micrositeId: string,
   entities: ExtractedEntity[],
-  entityIds: Record<string, string>
+  entityIds: Record<string, string>,
+  mode: ModeId
 ): Promise<void> {
   const appearances: Array<{
     entity_id: string;
@@ -431,7 +447,7 @@ async function createEntityAppearances(
 
   if (appearances.length > 0) {
     const { error } = await supabase
-      .from('entity_appearances')
+      .from(getSchemaTable('entity_appearances', mode))
       .upsert(appearances, { onConflict: 'entity_id,microsite_id,section' });
 
     if (error) {
@@ -442,7 +458,8 @@ async function createEntityAppearances(
 
 async function updateEntityRelations(
   supabase: ReturnType<typeof getSupabaseClient>,
-  entityIds: string[]
+  entityIds: string[],
+  mode: ModeId
 ): Promise<number> {
   if (entityIds.length < 2) return 0;
 
@@ -453,14 +470,16 @@ async function updateEntityRelations(
     for (let j = i + 1; j < entityIds.length; j++) {
       const [entityA, entityB] = [entityIds[i], entityIds[j]].sort();
 
-      const { error } = await supabase.rpc('increment_entity_relation', {
-        a_id: entityA,
-        b_id: entityB,
-      });
+      const { error } = await supabase
+        .schema(getSchemaForMode(mode))
+        .rpc('increment_entity_relation', {
+          a_id: entityA,
+          b_id: entityB,
+        });
 
       // If the RPC doesn't exist, fall back to upsert
       if (error?.code === 'PGRST202') {
-        await supabase.from('entity_relations').upsert(
+        await supabase.from(getSchemaTable('entity_relations', mode)).upsert(
           {
             entity_a_id: entityA,
             entity_b_id: entityB,
@@ -482,10 +501,11 @@ async function updateEntityRelations(
 async function completeGenerationJob(
   supabase: ReturnType<typeof getSupabaseClient>,
   jobId: string,
-  micrositeId: string
+  micrositeId: string,
+  mode: ModeId
 ): Promise<void> {
   await supabase
-    .from('generation_jobs')
+    .from(getSchemaTable('generation_jobs', mode))
     .update({
       status: 'completed',
       microsite_id: micrositeId,
@@ -503,7 +523,8 @@ async function insertOpportunities(
   entities: ExtractedEntity[],
   entityIds: Record<string, string>,
   jobId: string,
-  userId: string
+  userId: string,
+  mode: ModeId
 ): Promise<number> {
   let insertedCount = 0;
 
@@ -514,7 +535,7 @@ async function insertOpportunities(
     // Insert opportunity
     const oppSlug = slugify(opp.name);
     const { data: oppData, error: oppError } = await supabase
-      .from('opportunities')
+      .from(getSchemaTable('opportunities', mode))
       .insert({
         slug: oppSlug,
         name: opp.name,
@@ -542,7 +563,7 @@ async function insertOpportunities(
       // Find entity ID by matching slug
       for (const [name, id] of Object.entries(entityIds)) {
         if (entityNameToSlug(name) === slug) {
-          await supabase.from('opportunity_entities').insert({
+          await supabase.from(getSchemaTable('opportunity_entities', mode)).insert({
             opportunity_id: oppData.id,
             entity_id: id,
             relationship: 'related',
@@ -553,7 +574,7 @@ async function insertOpportunities(
     }
 
     // Log activity
-    await supabase.from('opportunity_activity').insert({
+    await supabase.from(getSchemaTable('opportunity_activity', mode)).insert({
       opportunity_id: oppData.id,
       user_id: userId,
       action: 'created',

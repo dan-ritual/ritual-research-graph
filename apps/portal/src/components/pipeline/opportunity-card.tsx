@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ConfidenceBar } from "./confidence-bar";
 import { EmailModal } from "./email-modal";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 export interface Opportunity {
   id: string;
@@ -26,12 +27,15 @@ interface OpportunityCardProps {
   opportunity: Opportunity;
   onAdvanceStage: (opportunityId: string) => void;
   isLastStage?: boolean;
+  /** Mode prefix for links (e.g., "/growth") */
+  modePrefix?: string;
 }
 
 export function OpportunityCard({
   opportunity,
   onAdvanceStage,
   isLastStage = false,
+  modePrefix = "",
 }: OpportunityCardProps) {
   const [generatingStrategy, setGeneratingStrategy] = useState(false);
   const [generatingEmail, setGeneratingEmail] = useState(false);
@@ -40,16 +44,18 @@ export function OpportunityCard({
     opportunity.email_draft || null
   );
 
+  const detailHref = `${modePrefix}/pipeline/${opportunity.id}`;
+
   const handleGenerateStrategy = async () => {
     setGeneratingStrategy(true);
     try {
-      const res = await fetch(`/api/opportunities/${opportunity.id}/generate-strategy`, {
+      const res = await fetchWithMode(`/api/opportunities/${opportunity.id}/generate-strategy`, {
         method: "POST",
       });
 
       if (res.ok) {
         // Navigate to detail page to view strategy
-        window.location.href = `/pipeline/${opportunity.id}`;
+        window.location.href = detailHref;
       } else {
         const data = await res.json();
         console.error("Failed to generate strategy:", data.error);
@@ -64,7 +70,7 @@ export function OpportunityCard({
   const handleGenerateEmail = async () => {
     setGeneratingEmail(true);
     try {
-      const res = await fetch(`/api/opportunities/${opportunity.id}/generate-email`, {
+      const res = await fetchWithMode(`/api/opportunities/${opportunity.id}/generate-email`, {
         method: "POST",
       });
 
@@ -89,13 +95,13 @@ export function OpportunityCard({
         {/* Header */}
         <div className="flex justify-between items-start mb-3">
           <Link
-            href={`/pipeline/${opportunity.id}`}
-            className="font-mono text-xs uppercase tracking-[0.12em] text-[#171717] hover:text-[#3B5FE6] transition-colors line-clamp-2"
+            href={detailHref}
+            className="font-mono text-xs uppercase tracking-[0.12em] text-[#171717] hover:text-[var(--mode-accent)] transition-colors line-clamp-2"
           >
             {opportunity.name}
           </Link>
           {opportunity.confidence !== null && opportunity.confidence !== undefined && (
-            <span className="font-mono text-[10px] text-[#3B5FE6] ml-2 shrink-0">
+            <span className="font-mono text-[10px] text-[var(--mode-accent)] ml-2 shrink-0">
               {opportunity.confidence}%
             </span>
           )}
@@ -136,8 +142,8 @@ export function OpportunityCard({
         </div>
 
         {/* Navigation Actions */}
-        <div className="flex justify-between items-center pt-3 border-t border-dotted border-[rgba(59,95,230,0.3)]">
-          <Link href={`/pipeline/${opportunity.id}`}>
+        <div className="flex justify-between items-center pt-3 border-t border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]">
+          <Link href={detailHref}>
             <Button variant="ghost" size="sm" className="text-[10px] px-2 h-7">
               View
             </Button>

@@ -14,8 +14,8 @@ export function ChatFAB() {
         border transition-all duration-150
         ${
           isOpen
-            ? "bg-[#3B5FE6] text-white border-[#3B5FE6]"
-            : "bg-white text-[#3B5FE6] border-[#3B5FE6] hover:bg-[#3B5FE6] hover:text-white"
+            ? "bg-[var(--mode-accent)] text-white border-[var(--mode-accent)]"
+            : "bg-white text-[var(--mode-accent)] border-[var(--mode-accent)] hover:bg-[var(--mode-accent)] hover:text-white"
         }
       `}
       aria-label={isOpen ? "Close chat" : "Open chat"}
@@ -39,7 +39,7 @@ export function ChatFAB() {
       {/* Unread indicator dot */}
       {hasUnread && !isOpen && (
         <span
-          className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#EF4444] animate-pulse"
+          className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-[#EF4444] animate-pulse" /* Status dot: notification indicator */
           aria-label="New response available"
         />
       )}

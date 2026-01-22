@@ -39,7 +39,7 @@ export function ChatPanel() {
   // Panel positioning classes based on mode
   const panelClasses = isCompact
     ? // Compact: fixed bottom-right corner, 400x500
-      "fixed bottom-6 right-6 w-[400px] h-[500px] rounded-lg shadow-xl"
+      "fixed bottom-6 right-6 w-[400px] h-[500px] rounded-none shadow-xl"
     : // Expanded: anchored to right edge, full height
       "fixed top-0 right-0 bottom-0 w-[420px] shadow-2xl";
 
@@ -78,14 +78,14 @@ export function ChatPanel() {
       >
         {/* Panel Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[rgba(0,0,0,0.08)] bg-white">
-          <h2 className="font-mono text-xs uppercase tracking-[0.12em] text-[#3B5FE6]">
+          <h2 className="font-mono text-xs uppercase tracking-[0.12em] text-[var(--mode-accent)]">
             Pipeline Chat
           </h2>
           <div className="flex items-center gap-2">
             {/* Expand/Collapse toggle */}
             <button
               onClick={toggleMode}
-              className="h-7 w-7 flex items-center justify-center text-[rgba(0,0,0,0.45)] hover:text-[#3B5FE6] transition-colors"
+              className="h-7 w-7 flex items-center justify-center text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)] transition-colors"
               aria-label={isCompact ? "Expand panel" : "Collapse panel"}
               title={isCompact ? "Expand" : "Collapse"}
             >

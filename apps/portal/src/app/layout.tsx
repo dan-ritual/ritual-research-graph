@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Crimson_Text, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { ModeProvider } from "@/components/providers/mode-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -33,12 +34,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${jetbrainsMono.variable} ${crimsonText.variable} ${spaceGrotesk.variable} antialiased font-serif`}>
-        <QueryProvider>
-          {children}
-          <Toaster />
-        </QueryProvider>
+    <html lang="en" data-mode="growth" suppressHydrationWarning>
+      <body className={`${jetbrainsMono.variable} ${crimsonText.variable} ${spaceGrotesk.variable} antialiased`}>
+        <ModeProvider>
+          <QueryProvider>
+            {children}
+            <Toaster />
+          </QueryProvider>
+        </ModeProvider>
       </body>
     </html>
   );

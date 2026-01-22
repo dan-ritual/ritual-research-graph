@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { fetchWithMode } from "@/lib/fetch-with-mode";
 
 interface Entity {
   id: string;
@@ -34,7 +35,7 @@ export function EntityLinker({ opportunityId, onEntityLinked }: EntityLinkerProp
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/entities/search?q=${encodeURIComponent(q)}`);
+      const res = await fetchWithMode(`/api/entities/search?q=${encodeURIComponent(q)}`);
       const data = await res.json();
       setResults(data.entities || []);
       setIsOpen(true);
@@ -76,7 +77,7 @@ export function EntityLinker({ opportunityId, onEntityLinked }: EntityLinkerProp
   const handleLinkEntity = async (entity: Entity, relationship: "primary" | "related") => {
     setLinking(entity.id);
     try {
-      const res = await fetch(`/api/opportunities/${opportunityId}/entities`, {
+      const res = await fetchWithMode(`/api/opportunities/${opportunityId}/entities`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ entity_id: entity.id, relationship }),

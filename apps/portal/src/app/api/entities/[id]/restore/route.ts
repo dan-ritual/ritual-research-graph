@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,9 +11,12 @@ export async function POST(
   // Middleware handles auth - use service client for fast DB access
   const supabase = createServiceClient();
 
+  // Resolve mode from header or cookie
+  const mode = await resolveMode();
+
   // Check if entity exists and is deleted
   const { data: entity, error: fetchError } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .select("id, deleted_at")
     .eq("id", id)
     .single();
@@ -30,7 +34,7 @@ export async function POST(
 
   // Restore
   const { error: restoreError } = await supabase
-    .from("entities")
+    .from(getSchemaTable("entities", mode))
     .update({ deleted_at: null })
     .eq("id", id);
 

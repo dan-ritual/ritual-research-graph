@@ -28,15 +28,24 @@ const FONTS = {
   display: '"Space Grotesk", "Inter", system-ui, sans-serif',
 };
 
+// Design system colors - uses ACCENT_COLOR from config for mode-aware theming
+// Fallback: Growth mode blue - microsites should always receive ACCENT_COLOR from config.js
+const COLORS = {
+  background: '#FBFBFB',
+  foreground: '#171717',
+  accent: ACCENT_COLOR, // Mode-aware: config.js provides accent based on workflow mode
+  muted: 'rgba(0,0,0,0.45)',
+  border: 'rgba(0,0,0,0.08)',
+};
+
 const styles = {
   page: {
     minHeight: '100vh',
-    backgroundColor: '#FBFBFB',
-    color: '#171717',
-    fontFamily: FONTS.serif,
-    fontSize: '17px',
-    lineHeight: '1.7',
-    letterSpacing: '0.01em',
+    backgroundColor: COLORS.background,
+    color: COLORS.foreground,
+    fontFamily: FONTS.mono, // Mono is default per SYSTEM_TOKENS.md
+    fontSize: '13px',
+    lineHeight: '1.6',
     backgroundImage: 'linear-gradient(rgba(0,0,0,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.018) 1px, transparent 1px)',
     backgroundSize: '20px 20px',
     WebkitFontSmoothing: 'antialiased',
@@ -64,7 +73,7 @@ const styles = {
     textTransform: 'uppercase',
     margin: '0 0 16px 0',
     lineHeight: '1.1',
-    color: '#3B5FE6'
+    color: COLORS.accent
   },
   subtitle: {
     fontFamily: FONTS.mono,
@@ -81,14 +90,14 @@ const styles = {
   },
   sectionTitle: {
     fontFamily: FONTS.mono,
-    fontSize: '14px',
-    fontWeight: '700',
+    fontSize: '12px',
+    fontWeight: '500',
     letterSpacing: '0.12em',
     textTransform: 'uppercase',
-    color: '#3B5FE6',
-    marginBottom: '28px',
-    paddingBottom: '16px',
-    borderBottom: '1px dotted rgba(59,95,230,0.3)'
+    color: COLORS.accent,
+    marginBottom: '24px',
+    paddingBottom: '12px',
+    borderBottom: `1px dotted ${COLORS.accent}4D` // 30% opacity
   },
   // Finding/Recommendation Cards
   card: {
@@ -107,7 +116,7 @@ const styles = {
     gap: '12px'
   },
   cardBullet: {
-    color: '#3B5FE6',
+    color: COLORS.accent,
     fontSize: '13px',
     fontWeight: '400'
   },
@@ -139,7 +148,7 @@ const styles = {
     margin: '0 0 8px 0',
     fontWeight: '600',
     letterSpacing: '-0.01em',
-    color: '#3B5FE6'
+    color: COLORS.accent
   },
   deepDiveSubtitle: {
     fontFamily: FONTS.mono,
@@ -199,9 +208,9 @@ const styles = {
   },
   // Project link
   projectLink: {
-    color: '#3B5FE6',
+    color: COLORS.accent,
     textDecoration: 'none',
-    borderBottom: '1px dotted rgba(59, 95, 230, 0.5)',
+    borderBottom: `1px dotted ${COLORS.accent}80`, // 50% opacity
     cursor: 'pointer',
     position: 'relative',
     display: 'inline-block',
@@ -402,7 +411,7 @@ const MarkdownContent = ({ content, isTranscript = false }) => {
       if (inTable) flushTable(`table-${i}`);
       if (inCodeBlock) {
         elements.push(
-          <pre key={i} style={{ backgroundColor: '#1a1a2e', color: '#e2e8f0', padding: '20px', margin: '24px 0', fontSize: '13px', overflow: 'auto', fontFamily: FONTS.mono, borderRadius: '2px' }}>
+          <pre key={i} style={{ backgroundColor: '#1a1a2e', color: '#e2e8f0', padding: '20px', margin: '24px 0', fontSize: '13px', overflow: 'auto', fontFamily: FONTS.mono }}>
             {codeLines.join('\n')}
           </pre>
         );
@@ -452,7 +461,7 @@ const MarkdownContent = ({ content, isTranscript = false }) => {
 
     // Blockquotes
     if (line.startsWith('>')) {
-      elements.push(<blockquote key={i} style={{ borderLeft: '3px solid #3B5FE6', paddingLeft: '20px', margin: '24px 0', fontStyle: 'italic', color: 'rgba(0,0,0,0.75)', ...baseStyle }}>{line.slice(1).trim()}</blockquote>);
+      elements.push(<blockquote key={i} style={{ borderLeft: `3px solid ${COLORS.accent}`, paddingLeft: '20px', margin: '24px 0', fontStyle: 'italic', color: 'rgba(0,0,0,0.75)', ...baseStyle }}>{line.slice(1).trim()}</blockquote>);
       continue;
     }
 
@@ -483,7 +492,7 @@ const formatInlineHtml = (text) => {
   // Handle italics
   text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
   // Handle code
-  text = text.replace(/`(.+?)`/g, '<code style="font-family: JetBrains Mono, SF Mono, Consolas, monospace; font-size: 0.9em; background: rgba(0,0,0,0.04); padding: 2px 6px; border-radius: 2px;">$1</code>');
+  text = text.replace(/`(.+?)`/g, '<code style="font-family: JetBrains Mono, SF Mono, Consolas, monospace; font-size: 0.9em; background: rgba(0,0,0,0.04); padding: 2px 6px;">$1</code>');
   return text;
 };
 
@@ -769,7 +778,7 @@ const DocumentViewerModal = ({ artifact, onClose }) => {
               fontFamily: FONTS.mono,
               fontSize: '18px',
               fontWeight: '600',
-              color: '#3B5FE6',
+              color: COLORS.accent,
               margin: '0 0 6px 0',
               letterSpacing: '-0.01em'
             }}>
@@ -890,8 +899,8 @@ const SourceArtifactsPanel = () => {
       <section style={{
         marginBottom: '56px',
         padding: '24px',
-        backgroundColor: 'rgba(59, 95, 230, 0.03)',
-        border: '1px solid rgba(59, 95, 230, 0.12)'
+        backgroundColor: `${COLORS.accent}08`,
+        border: `1px solid ${COLORS.accent}1F`
       }}>
         <div style={{
           display: 'flex',
@@ -899,14 +908,14 @@ const SourceArtifactsPanel = () => {
           gap: '10px',
           marginBottom: '16px'
         }}>
-          <FileText size={16} strokeWidth={1.5} style={{ color: '#3B5FE6' }} />
+          <FileText size={16} strokeWidth={1.5} style={{ color: COLORS.accent }} />
           <h3 style={{
             fontFamily: FONTS.mono,
             fontSize: '12px',
             fontWeight: '600',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
-            color: '#3B5FE6',
+            color: COLORS.accent,
             margin: 0
           }}>
             Source Artifacts
@@ -952,15 +961,15 @@ const SourceArtifactsPanel = () => {
                 transition: 'all 0.15s ease'
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(59, 95, 230, 0.4)';
-                e.currentTarget.style.backgroundColor = 'rgba(59, 95, 230, 0.02)';
+                e.currentTarget.style.borderColor = `${COLORS.accent}66`;
+                e.currentTarget.style.backgroundColor = `${COLORS.accent}05`;
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
                 e.currentTarget.style.backgroundColor = '#FFFFFF';
               }}
             >
-              <FileText size={18} strokeWidth={1.5} style={{ color: '#3B5FE6', flexShrink: 0, marginTop: '2px' }} />
+              <FileText size={18} strokeWidth={1.5} style={{ color: COLORS.accent, flexShrink: 0, marginTop: '2px' }} />
               <div>
                 <div style={{
                   fontFamily: FONTS.mono,
@@ -1174,8 +1183,7 @@ const AgentExportButton = () => {
           fontWeight: '500',
           letterSpacing: '0.05em',
           border: '1px solid rgba(0,0,0,0.08)',
-          borderRadius: isMobile ? '50%' : '0',
-          backgroundColor: 'rgba(251,251,251,0.9)',
+                    backgroundColor: 'rgba(251,251,251,0.9)',
           cursor: 'pointer',
           color: 'rgba(0,0,0,0.35)',
           transition: 'all 0.15s ease',
@@ -1184,9 +1192,9 @@ const AgentExportButton = () => {
           opacity: isMobile ? 0.6 : 1
         }}
         onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(59,95,230,0.08)';
-          e.currentTarget.style.borderColor = 'rgba(59,95,230,0.3)';
-          e.currentTarget.style.color = '#3B5FE6';
+          e.currentTarget.style.backgroundColor = `${COLORS.accent}14`;
+          e.currentTarget.style.borderColor = `${COLORS.accent}4D`;
+          e.currentTarget.style.color = COLORS.accent;
           e.currentTarget.style.opacity = '1';
         }}
         onMouseOut={(e) => {
@@ -1228,8 +1236,8 @@ const AgentExportButton = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-              <Bot size={20} strokeWidth={1.5} style={{ color: '#3B5FE6' }} />
-              <h3 style={{ fontFamily: FONTS.mono, fontSize: '16px', fontWeight: '600', margin: 0, color: '#3B5FE6' }}>
+              <Bot size={20} strokeWidth={1.5} style={{ color: COLORS.accent }} />
+              <h3 style={{ fontFamily: FONTS.mono, fontSize: '16px', fontWeight: '600', margin: 0, color: COLORS.accent }}>
                 Agent Context Export
               </h3>
             </div>
@@ -1269,8 +1277,8 @@ const AgentExportButton = () => {
                   justifyContent: 'center',
                   padding: '12px 20px',
                   fontSize: '11px',
-                  backgroundColor: '#3B5FE6',
-                  borderColor: '#3B5FE6',
+                  backgroundColor: COLORS.accent,
+                  borderColor: COLORS.accent,
                   color: '#fff'
                 }}
               >
@@ -1351,10 +1359,10 @@ const TextSizeControls = () => {
     }}>
       <button
         onClick={decrease}
-        style={{ ...buttonStyle, borderRadius: '4px 0 0 4px' }}
+        style={buttonStyle}
         onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(59,95,230,0.08)';
-          e.currentTarget.style.color = '#3B5FE6';
+          e.currentTarget.style.backgroundColor = `${COLORS.accent}14`;
+          e.currentTarget.style.color = COLORS.accent;
         }}
         onMouseOut={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(251,251,251,0.95)';
@@ -1384,10 +1392,10 @@ const TextSizeControls = () => {
       </div>
       <button
         onClick={increase}
-        style={{ ...buttonStyle, borderRadius: '0 4px 4px 0' }}
+        style={buttonStyle}
         onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = 'rgba(59,95,230,0.08)';
-          e.currentTarget.style.color = '#3B5FE6';
+          e.currentTarget.style.backgroundColor = `${COLORS.accent}14`;
+          e.currentTarget.style.color = COLORS.accent;
         }}
         onMouseOut={(e) => {
           e.currentTarget.style.backgroundColor = 'rgba(251,251,251,0.95)';

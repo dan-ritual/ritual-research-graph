@@ -113,15 +113,17 @@ export interface AccentPreset {
   value: string;
 }
 
+import { COLORS } from "@/styles/tokens";
+
 export const ACCENT_PRESETS: readonly AccentPreset[] = [
-  { name: "Blue", value: "#3B5FE6" },
+  { name: "Blue", value: COLORS.mode.growth.accent },
   { name: "Orange", value: "#E67E22" },
   { name: "Green", value: "#27AE60" },
   { name: "Purple", value: "#9B59B6" },
   { name: "Red", value: "#E74C3C" },
 ] as const;
 
-export const DEFAULT_ACCENT_COLOR = "#3B5FE6";
+export const DEFAULT_ACCENT_COLOR = COLORS.mode.growth.accent;
 
 // =============================================================================
 // UI CONSTANTS

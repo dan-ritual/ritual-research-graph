@@ -1,3 +1,4 @@
+import { getSchemaTable, resolveMode } from "@/lib/db";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,8 +10,12 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") || "20");
   const search = searchParams.get("q");
 
+  // Resolve mode from query param, header, or cookie
+  const modeParam = searchParams.get("mode") || undefined;
+  const mode = await resolveMode(modeParam);
+
   let query = supabase
-    .from("microsites")
+    .from(getSchemaTable("microsites", mode))
     .select("id, title, slug, visibility, created_at, generation_job_id", { count: "exact" })
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
