@@ -170,6 +170,24 @@ SHOW pgrst.db_schemas;
 
 **Result:** ✅ `public,growth,engineering,skunkworks,shared`
 
+### 9. Portal Smoke Test (API Layer)
+
+Tested PostgREST schema access via `Accept-Profile` header:
+
+| Schema | Table | Auth | Result |
+|--------|-------|------|--------|
+| growth | entities | service_role | ✅ 3 records returned |
+| engineering | entities | service_role | ✅ Empty array (expected) |
+| skunkworks | entities | service_role | ✅ Empty array (expected) |
+| shared | users | service_role | ✅ 3 records returned |
+| shared | cross_links | service_role | ✅ Empty array (expected) |
+| growth | entities | anon | ✅ Empty array (RLS blocks) |
+| shared | users | anon | ✅ Empty array (RLS blocks) |
+
+**Portal UI:** Login page renders correctly. Dashboard requires authentication (redirects to `/login`).
+
+**Conclusion:** ✅ All mode schemas accessible via PostgREST. RLS correctly blocks unauthenticated access.
+
 ---
 
 ## Handoff Notes
@@ -184,7 +202,7 @@ SHOW pgrst.db_schemas;
 
 - [x] Run migrations in target environment
 - [x] Update PostgREST db_schema configuration in Supabase dashboard
-- [ ] Smoke test portal queries per mode
+- [x] Smoke test portal queries per mode
 
 ### Risks Identified
 
@@ -217,3 +235,13 @@ SHOW pgrst.db_schemas;
 - Ran `ALTER ROLE authenticator SET pgrst.db_schemas` to expose growth/engineering/skunkworks/shared
 - Reloaded PostgREST (`NOTIFY pgrst, 'reload'`)
 - Verified `SHOW pgrst.db_schemas` returned expected list
+
+### 2026-01-22 (Portal Smoke Test)
+
+- Verified PostgREST schema cache reloaded after NOTIFY
+- Tested API access to all mode schemas via `Accept-Profile` header
+- Confirmed RLS blocks unauthenticated access (empty arrays with anon key)
+- Confirmed service_role bypasses RLS and returns data
+- Portal login page renders correctly
+- Dashboard redirects to /login (expected for unauthenticated users)
+- Added NEXT_PUBLIC_SUPABASE_* env vars to apps/portal/.env.local
