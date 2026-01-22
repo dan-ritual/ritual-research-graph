@@ -13,12 +13,24 @@ import { extractEntities } from './stages/entities.js';
 import { generateSiteConfig } from './stages/site-config.js';
 import { buildMicrosite } from './stages/microsite.js';
 import { integrateWithGraph } from './stages/graph.js';
+import { ingestMeetingTranscript } from './stages/meeting-transcript.js';
+import { extractEngineeringEntities } from './stages/engineering-entities.js';
+import { generateEngineeringWiki } from './stages/engineering-wiki.js';
+import { syncEngineeringOutputs } from './stages/engineering-sync.js';
+import { importAsanaFeatures } from './stages/asana-import.js';
 import { uploadToBlob, isBlobConfigured, formatBytes } from './lib/blob.js';
-import { fileExists, ensureDir, writeFile } from './utils/files.js';
+import { fileExists, ensureDir, writeFile, readFile } from './utils/files.js';
 import { slugify } from './utils/files.js';
 import { GenerationError, GenerationErrorType } from './lib/errors.js';
 import { getSupabaseClient, isSupabaseConfigured } from './lib/supabase.js';
-import type { GenerationConfig, ExtractedOpportunity } from './lib/types.js';
+import type {
+  GenerationConfig,
+  ExtractedOpportunity,
+  MeetingTranscript,
+  EngineeringExtractionResult,
+  EngineeringWikiPage,
+  Artifact,
+} from './lib/types.js';
 import os from 'os';
 import {
   DEFAULT_MODE_ID,
@@ -44,6 +56,25 @@ function resolvePipelineStages(modeId: ModeId): ModePipelineStage[] {
     return modeConfig.pipelineStages;
   }
   return MODE_CONFIGS[DEFAULT_MODE_ID].pipelineStages;
+}
+
+const STAGE_STATUS_BY_ID: Record<string, string> = {
+  artifacts: 'generating_artifacts',
+  research: 'researching',
+  entities: 'extracting_entities',
+  'site-config': 'generating_site_config',
+  microsite: 'building',
+  'blob-upload': 'deploying',
+  graph: 'integrating_graph',
+  'meet-transcript': 'ingesting_transcript',
+  'engineering-entities': 'extracting_entities',
+  'engineering-wiki': 'generating_wiki',
+  'engineering-sync': 'syncing_entities',
+  'asana-import': 'importing_asana',
+};
+
+function resolveStageStatus(stageId: string): string {
+  return STAGE_STATUS_BY_ID[stageId] ?? 'generating_artifacts';
 }
 
 // Job status update helper for Portal integration
@@ -166,6 +197,7 @@ async function fetchJobAndTranscript(jobId: string, mode: ModeId): Promise<{
     subtitle?: string;
     accentColor?: string;
     mode?: string;
+    asanaProjectId?: string;
     skipBuild?: boolean;
     skipResearch?: boolean;
   };
@@ -219,6 +251,7 @@ program
   .option('--title <title>', 'Microsite title')
   .option('--subtitle <subtitle>', 'Microsite subtitle')
   .option('--accent <color>', 'Accent color hex', '#3B5FE6')
+  .option('--asana-project <id>', 'Asana project GID for engineering import')
   .option('--skip-build', 'Skip Vite build step')
   .option('--dry-run', 'Show what would be generated without running')
   .option('--regenerate', 'Regeneration mode: re-use existing artifacts, only rebuild site-config and microsite')
@@ -275,6 +308,7 @@ async function main() {
       title: opts.title || jobData.config.title,
       subtitle: opts.subtitle || jobData.config.subtitle,
       accent: opts.accent || jobData.config.accentColor || accentFallback,
+      asanaProjectId: opts.asanaProject || jobData.config.asanaProjectId,
       skipBuild: opts.skipBuild ?? jobData.config.skipBuild,
       dryRun: opts.dryRun,
     };
@@ -302,6 +336,7 @@ async function main() {
       title: opts.title,
       subtitle: opts.subtitle,
       accent: opts.accent || MODE_CONFIGS[modeId]?.accent || '#3B5FE6',
+      asanaProjectId: opts.asanaProject,
       skipBuild: opts.skipBuild,
       dryRun: opts.dryRun,
     };
@@ -329,7 +364,12 @@ async function main() {
   }
 
   // Check for regeneration mode
-  const isRegeneration = opts.regenerate && jobId;
+  const isEngineeringMode = modeId === 'engineering';
+  const regenerationRequested = Boolean(opts.regenerate && jobId);
+  const isRegeneration = regenerationRequested && !isEngineeringMode;
+  if (regenerationRequested && isEngineeringMode) {
+    console.log(chalk.yellow('\n⚠️  Regeneration is only supported for Growth mode. Continuing with full run.\n'));
+  }
   const pipelineStages = resolvePipelineStages(modeId);
   const orderedStages = [...pipelineStages].sort((a, b) => a.order - b.order);
   const hasBlobStage = orderedStages.some((stage) => stage.id === 'blob-upload');
@@ -346,6 +386,15 @@ async function main() {
     let siteConfig: import('./lib/types.js').SiteConfig | null = null;
     let distPath: string | undefined;
     let blobPath: string | undefined;
+
+    let meetingTranscript: MeetingTranscript | null = null;
+    let meetingTranscriptArtifact: Artifact | null = null;
+    let engineeringExtraction: EngineeringExtractionResult | null = null;
+    let engineeringEntitiesArtifact: Artifact | null = null;
+    let engineeringWikiPages: EngineeringWikiPage[] = [];
+    let engineeringWikiArtifact: Artifact | null = null;
+    let featureTrackingArtifact: Artifact | null = null;
+    let decisionLogArtifact: Artifact | null = null;
 
     if (isRegeneration) {
       // REGENERATION MODE: Re-use existing artifacts, skip to stage 4
@@ -380,21 +429,25 @@ async function main() {
 
     const regenerationSkips = new Set(['artifacts', 'research', 'entities']);
 
-    for (const stage of orderedStages) {
+    for (const [index, stage] of orderedStages.entries()) {
+      const stageNumber = index + 1;
+      const totalStages = orderedStages.length;
+      const stageLabel = `Stage ${stageNumber}/${totalStages}`;
+      const stageStatus = resolveStageStatus(stage.id);
       if (isRegeneration && regenerationSkips.has(stage.id)) {
         continue;
       }
 
       switch (stage.id) {
         case 'artifacts': {
-          if (jobId) await updateJobStatus(jobId, 'generating_artifacts', 1, 0, undefined, modeId);
-          spinner.start('Stage 1/6: Generating artifacts...');
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`${stageLabel}: Generating artifacts...`);
           artifacts = await generateArtifacts({
             config,
             spinner,
           });
-          if (jobId) await updateJobStatus(jobId, 'generating_artifacts', 1, 100, undefined, modeId);
-          spinner.succeed(`Stage 1/6: Artifacts generated (3 files)`);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          spinner.succeed(`${stageLabel}: Artifacts generated (3 files)`);
           console.log(chalk.gray(`   ├── ${artifacts.cleanedTranscript.filename}`));
           console.log(chalk.gray(`   ├── ${artifacts.intelligenceBrief.filename}`));
           console.log(chalk.gray(`   └── ${artifacts.strategicQuestions.filename}`));
@@ -407,10 +460,10 @@ async function main() {
               'Artifacts are required before research stage'
             );
           }
-          if (jobId) await updateJobStatus(jobId, 'research', 2, 0, undefined, modeId);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
           const hasExternalKeys = process.env.XAI_API_KEY || process.env.PERPLEXITY_API_KEY;
           if (hasExternalKeys) {
-            spinner.start('\nStage 2/6: Executing multi-AI research chain...');
+            spinner.start(`\n${stageLabel}: Executing multi-AI research chain...`);
             const preliminaryEntities = extractPreliminaryEntities(artifacts.intelligenceBrief.content);
             console.log(chalk.gray(`\n   Found ${preliminaryEntities.length} entities to research`));
 
@@ -423,15 +476,15 @@ async function main() {
             });
 
             if (narrativeResearch) {
-              spinner.succeed(`Stage 2/6: Research chain complete (1 file)`);
+              spinner.succeed(`${stageLabel}: Research chain complete (1 file)`);
               console.log(chalk.gray(`   └── ${narrativeResearch.filename}`));
             } else {
-              spinner.warn('Stage 2/6: Research chain completed with no output');
+              spinner.warn(`${stageLabel}: Research chain completed with no output`);
             }
           } else {
-            console.log(chalk.yellow('\n⏸️  Stage 2/6: Skipping multi-AI research (no XAI_API_KEY or PERPLEXITY_API_KEY)'));
+            console.log(chalk.yellow(`\n⏸️  ${stageLabel}: Skipping multi-AI research (no XAI_API_KEY or PERPLEXITY_API_KEY)`));
           }
-          if (jobId) await updateJobStatus(jobId, 'research', 2, 100, undefined, modeId);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
           break;
         }
         case 'entities': {
@@ -441,8 +494,8 @@ async function main() {
               'Artifacts are required before entity extraction'
             );
           }
-          if (jobId) await updateJobStatus(jobId, 'entity_extraction', 3, 0, undefined, modeId);
-          spinner.start('\nStage 3/6: Extracting entities...');
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Extracting entities...`);
           const extractionResult = await extractEntities({
             config,
             intelligenceBrief: artifacts.intelligenceBrief,
@@ -454,12 +507,12 @@ async function main() {
           opportunitiesArtifact = extractionResult.opportunitiesArtifact;
           entities = extractionResult.entities;
           opportunities = extractionResult.opportunities;
-          spinner.succeed(`Stage 3/6: Entities extracted (${entities.length} entities, ${opportunities.length} opportunities)`);
+          spinner.succeed(`${stageLabel}: Entities extracted (${entities.length} entities, ${opportunities.length} opportunities)`);
           console.log(chalk.gray(`   ├── ${entitiesArtifact.filename}`));
           if (opportunitiesArtifact) {
             console.log(chalk.gray(`   └── ${opportunitiesArtifact.filename}`));
           }
-          if (jobId) await updateJobStatus(jobId, 'entity_extraction', 3, 100, undefined, modeId);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
           break;
         }
         case 'site-config': {
@@ -469,8 +522,8 @@ async function main() {
               'Artifacts and entities are required before SITE_CONFIG'
             );
           }
-          if (jobId) await updateJobStatus(jobId, 'site_config', 4, 0, undefined, modeId);
-          spinner.start('\nStage 4/6: Generating SITE_CONFIG...');
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Generating SITE_CONFIG...`);
           siteConfigArtifact = await generateSiteConfig({
             config,
             intelligenceBrief: artifacts.intelligenceBrief,
@@ -481,12 +534,12 @@ async function main() {
             outputDir: outputPath,
           });
           siteConfig = JSON.parse(siteConfigArtifact.content);
-          spinner.succeed(`Stage 4/6: SITE_CONFIG generated`);
+          spinner.succeed(`${stageLabel}: SITE_CONFIG generated`);
           console.log(chalk.gray(`   ├── ${siteConfigArtifact.filename}`));
           console.log(chalk.gray(`   ├── ${siteConfig.keyFindings.length} key findings`));
           console.log(chalk.gray(`   ├── ${siteConfig.recommendations.length} recommendations`));
           console.log(chalk.gray(`   └── ${siteConfig.deepDives.length} deep dives`));
-          if (jobId) await updateJobStatus(jobId, 'site_config', 4, 100, undefined, modeId);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
           break;
         }
         case 'microsite': {
@@ -496,8 +549,8 @@ async function main() {
               'Artifacts, entities, and SITE_CONFIG are required before microsite build'
             );
           }
-          if (jobId) await updateJobStatus(jobId, 'building', 5, 0, undefined, modeId);
-          spinner.start('\nStage 5/6: Building microsite...');
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Building microsite...`);
           distPath = await buildMicrosite({
             config,
             siteConfig,
@@ -515,20 +568,20 @@ async function main() {
           });
           if (distPath) {
             if (config.skipBuild) {
-              spinner.succeed(`Stage 5/6: Microsite prepared (build skipped)`);
+              spinner.succeed(`${stageLabel}: Microsite prepared (build skipped)`);
             } else {
-              spinner.succeed(`Stage 5/6: Microsite built`);
+              spinner.succeed(`${stageLabel}: Microsite built`);
             }
             console.log(chalk.gray(`   └── ${path.relative(outputPath, distPath)}/`));
           }
           if (!hasBlobStage && jobId) {
-            await updateJobStatus(jobId, 'building', 5, 100, undefined, modeId);
+            await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
           }
           break;
         }
         case 'blob-upload': {
           if (distPath && !config.skipBuild && !config.dryRun && isBlobConfigured()) {
-            spinner.start('\nStage 5b: Uploading to Vercel Blob...');
+            spinner.start(`\n${stageLabel}: Uploading to Vercel Blob...`);
             const micrositeSlug = slugify(siteConfig?.branding.title || 'microsite');
             const blobResult = await uploadToBlob({
               distPath,
@@ -536,14 +589,14 @@ async function main() {
               spinner,
             });
             blobPath = blobResult.blobPath;
-            spinner.succeed(`Stage 5b: Uploaded to Vercel Blob`);
+            spinner.succeed(`${stageLabel}: Uploaded to Vercel Blob`);
             console.log(chalk.gray(`   ├── Path: ${blobResult.blobPath}`));
             console.log(chalk.gray(`   ├── Files: ${blobResult.fileCount}`));
             console.log(chalk.gray(`   └── Size: ${formatBytes(blobResult.totalSize)}`));
           } else if (!isBlobConfigured()) {
-            console.log(chalk.yellow('\n⏸️  Stage 5b: Skipping blob upload (BLOB_READ_WRITE_TOKEN not set)'));
+            console.log(chalk.yellow(`\n⏸️  ${stageLabel}: Skipping blob upload (BLOB_READ_WRITE_TOKEN not set)`));
           }
-          if (jobId) await updateJobStatus(jobId, 'building', 5, 100, undefined, modeId);
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
           break;
         }
         case 'graph': {
@@ -553,8 +606,8 @@ async function main() {
               'Artifacts, entities, and SITE_CONFIG are required before graph integration'
             );
           }
-          if (jobId) await updateJobStatus(jobId, 'graph_integration', 6, 0, undefined, modeId);
-          spinner.start('\nStage 6/6: Integrating with graph database...');
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Integrating with graph database...`);
           const graphResult = await integrateWithGraph({
             config,
             siteConfig,
@@ -573,7 +626,7 @@ async function main() {
             blobPath, // Pass blob path for storage in database
           });
           if (graphResult) {
-            spinner.succeed(`Stage 6/6: Graph integration complete`);
+            spinner.succeed(`${stageLabel}: Graph integration complete`);
             console.log(chalk.gray(`   ├── Microsite ID: ${graphResult.micrositeId.slice(0, 8)}...`));
             console.log(chalk.gray(`   ├── ${graphResult.entityCount} entities indexed`));
             console.log(chalk.gray(`   ├── ${graphResult.relationCount} relations created`));
@@ -585,13 +638,132 @@ async function main() {
           }
           break;
         }
+        case 'meet-transcript': {
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Normalizing meeting transcript...`);
+          const meetingResult = await ingestMeetingTranscript({
+            config,
+            spinner,
+            outputDir: outputPath,
+          });
+          meetingTranscript = meetingResult.meeting;
+          meetingTranscriptArtifact = meetingResult.artifact;
+          spinner.succeed(`${stageLabel}: Meeting transcript ingested`);
+          console.log(chalk.gray(`   └── ${meetingTranscriptArtifact.filename}`));
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          break;
+        }
+        case 'engineering-entities': {
+          if (!meetingTranscript) {
+            const rawTranscript = await readFile(config.transcript);
+            meetingTranscript = {
+              title: config.title || 'Meeting',
+              date: null,
+              attendees: [],
+              summary: null,
+              transcript: rawTranscript,
+            };
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Extracting engineering entities...`);
+          const extractionResult = await extractEngineeringEntities({
+            config,
+            meeting: meetingTranscript,
+            spinner,
+            outputDir: outputPath,
+          });
+          engineeringExtraction = extractionResult.extraction;
+          engineeringEntitiesArtifact = extractionResult.entitiesArtifact;
+          spinner.succeed(
+            `${stageLabel}: Entities extracted (${engineeringExtraction.topics.length} topics, ${engineeringExtraction.features.length} features, ${engineeringExtraction.decisions.length} decisions)`
+          );
+          console.log(chalk.gray(`   └── ${engineeringEntitiesArtifact.filename}`));
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          break;
+        }
+        case 'engineering-wiki': {
+          if (!meetingTranscript || !engineeringExtraction) {
+            throw new GenerationError(
+              GenerationErrorType.VALIDATION_ERROR,
+              'Meeting transcript and engineering entities are required before wiki generation'
+            );
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Generating wiki pages and outputs...`);
+          const wikiResult = await generateEngineeringWiki({
+            config,
+            meeting: meetingTranscript,
+            extraction: engineeringExtraction,
+            spinner,
+            outputDir: outputPath,
+          });
+          engineeringWikiPages = wikiResult.pages;
+          engineeringWikiArtifact = wikiResult.wikiArtifact;
+          featureTrackingArtifact = wikiResult.featureTrackingArtifact;
+          decisionLogArtifact = wikiResult.decisionLogArtifact;
+          spinner.succeed(`${stageLabel}: Wiki outputs generated (${engineeringWikiPages.length} pages)`);
+          if (engineeringWikiArtifact && featureTrackingArtifact && decisionLogArtifact) {
+            console.log(chalk.gray(`   ├── ${engineeringWikiArtifact.filename}`));
+            console.log(chalk.gray(`   ├── ${featureTrackingArtifact.filename}`));
+            console.log(chalk.gray(`   └── ${decisionLogArtifact.filename}`));
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          break;
+        }
+        case 'engineering-sync': {
+          if (!engineeringExtraction) {
+            throw new GenerationError(
+              GenerationErrorType.VALIDATION_ERROR,
+              'Engineering entities are required before sync'
+            );
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Syncing engineering entities...`);
+          const syncResult = await syncEngineeringOutputs({
+            config,
+            jobId: jobId ?? undefined,
+            extraction: engineeringExtraction,
+            wikiPages: engineeringWikiPages,
+            artifacts: {
+              meetingTranscript: meetingTranscriptArtifact,
+              entities: engineeringEntitiesArtifact,
+              wiki: engineeringWikiArtifact,
+              featureTracking: featureTrackingArtifact,
+              decisionLog: decisionLogArtifact,
+            },
+            spinner,
+          });
+          if (syncResult) {
+            spinner.succeed(`${stageLabel}: Engineering sync complete`);
+            console.log(chalk.gray(`   ├── ${syncResult.entityCount} entities upserted`));
+            if (syncResult.artifactCount > 0) {
+              console.log(chalk.gray(`   └── ${syncResult.artifactCount} artifacts stored`));
+            }
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          break;
+        }
+        case 'asana-import': {
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 0, undefined, modeId);
+          spinner.start(`\n${stageLabel}: Importing Asana features...`);
+          const importResult = await importAsanaFeatures({ config });
+          if (importResult?.reason) {
+            spinner.warn(`${stageLabel}: Asana import skipped (${importResult.reason})`);
+          } else if (importResult) {
+            spinner.succeed(`${stageLabel}: Asana import complete (${importResult.imported} tasks)`);
+          } else {
+            spinner.warn(`${stageLabel}: Asana import skipped`);
+          }
+          if (jobId) await updateJobStatus(jobId, stageStatus, stageNumber, 100, undefined, modeId);
+          break;
+        }
         default:
           console.log(chalk.yellow(`\n⏸️  Skipping unknown stage: ${stage.id}`));
       }
     }
 
     // Mark job as completed
-    if (jobId) await updateJobStatus(jobId, 'completed', 6, 100, undefined, modeId);
+    if (jobId) await updateJobStatus(jobId, 'completed', orderedStages.length, 100, undefined, modeId);
 
     console.log(chalk.green('\n✨ Pipeline complete!'));
     console.log(`   Artifacts: ${outputPath}/artifacts/`);

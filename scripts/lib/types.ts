@@ -12,6 +12,7 @@ export interface GenerationConfig {
   accent?: string;
   skipBuild?: boolean;
   dryRun?: boolean;
+  asanaProjectId?: string;
 }
 
 export interface Artifact {
@@ -29,10 +30,14 @@ export interface GeneratedArtifacts {
   narrativeResearch?: Artifact;
 }
 
+export type GrowthEntityType = 'company' | 'protocol' | 'person' | 'concept' | 'opportunity';
+export type EngineeringEntityType = 'feature' | 'topic' | 'decision' | 'component';
+export type ExtractedEntityType = GrowthEntityType | EngineeringEntityType;
+
 export interface ExtractedEntity {
   canonicalName: string;
   aliases: string[];
-  type: 'company' | 'protocol' | 'person' | 'concept' | 'opportunity';
+  type: ExtractedEntityType;
   url?: string;
   twitter?: string;
   category?: string;
@@ -55,6 +60,70 @@ export interface ExtractedOpportunity {
   angle: string;
   confidence: number;
   linked_entities: string[]; // entity slugs
+}
+
+export interface MeetingTranscript {
+  title: string;
+  date: string | null;
+  attendees: string[];
+  summary?: string | null;
+  transcript: string;
+}
+
+export interface EngineeringTopic {
+  name: string;
+  description: string;
+  category: 'architecture' | 'infrastructure' | 'frontend' | 'backend' | 'devops' | 'process' | 'other';
+  mentions: Array<{
+    timestamp?: string | null;
+    context: string;
+  }>;
+  related_features: string[];
+  related_decisions: string[];
+}
+
+export interface EngineeringDecision {
+  title: string;
+  status: 'proposed' | 'accepted' | 'deprecated' | 'superseded';
+  context: string;
+  decision: string;
+  consequences: string;
+  related_topics: string[];
+  superseded_by?: string | null;
+  decided_at?: string | null;
+}
+
+export interface EngineeringFeature {
+  name: string;
+  description: string;
+  status: 'planning' | 'in_progress' | 'review' | 'done' | 'blocked';
+  owner: string | null;
+  epic?: string | null;
+  asana_task_id?: string | null;
+  related_topics: string[];
+  related_decisions: string[];
+}
+
+export interface EngineeringComponent {
+  name: string;
+  type: 'service' | 'library' | 'api' | 'ui' | 'database' | 'infrastructure';
+  description: string;
+  repository?: string | null;
+  dependencies: string[];
+  owned_by?: string | null;
+  related_features: string[];
+}
+
+export interface EngineeringExtractionResult {
+  topics: EngineeringTopic[];
+  decisions: EngineeringDecision[];
+  features: EngineeringFeature[];
+  components: EngineeringComponent[];
+}
+
+export interface EngineeringWikiPage {
+  topic: string;
+  content: string;
 }
 
 export interface SiteConfig {

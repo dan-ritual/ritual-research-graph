@@ -47,6 +47,13 @@ const TYPE_MAP: Record<string, string> = {
   person: 'person',
   concept: 'concept',
   opportunity: 'opportunity',
+  feature: 'feature',
+  topic: 'topic',
+  decision: 'decision',
+  component: 'component',
+  idea: 'idea',
+  prototype: 'prototype',
+  experiment: 'experiment',
 };
 
 // Map section names to database enum

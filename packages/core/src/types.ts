@@ -6,7 +6,19 @@
 // ENTITY REGISTRY
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type EntityType = 'company' | 'person' | 'concept' | 'opportunity' | 'protocol';
+export type EntityType =
+  | 'company'
+  | 'person'
+  | 'concept'
+  | 'opportunity'
+  | 'protocol'
+  | 'feature'
+  | 'topic'
+  | 'decision'
+  | 'component'
+  | 'idea'
+  | 'prototype'
+  | 'experiment';
 
 export interface EntityAppearance {
   micrositeId: string;
@@ -195,3 +207,9 @@ export interface SiteConfig {
     entityBacklinks: Record<string, number>;  // entity slug → mention count across all sites
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CROSS-MODE LINKS
+// ─────────────────────────────────────────────────────────────────────────────
+
+export * from "./types/cross-links.js";
