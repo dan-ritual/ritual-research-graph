@@ -27,6 +27,7 @@ interface StepConfigureProps {
   initialConfig: GenerationConfig;
   onComplete: (config: GenerationConfig) => void;
   onBack: () => void;
+  showAdvancedOptions?: boolean;
 }
 
 export function StepConfigure({
@@ -34,6 +35,7 @@ export function StepConfigure({
   initialConfig,
   onComplete,
   onBack,
+  showAdvancedOptions = true,
 }: StepConfigureProps) {
   const [config, setConfig] = useState<GenerationConfig>(initialConfig);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -67,9 +69,9 @@ export function StepConfigure({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-display text-lg font-semibold mb-1">Configure Research</h2>
+        <h2 className="font-display text-lg font-semibold mb-1">Configure Session</h2>
         <p className="font-serif text-sm text-[rgba(0,0,0,0.45)] italic">
-          Set up your microsite title and options
+          Set up your title and processing options
         </p>
       </div>
 
@@ -86,7 +88,7 @@ export function StepConfigure({
           className="font-display border-[rgba(0,0,0,0.08)]"
         />
         <p className="font-serif text-xs text-[rgba(0,0,0,0.45)] mt-1 italic">
-          Main heading for your microsite
+          Main heading for this run
         </p>
       </div>
 
@@ -181,45 +183,47 @@ export function StepConfigure({
       </div>
 
       {/* Advanced Options */}
-      <div>
-        <button
-          onClick={() => setShowAdvanced(!showAdvanced)}
-          className="font-mono text-xs uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)] flex items-center gap-1 transition-colors"
-        >
-          {showAdvanced ? "▼" : "▶"} Advanced Options
-        </button>
-        {showAdvanced && (
-          <div className="mt-3 pl-4 border-l border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] space-y-3">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="skipResearch"
-                checked={config.skipResearch}
-                onCheckedChange={(checked) =>
-                  updateConfig("skipResearch", !!checked)
-                }
-              />
-              <Label htmlFor="skipResearch" className="font-mono text-sm font-normal">
-                Skip multi-AI research (Stage 2)
-              </Label>
+      {showAdvancedOptions && (
+        <div>
+          <button
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="font-mono text-xs uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)] hover:text-[var(--mode-accent)] flex items-center gap-1 transition-colors"
+          >
+            {showAdvanced ? "▼" : "▶"} Advanced Options
+          </button>
+          {showAdvanced && (
+            <div className="mt-3 pl-4 border-l border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)] space-y-3">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="skipResearch"
+                  checked={config.skipResearch}
+                  onCheckedChange={(checked) =>
+                    updateConfig("skipResearch", !!checked)
+                  }
+                />
+                <Label htmlFor="skipResearch" className="font-mono text-sm font-normal">
+                  Skip multi-AI research (Stage 2)
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="skipBuild"
+                  checked={config.skipBuild}
+                  onCheckedChange={(checked) =>
+                    updateConfig("skipBuild", !!checked)
+                  }
+                />
+                <Label htmlFor="skipBuild" className="font-mono text-sm font-normal">
+                  Skip Vite build (Stage 5)
+                </Label>
+              </div>
+              <p className="font-serif text-xs text-[rgba(0,0,0,0.45)] italic">
+                Use these for testing or to speed up iteration
+              </p>
             </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="skipBuild"
-                checked={config.skipBuild}
-                onCheckedChange={(checked) =>
-                  updateConfig("skipBuild", !!checked)
-                }
-              />
-              <Label htmlFor="skipBuild" className="font-mono text-sm font-normal">
-                Skip Vite build (Stage 5)
-              </Label>
-            </div>
-            <p className="font-serif text-xs text-[rgba(0,0,0,0.45)] italic">
-              Use these for testing or to speed up iteration
-            </p>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Error */}
       {error && <p className="font-mono text-sm text-[#dc2626]">{error}</p>}

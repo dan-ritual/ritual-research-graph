@@ -1,4 +1,4 @@
-import { getSchemaTable } from "@/lib/db";
+import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -31,7 +31,7 @@ export default async function EntitiesPage({ params }: EntitiesPageProps) {
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId))
+    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
     .select("email, name, avatar_url")
     .eq("id", user.id)
     .single();
@@ -42,11 +42,17 @@ export default async function EntitiesPage({ params }: EntitiesPageProps) {
     avatar_url: profile?.avatar_url || user.user_metadata?.avatar_url,
   };
 
+  const emptyActionLabel = modeId === "engineering" ? "+ New Meeting" : "+ New Research";
+
   return (
     <div className="min-h-screen bg-[#FBFBFB]">
       <Header user={userInfo} />
       <main className="p-6 max-w-7xl mx-auto">
-        <EntitiesContent mode={modeId} />
+        <EntitiesContent
+          mode={modeId}
+          emptyActionLabel={emptyActionLabel}
+          emptyActionHref={`/${modeId}/new`}
+        />
       </main>
     </div>
   );

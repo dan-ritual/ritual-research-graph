@@ -124,9 +124,16 @@ export default function JobStatusPage() {
     );
   }
 
+  const pipelineStages = config.pipelineStages.length
+    ? config.pipelineStages.map((stage) => ({
+        name: stage.name,
+        description: stage.description || stage.name,
+      }))
+    : PIPELINE_STAGES;
+
   const currentStageIndex = job.current_stage || 0;
   const progressPercent = Math.round(
-    ((currentStageIndex + 1) / PIPELINE_STAGES.length) * 100
+    ((currentStageIndex + 1) / pipelineStages.length) * 100
   );
 
   const isCompleted = job.status === "completed";
@@ -176,8 +183,8 @@ export default function JobStatusPage() {
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="font-mono text-sm uppercase tracking-[0.05em]">
-                  Stage {currentStageIndex + 1} of {PIPELINE_STAGES.length}:{" "}
-                  {PIPELINE_STAGES[currentStageIndex]?.name}
+                  Stage {currentStageIndex + 1} of {pipelineStages.length}:{" "}
+                  {pipelineStages[currentStageIndex]?.name}
                 </CardTitle>
                 {!isAwaitingReview && <CancelJobButton jobId={job.id} />}
               </div>
@@ -185,7 +192,7 @@ export default function JobStatusPage() {
             <CardContent>
               <Progress value={progressPercent} className="h-1 mb-2" />
               <p className="font-serif text-sm text-[rgba(0,0,0,0.65)] italic">
-                {PIPELINE_STAGES[currentStageIndex]?.description}
+                {pipelineStages[currentStageIndex]?.description}
               </p>
             </CardContent>
           </Card>
@@ -237,6 +244,29 @@ export default function JobStatusPage() {
           </Card>
         )}
 
+        {isCompleted && modeId === "engineering" && !job.microsite_id && (
+          <Card className="mb-6 border-[#22c55e]/20 bg-[#22c55e]/5">
+            <CardHeader className="pb-2">
+              <CardTitle className="font-mono text-sm uppercase tracking-[0.05em] text-[#16a34a]">
+                Extraction Complete
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="font-serif text-sm text-[#16a34a]/80 mb-4 italic">
+                Your meeting has been processed. Review the outputs below.
+              </p>
+              <div className="flex gap-2">
+                <Link href={`/${modeId}/wiki`}>
+                  <Button>View Wiki</Button>
+                </Link>
+                <Link href={`/${modeId}/features`}>
+                  <Button variant="outline">View Features</Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {isAwaitingReview && (
           <Card className="mb-6 border-[#eab308]/20 bg-[#eab308]/5">
             <CardHeader className="pb-2">
@@ -260,7 +290,7 @@ export default function JobStatusPage() {
           <Card>
             <CardContent className="p-0">
               <div className="divide-y divide-[rgba(0,0,0,0.05)]">
-                {PIPELINE_STAGES.map((stage, index) => {
+                {pipelineStages.map((stage, index) => {
                   const isComplete = index < currentStageIndex || isCompleted;
                   const isCurrent = index === currentStageIndex && !isCompleted && !isFailed;
                   const isPending = index > currentStageIndex;

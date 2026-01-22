@@ -32,21 +32,6 @@ interface EntityReviewCardProps {
   isProcessing: boolean;
 }
 
-function getTypeColor(type: string): string {
-  switch (type) {
-    case "company":
-      return "bg-blue-100 text-blue-800";
-    case "person":
-      return "bg-green-100 text-green-800";
-    case "protocol":
-      return "bg-purple-100 text-purple-800";
-    case "concept":
-      return "bg-amber-100 text-amber-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-}
-
 function getStatusIcon(status: string) {
   switch (status) {
     case "approved":
@@ -68,7 +53,8 @@ export function EntityReviewCard({
   isProcessing,
 }: EntityReviewCardProps) {
   const isReviewed = entity.review_status !== "pending";
-  const typeColor = getTypeColor(entity.type);
+  const badgeClass =
+    "bg-[color-mix(in_srgb,var(--mode-accent)_12%,transparent)] text-[var(--mode-accent)]";
 
   return (
     <Card
@@ -91,7 +77,7 @@ export function EntityReviewCard({
               <h4 className="font-display text-sm font-semibold truncate">
                 {entity.canonical_name}
               </h4>
-              <Badge className={`${typeColor} font-mono text-[10px] uppercase`}>
+              <Badge className={`${badgeClass} font-mono text-[10px] uppercase`}>
                 {entity.type}
               </Badge>
             </div>

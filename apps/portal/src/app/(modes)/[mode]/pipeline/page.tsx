@@ -1,6 +1,6 @@
 "use client";
 
-import { getSchemaTable } from "@/lib/db";
+import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
@@ -32,6 +32,16 @@ function PipelineContent() {
 
   const supabase = createClient();
 
+  useEffect(() => {
+    if (modeId !== "growth") {
+      router.replace(`/${modeId}/dashboard`);
+    }
+  }, [modeId, router]);
+
+  if (modeId !== "growth") {
+    return null;
+  }
+
   // Fetch initial data
   useEffect(() => {
     async function fetchData() {
@@ -44,7 +54,7 @@ function PipelineContent() {
 
       // Fetch user profile
       const { data: profile } = await supabase
-        .from(getSchemaTable("users", modeId))
+        .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
         .select("*")
         .eq("id", authUser.id)
         .single();

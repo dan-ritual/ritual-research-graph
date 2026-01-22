@@ -40,6 +40,7 @@ export const PIPELINE_STAGES: readonly PipelineStage[] = [
 
 export type JobStatus =
   | "pending"
+  | "pending_regeneration"
   | "generating_artifacts"
   | "researching"
   | "extracting_entities"
@@ -48,6 +49,11 @@ export type JobStatus =
   | "building"
   | "integrating_graph"
   | "deploying"
+  | "regenerating_microsite"
+  | "ingesting_transcript"
+  | "generating_wiki"
+  | "syncing_entities"
+  | "importing_asana"
   | "completed"
   | "failed";
 
@@ -62,6 +68,7 @@ export interface StatusConfig {
  */
 export const STATUS_CONFIG: Record<JobStatus, StatusConfig> = {
   pending: { label: "Pending", variant: "secondary" },
+  pending_regeneration: { label: "Pending Regeneration", variant: "secondary" },
   generating_artifacts: { label: "Stage 1", variant: "default" },
   researching: { label: "Stage 2", variant: "default" },
   extracting_entities: { label: "Stage 3", variant: "default" },
@@ -70,6 +77,11 @@ export const STATUS_CONFIG: Record<JobStatus, StatusConfig> = {
   building: { label: "Stage 5", variant: "default" },
   integrating_graph: { label: "Stage 6", variant: "default" },
   deploying: { label: "Deploying", variant: "default" },
+  regenerating_microsite: { label: "Regenerating", variant: "warning" },
+  ingesting_transcript: { label: "Stage 1", variant: "default" },
+  generating_wiki: { label: "Stage 3", variant: "default" },
+  syncing_entities: { label: "Stage 4", variant: "default" },
+  importing_asana: { label: "Stage 5", variant: "default" },
   completed: { label: "Completed", variant: "success" },
   failed: { label: "Failed", variant: "error" },
 } as const;
@@ -90,7 +102,7 @@ export function getStatusConfig(status: string): StatusConfig {
 // WORKFLOWS
 // =============================================================================
 
-export type WorkflowType = "market-landscape";
+export type WorkflowType = "market-landscape" | "engineering-meeting";
 
 export interface WorkflowConfig {
   name: string;
@@ -101,6 +113,10 @@ export const WORKFLOWS: Record<WorkflowType, WorkflowConfig> = {
   "market-landscape": {
     name: "Market Landscape",
     description: "Full pipeline with multi-AI research",
+  },
+  "engineering-meeting": {
+    name: "Engineering Meeting",
+    description: "Extract wiki, decisions, features, components",
   },
 } as const;
 

@@ -137,8 +137,8 @@ export function StepReview({
           Generation will begin immediately after submission
         </p>
         <p className="font-serif text-sm text-[#ca8a04]/80 mt-1 italic">
-          The 6-stage pipeline typically takes 3-5 minutes. You can monitor
-          progress on the job status page.
+          The pipeline typically takes a few minutes. You can monitor progress
+          on the job status page.
         </p>
       </div>
 

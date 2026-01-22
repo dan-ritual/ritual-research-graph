@@ -1,31 +1,15 @@
-import { getSchemaTable } from "@/lib/db";
+import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { AppearanceList } from "@/components/entities/appearance-list";
 import { CoOccurrenceChips } from "@/components/entities/co-occurrence-chips";
+import { CrossLinksPanel } from "@/components/entities/cross-links-panel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { MODE_CONFIGS, type ModeId } from "@ritual-research/core";
-
-function getTypeColor(type: string): string {
-  switch (type) {
-    case "company":
-      return "bg-blue-100 text-blue-800";
-    case "person":
-      return "bg-green-100 text-green-800";
-    case "protocol":
-      return "bg-purple-100 text-purple-800";
-    case "concept":
-      return "bg-amber-100 text-amber-800";
-    case "opportunity":
-      return "bg-indigo-100 text-indigo-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-}
 
 interface EntityDetailPageProps {
   params: Promise<{ mode: string; slug: string }>;
@@ -53,7 +37,7 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId))
+    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
     .select("email, name, avatar_url")
     .eq("id", user.id)
     .single();
@@ -63,6 +47,20 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
     name: profile?.name || user.user_metadata?.full_name,
     avatar_url: profile?.avatar_url || user.user_metadata?.avatar_url,
   };
+
+  const { data: userModes, error: userModesError } = await supabase
+    .schema(SHARED_SCHEMA)
+    .rpc("get_user_modes");
+
+  const availableModes = Array.isArray(userModes)
+    ? userModes.filter((value): value is ModeId => value in MODE_CONFIGS)
+    : [];
+
+  if (!availableModes.includes(modeId)) {
+    availableModes.unshift(modeId);
+  }
+
+  const canCreateCrossLinks = !userModesError && Array.isArray(userModes);
 
   // Fetch entity
   const { data: entity, error: entityError } = await supabase
@@ -238,7 +236,25 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
     .filter((o): o is NonNullable<typeof o> => o !== null) || [];
 
   const metadata = entity.metadata || {};
-  const typeColor = getTypeColor(entity.type);
+  const badgeClass =
+    "bg-[color-mix(in_srgb,var(--mode-accent)_12%,transparent)] text-[var(--mode-accent)]";
+  const wikiContent =
+    typeof metadata.wiki_content === "string" ? metadata.wiki_content : null;
+  const decisionContext =
+    typeof metadata.context === "string" ? metadata.context : null;
+  const decisionText =
+    typeof metadata.decision === "string" ? metadata.decision : null;
+  const decisionConsequences =
+    typeof metadata.consequences === "string" ? metadata.consequences : null;
+
+  const metadataFields = [
+    { label: "Status", value: metadata.status },
+    { label: "Owner", value: metadata.owner },
+    { label: "Category", value: metadata.category },
+    { label: "Type", value: metadata.type },
+    { label: "Repository", value: metadata.repository },
+    { label: "Asana Task", value: metadata.asana_task_id },
+  ].filter((field) => field.value !== undefined && field.value !== null);
 
   return (
     <div className="min-h-screen bg-[#FBFBFB]">
@@ -266,7 +282,7 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
                 </p>
               )}
             </div>
-            <Badge className={`${typeColor} font-mono text-xs uppercase`}>
+            <Badge className={`${badgeClass} font-mono text-xs uppercase`}>
               {entity.type}
             </Badge>
           </div>
@@ -318,6 +334,57 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main content - Appearances */}
           <div className="lg:col-span-2 space-y-6">
+            {wikiContent && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.65)]">
+                    Wiki
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="font-serif text-sm whitespace-pre-wrap">
+                    {wikiContent}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {(decisionContext || decisionText || decisionConsequences) && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.65)]">
+                    Decision Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 text-sm">
+                  {decisionContext && (
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)]">
+                        Context
+                      </div>
+                      <p className="font-serif text-sm whitespace-pre-wrap">{decisionContext}</p>
+                    </div>
+                  )}
+                  {decisionText && (
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)]">
+                        Decision
+                      </div>
+                      <p className="font-serif text-sm whitespace-pre-wrap">{decisionText}</p>
+                    </div>
+                  )}
+                  {decisionConsequences && (
+                    <div>
+                      <div className="font-mono text-[10px] uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)]">
+                        Consequences
+                      </div>
+                      <p className="font-serif text-sm whitespace-pre-wrap">{decisionConsequences}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
             <div>
               <h2 className="font-mono text-sm font-semibold uppercase tracking-[0.12em] text-[var(--mode-accent)] pb-3 mb-4 border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]">
                 Appears In
@@ -342,6 +409,36 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
                 <CoOccurrenceChips coOccurrences={coOccurrences.slice(0, 10)} modePrefix={`/${modeId}`} />
               </CardContent>
             </Card>
+
+            <CrossLinksPanel
+              modeId={modeId}
+              entityId={entity.id}
+              entityType={entity.type}
+              availableModes={availableModes}
+              canCreate={canCreateCrossLinks}
+            />
+
+            {metadataFields.length > 0 && (
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.65)]">
+                    Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {metadataFields.map((field) => (
+                    <div key={field.label} className="flex items-center justify-between text-xs">
+                      <span className="font-mono text-[rgba(0,0,0,0.45)] uppercase tracking-[0.05em]">
+                        {field.label}
+                      </span>
+                      <span className="font-mono text-[rgba(0,0,0,0.65)]">
+                        {Array.isArray(field.value) ? field.value.join(", ") : String(field.value)}
+                      </span>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
 
             {/* Linked Opportunities */}
             {opportunities.length > 0 && (

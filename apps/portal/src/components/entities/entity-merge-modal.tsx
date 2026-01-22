@@ -27,21 +27,6 @@ interface EntityMergeModalProps {
   onConfirmMerge: (newCanonicalName: string) => Promise<void>;
 }
 
-function getTypeColor(type: string): string {
-  switch (type) {
-    case "company":
-      return "bg-blue-100 text-blue-800";
-    case "person":
-      return "bg-green-100 text-green-800";
-    case "protocol":
-      return "bg-purple-100 text-purple-800";
-    case "concept":
-      return "bg-amber-100 text-amber-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-}
-
 export function EntityMergeModal({
   isOpen,
   onClose,
@@ -77,8 +62,8 @@ export function EntityMergeModal({
 
   if (!sourceEntity || !targetEntity) return null;
 
-  const sourceColor = getTypeColor(sourceEntity.type);
-  const targetColor = getTypeColor(targetEntity.type);
+  const badgeClass =
+    "bg-[color-mix(in_srgb,var(--mode-accent)_12%,transparent)] text-[var(--mode-accent)]";
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -100,7 +85,7 @@ export function EntityMergeModal({
               <div className="font-display text-sm font-semibold">
                 {sourceEntity.canonical_name}
               </div>
-              <Badge className={`${sourceColor} font-mono text-[10px] mt-2`}>
+              <Badge className={`${badgeClass} font-mono text-[10px] mt-2`}>
                 {sourceEntity.type}
               </Badge>
               <div className="font-mono text-[10px] text-[rgba(0,0,0,0.45)] mt-2">
@@ -119,7 +104,7 @@ export function EntityMergeModal({
               <div className="font-display text-sm font-semibold">
                 {targetEntity.canonical_name}
               </div>
-              <Badge className={`${targetColor} font-mono text-[10px] mt-2`}>
+              <Badge className={`${badgeClass} font-mono text-[10px] mt-2`}>
                 {targetEntity.type}
               </Badge>
               <div className="font-mono text-[10px] text-[rgba(0,0,0,0.45)] mt-2">

@@ -34,9 +34,27 @@ interface Pagination {
 
 interface EntitiesContentProps {
   mode: ModeId;
+  title?: string;
+  description?: string;
+  defaultTypeFilter?: string;
+  hideTypeFilter?: boolean;
+  emptyStateTitle?: string;
+  emptyStateMessage?: string;
+  emptyActionLabel?: string;
+  emptyActionHref?: string;
 }
 
-export function EntitiesContent({ mode }: EntitiesContentProps) {
+export function EntitiesContent({
+  mode,
+  title = "Entities",
+  description = "Browse and explore all entities in the knowledge graph.",
+  defaultTypeFilter = "all",
+  hideTypeFilter = false,
+  emptyStateTitle,
+  emptyStateMessage,
+  emptyActionLabel,
+  emptyActionHref,
+}: EntitiesContentProps) {
   const [entities, setEntities] = useState<Entity[]>([]);
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
@@ -47,7 +65,7 @@ export function EntitiesContent({ mode }: EntitiesContentProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState(defaultTypeFilter);
   const [sortBy, setSortBy] = useState("appearance_count");
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
@@ -114,10 +132,10 @@ export function EntitiesContent({ mode }: EntitiesContentProps) {
       {/* Header */}
       <div>
         <h1 className="font-mono text-sm font-semibold uppercase tracking-[0.12em] text-[var(--mode-accent)] pb-4 mb-6 border-b border-dotted border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]">
-          Entities
+          {title}
         </h1>
         <p className="font-serif text-sm italic text-[rgba(0,0,0,0.45)]">
-          Browse and explore all entities in the knowledge graph.
+          {description}
         </p>
       </div>
 
@@ -130,7 +148,9 @@ export function EntitiesContent({ mode }: EntitiesContentProps) {
             placeholder="Search by name..."
           />
         </div>
-        <EntityTypeFilter value={typeFilter} onChange={setTypeFilter} mode={mode} />
+        {!hideTypeFilter && (
+          <EntityTypeFilter value={typeFilter} onChange={setTypeFilter} mode={mode} />
+        )}
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
@@ -155,13 +175,15 @@ export function EntitiesContent({ mode }: EntitiesContentProps) {
         />
       ) : entities.length === 0 ? (
         <EmptyState
-          title="No entities found"
-          message={searchQuery || typeFilter !== "all"
-            ? "No entities match your search criteria. Try adjusting your filters."
-            : "No entities in the knowledge graph yet. Generate a microsite to extract entities."
+          title={emptyStateTitle || "No entities found"}
+          message={
+            emptyStateMessage ||
+            (searchQuery || typeFilter !== "all"
+              ? "No entities match your search criteria. Try adjusting your filters."
+              : "No entities in the knowledge graph yet. Generate a new run to extract entities.")
           }
-          actionLabel={!searchQuery && typeFilter === "all" ? "+ New Research" : undefined}
-          actionHref={!searchQuery && typeFilter === "all" ? `/${mode}/new` : undefined}
+          actionLabel={emptyActionLabel || (!searchQuery && typeFilter === "all" ? "+ New Run" : undefined)}
+          actionHref={emptyActionHref || (!searchQuery && typeFilter === "all" ? `/${mode}/new` : undefined)}
         />
       ) : (
         <>
@@ -173,7 +195,7 @@ export function EntitiesContent({ mode }: EntitiesContentProps) {
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {entities.map((entity) => (
-              <EntityCard key={entity.id} entity={entity} modePrefix={`/${mode}`} />
+              <EntityCard key={entity.id} entity={entity} modePrefix={`/${mode}`} modeId={mode} />
             ))}
           </div>
 

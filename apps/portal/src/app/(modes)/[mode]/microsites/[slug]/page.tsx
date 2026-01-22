@@ -1,4 +1,4 @@
-import { getSchemaTable } from "@/lib/db";
+import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -37,7 +37,7 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId))
+    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
     .select("*")
     .eq("id", user.id)
     .single();

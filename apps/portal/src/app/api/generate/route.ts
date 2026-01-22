@@ -6,10 +6,11 @@ import { NextRequest, NextResponse } from "next/server";
 interface GenerationConfig {
   title: string;
   subtitle: string;
-  workflow: "market-landscape";
+  workflow: "market-landscape" | "engineering-meeting";
   accentColor: string;
   skipBuild: boolean;
   skipResearch: boolean;
+  asanaProjectId?: string;
 }
 
 interface GenerateRequest {
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
         accentColor: config.accentColor,
         skipBuild: config.skipBuild,
         skipResearch: config.skipResearch,
+        asanaProjectId: config.asanaProjectId,
       },
       transcript_path: "", // Will be updated after upload
       current_stage: 0,

@@ -35,6 +35,7 @@ export default function NewResearchPage() {
   const params = useParams();
   const modeId = params.mode as ModeId;
   const { config } = useMode();
+  const defaultWorkflow: WorkflowType = modeId === "engineering" ? "engineering-meeting" : "market-landscape";
   
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,11 +44,17 @@ export default function NewResearchPage() {
   const [generationConfig, setGenerationConfig] = useState<GenerationConfig>({
     title: "",
     subtitle: "",
-    workflow: "market-landscape",
-    accentColor: DEFAULT_ACCENT_COLOR,
+    workflow: defaultWorkflow,
+    accentColor: config.accent || DEFAULT_ACCENT_COLOR,
     skipBuild: false,
     skipResearch: false,
   });
+
+  const pageTitle = modeId === "engineering" ? "New Meeting" : "New Research";
+  const pageSubtitle =
+    modeId === "engineering"
+      ? "Transform meeting transcripts into wiki pages and feature tracking"
+      : "Transform your transcript into a research microsite";
 
   const handleUploadComplete = (data: TranscriptData) => {
     setTranscript(data);
@@ -106,10 +113,10 @@ export default function NewResearchPage() {
       <main className="p-6 max-w-3xl mx-auto">
         <div className="mb-8">
           <h1 className="font-display text-2xl font-semibold tracking-tight">
-            New Research
+            {pageTitle}
           </h1>
           <p className="font-serif text-lg text-[rgba(0,0,0,0.45)] mt-1 italic">
-            Transform your transcript into a research microsite
+            {pageSubtitle}
           </p>
         </div>
 
@@ -166,6 +173,7 @@ export default function NewResearchPage() {
                 initialConfig={generationConfig}
                 onComplete={handleConfigComplete}
                 onBack={handleBack}
+                showAdvancedOptions={modeId !== "engineering"}
               />
             )}
             {currentStep === 2 && (

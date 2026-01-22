@@ -50,20 +50,8 @@ export function LinkedEntityList({
     }
   };
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case "company":
-        return "bg-blue-100 text-blue-800 border-blue-200";
-      case "person":
-        return "bg-green-100 text-green-800 border-green-200";
-      case "protocol":
-        return "bg-purple-100 text-purple-800 border-purple-200";
-      case "concept":
-        return "bg-amber-100 text-amber-800 border-amber-200";
-      default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
-    }
-  };
+  const badgeClass =
+    "bg-[color-mix(in_srgb,var(--mode-accent)_10%,transparent)] text-[var(--mode-accent)] border-[color-mix(in_srgb,var(--mode-accent)_30%,transparent)]";
 
   const getRelationshipBadge = (relationship: string) => {
     switch (relationship) {
@@ -89,9 +77,7 @@ export function LinkedEntityList({
       {entities.map((entity) => (
         <div
           key={entity.id}
-          className={`flex items-center gap-1.5 px-2 py-1 border ${getTypeColor(
-            entity.type
-          )}`}
+          className={`flex items-center gap-1.5 px-2 py-1 border ${badgeClass}`}
         >
           <Link
             href={`${modePrefix}/entities/${entity.slug}`}

@@ -38,7 +38,7 @@ From `AUDIT_SCHEMA.md`:
 
 - [ ] Existing data migrated from `public.*` to `growth.*` without loss
 - [ ] `engineering.*` schema created and empty
-- [ ] `product.*` schema created and empty
+- [ ] `skunkworks.*` schema created and empty
 - [ ] `shared.*` schema created with users and cross_links tables
 - [ ] RLS policies updated for multi-schema access
 - [ ] All existing queries work against new schema
@@ -59,7 +59,7 @@ From `AUDIT_SCHEMA.md`:
 ## Scope Boundaries
 
 **In Scope:**
-- Schema creation (growth, engineering, product, shared)
+- Schema creation (growth, engineering, skunkworks, shared)
 - Data migration from public to growth
 - RLS policy updates
 - Foreign key adjustments
@@ -95,7 +95,7 @@ CREATE SCHEMA IF NOT EXISTS engineering;
 -- engineering.wiki_pages
 
 -- Product schema (new, placeholder)
-CREATE SCHEMA IF NOT EXISTS product;
+CREATE SCHEMA IF NOT EXISTS skunkworks;
 
 -- Shared schema
 CREATE SCHEMA IF NOT EXISTS shared;
@@ -132,12 +132,12 @@ CREATE TABLE shared.cross_links (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
   -- Source
-  source_mode TEXT NOT NULL CHECK (source_mode IN ('growth', 'engineering', 'product')),
+  source_mode TEXT NOT NULL CHECK (source_mode IN ('growth', 'engineering', 'skunkworks')),
   source_type TEXT NOT NULL,
   source_id UUID NOT NULL,
 
   -- Target
-  target_mode TEXT NOT NULL CHECK (target_mode IN ('growth', 'engineering', 'product')),
+  target_mode TEXT NOT NULL CHECK (target_mode IN ('growth', 'engineering', 'skunkworks')),
   target_type TEXT NOT NULL,
   target_id UUID NOT NULL,
 

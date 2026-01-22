@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { MODE_CONFIGS, type ModeId } from "@ritual-research/core";
 
 interface Entity {
   id: string;
@@ -28,27 +29,27 @@ interface EntityCardProps {
   variant?: "default" | "compact";
   /** Mode prefix for links (e.g., "/growth") */
   modePrefix?: string;
+  modeId?: ModeId;
 }
 
-function getTypeColor(type: string): string {
-  switch (type) {
-    case "company":
-      return "bg-blue-100 text-blue-800";
-    case "person":
-      return "bg-green-100 text-green-800";
-    case "protocol":
-      return "bg-purple-100 text-purple-800";
-    case "concept":
-      return "bg-amber-100 text-amber-800";
-    case "opportunity":
-      return "bg-indigo-100 text-indigo-800";
-    default:
-      return "bg-gray-100 text-gray-800";
-  }
-}
-
-export function EntityCard({ entity, variant = "default", modePrefix = "" }: EntityCardProps) {
-  const typeColor = getTypeColor(entity.type);
+export function EntityCard({
+  entity,
+  variant = "default",
+  modePrefix = "",
+  modeId,
+}: EntityCardProps) {
+  const typeConfig = modeId ? MODE_CONFIGS[modeId]?.entityTypes.find((et) => et.id === entity.type) : null;
+  const typeLabel = typeConfig?.label || entity.type;
+  const status =
+    entity.metadata && typeof entity.metadata === "object" && "status" in entity.metadata
+      ? (entity.metadata as { status?: string }).status
+      : undefined;
+  const owner =
+    entity.metadata && typeof entity.metadata === "object" && "owner" in entity.metadata
+      ? (entity.metadata as { owner?: string }).owner
+      : undefined;
+  const badgeClass =
+    "bg-[color-mix(in_srgb,var(--mode-accent)_12%,transparent)] text-[var(--mode-accent)]";
   const href = `${modePrefix}/entities/${entity.slug}`;
 
   if (variant === "compact") {
@@ -59,8 +60,8 @@ export function EntityCard({ entity, variant = "default", modePrefix = "" }: Ent
             <CardTitle className="font-display text-sm font-semibold">
               {entity.canonical_name}
             </CardTitle>
-            <Badge className={`${typeColor} font-mono text-[10px] uppercase`}>
-              {entity.type}
+            <Badge className={`${badgeClass} font-mono text-[10px] uppercase`}>
+              {typeLabel}
             </Badge>
           </div>
         </CardHeader>
@@ -75,14 +76,20 @@ export function EntityCard({ entity, variant = "default", modePrefix = "" }: Ent
           <CardTitle className="font-display text-lg font-semibold">
             {entity.canonical_name}
           </CardTitle>
-          <Badge className={`${typeColor} font-mono text-[10px] uppercase`}>
-            {entity.type}
+          <Badge className={`${badgeClass} font-mono text-[10px] uppercase`}>
+            {typeLabel}
           </Badge>
         </div>
         {entity.metadata?.description && (
           <CardDescription className="font-serif text-sm line-clamp-2 italic">
             {entity.metadata.description}
           </CardDescription>
+        )}
+        {(status || owner) && (
+          <div className="mt-2 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.05em] text-[rgba(0,0,0,0.45)]">
+            {status && <span>Status: {status.replace(/_/g, " ")}</span>}
+            {owner && <span>Owner: {owner}</span>}
+          </div>
         )}
       </CardHeader>
       <CardContent>

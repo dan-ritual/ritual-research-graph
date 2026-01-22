@@ -333,6 +333,44 @@ apps/portal/src/app/
 
 ---
 
+## Cross-Mode Linking (Phase 4)
+
+Cross-mode links are stored in a shared table to avoid schema coupling while
+preserving strict access control. Links never expose target entity data by
+default; consumers must fetch entity details from each mode separately.
+
+**Shared table:** `shared.cross_links`
+
+```sql
+CREATE TABLE shared.cross_links (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+
+  source_mode TEXT NOT NULL CHECK (source_mode IN ('growth', 'engineering', 'skunkworks')),
+  source_type TEXT NOT NULL,
+  source_id UUID NOT NULL,
+
+  target_mode TEXT NOT NULL CHECK (target_mode IN ('growth', 'engineering', 'skunkworks')),
+  target_type TEXT NOT NULL,
+  target_id UUID NOT NULL,
+
+  link_type TEXT NOT NULL,
+  confidence FLOAT CHECK (confidence >= 0 AND confidence <= 1),
+  created_by UUID REFERENCES auth.users(id),
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  metadata JSONB DEFAULT '{}',
+
+  UNIQUE(source_mode, source_id, target_mode, target_id, link_type)
+);
+```
+
+**RLS requirement:** a user must have access to both source and target modes.
+
+**API endpoints (mode-scoped queries):**
+- `GET /api/cross-links?mode={mode}&entityId={id}`
+- `POST /api/cross-links` (explicit source/target modes)
+
+---
+
 ## Files to Create/Modify
 
 | File | Action | Purpose |
