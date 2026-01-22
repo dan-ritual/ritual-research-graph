@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -16,8 +15,10 @@ export async function GET(request: NextRequest) {
   const modeParam = searchParams.get("mode") || undefined;
   const mode = await resolveMode(modeParam);
 
+  // Use .schema() for proper PostgREST schema selection
   let query = supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select(`
       id, name, stage, priority, created_at, updated_at,
       opportunity_owners(user_id, users(email))

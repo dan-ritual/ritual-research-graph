@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -10,11 +9,14 @@ export async function GET(request: NextRequest) {
   const modeParam = request.nextUrl.searchParams.get("mode") || undefined;
   const mode = await resolveMode(modeParam);
 
+  // Use .schema() for proper PostgREST schema selection
+  const schemaClient = supabase.schema(mode);
+
   const [microsites, entities, opportunities, jobs] = await Promise.all([
-    supabase.from(getSchemaTable("microsites", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from(getSchemaTable("entities", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from(getSchemaTable("opportunities", mode)).select("id", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from(getSchemaTable("generation_jobs", mode)).select("id", { count: "exact", head: true })
+    schemaClient.from("microsites").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    schemaClient.from("entities").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    schemaClient.from("opportunities").select("id", { count: "exact", head: true }).is("deleted_at", null),
+    schemaClient.from("generation_jobs").select("id", { count: "exact", head: true })
   ]);
 
   return NextResponse.json({

@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,8 +14,10 @@ export async function GET(request: NextRequest) {
   const modeParam = searchParams.get("mode") || undefined;
   const mode = await resolveMode(modeParam);
 
+  // Use .schema() for proper PostgREST schema selection
   let query = supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .select("id, title, slug, visibility, created_at, generation_job_id", { count: "exact" })
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
