@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { DriveImportModal } from "@/components/drive/drive-import-modal";
 
 interface TranscriptData {
   content: string;
@@ -19,6 +20,13 @@ export function StepUpload({ onComplete }: StepUploadProps) {
   const [filename, setFilename] = useState("pasted-transcript.md");
   const [isDragging, setIsDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showDriveModal, setShowDriveModal] = useState(false);
+
+  const handleDriveImport = useCallback((importedContent: string, importedFilename: string) => {
+    setContent(importedContent);
+    setFilename(importedFilename);
+    setError(null);
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -121,6 +129,19 @@ export function StepUpload({ onComplete }: StepUploadProps) {
         </div>
       </div>
 
+      {/* Google Drive Import */}
+      <div className="text-center">
+        <button
+          onClick={() => setShowDriveModal(true)}
+          className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.05em] text-[var(--mode-accent)] border-b border-dotted border-[var(--mode-accent)]/50 hover:border-[var(--mode-accent)]"
+        >
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.71 3.5L1.15 15l4.58 7.5h13.54l4.58-7.5L17.29 3.5H7.71zM14.29 5.5l4.58 7.5H5.13l4.58-7.5h4.58zM5.71 15h12.58l-2.29 3.75H8l-2.29-3.75z"/>
+          </svg>
+          Import from Google Drive
+        </button>
+      </div>
+
       {/* Paste Area */}
       <div>
         <Label htmlFor="transcript" className="font-mono text-xs uppercase tracking-[0.08em] text-[rgba(0,0,0,0.45)] mb-2 block">
@@ -172,6 +193,13 @@ export function StepUpload({ onComplete }: StepUploadProps) {
           Next
         </Button>
       </div>
+
+      {/* Drive Import Modal */}
+      <DriveImportModal
+        isOpen={showDriveModal}
+        onClose={() => setShowDriveModal(false)}
+        onImport={handleDriveImport}
+      />
     </div>
   );
 }
