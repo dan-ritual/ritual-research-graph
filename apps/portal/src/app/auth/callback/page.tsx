@@ -1,20 +1,67 @@
 "use client";
 
-import { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
-/**
- * Auth callback page - displays errors or loading state.
- *
- * The actual PKCE code exchange happens in route.ts (server-side).
- * This page only renders when:
- * 1. There's an auth_error query param (error display)
- * 2. Fallback during redirect (brief loading state)
- */
 function AuthCallbackContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const error = searchParams.get("auth_error");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    const next = searchParams.get("next") || "/";
+    const code = searchParams.get("code");
+
+    async function handleAuthCallback() {
+      // If we have a code, exchange it for a session (PKCE flow)
+      if (code) {
+        console.log("[auth/callback] Exchanging code for session...");
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchangeError) {
+          console.error("[auth/callback] Exchange error:", exchangeError.message);
+          setError(exchangeError.message);
+          return;
+        }
+        console.log("[auth/callback] Exchange successful, redirecting to:", next);
+        router.push(next);
+        return;
+      }
+
+      // Check if session exists (might be set via URL fragment)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log("[auth/callback] Session found, redirecting to:", next);
+        router.push(next);
+        return;
+      }
+
+      // Listen for auth state changes as fallback (handles hash fragments)
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        console.log("[auth/callback] Auth state change:", event);
+        if (session) {
+          router.push(next);
+        }
+      });
+
+      // Timeout fallback - if no session after 10 seconds, show error
+      const timeout = setTimeout(async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          setError("Authentication timed out. Please try again.");
+        }
+      }, 10000);
+
+      return () => {
+        subscription.unsubscribe();
+        clearTimeout(timeout);
+      };
+    }
+
+    handleAuthCallback();
+  }, [searchParams, router]);
 
   if (error) {
     return (
@@ -30,7 +77,6 @@ function AuthCallbackContent() {
     );
   }
 
-  // Brief loading state shown during redirect
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FBFBFB]">
       <div className="text-center">
