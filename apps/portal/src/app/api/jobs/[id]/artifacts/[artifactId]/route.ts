@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -89,7 +88,8 @@ export async function GET(
 
   // Fetch artifact
   const { data: artifact, error } = await supabase
-    .from(getSchemaTable("artifacts", mode))
+    .schema(mode)
+    .from("artifacts")
     .select("*")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -137,7 +137,8 @@ export async function PATCH(
 
   // Get current artifact for original_content tracking
   const { data: current } = await supabase
-    .from(getSchemaTable("artifacts", mode))
+    .schema(mode)
+    .from("artifacts")
     .select("content, original_content")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -174,7 +175,8 @@ export async function PATCH(
 
   // Update artifact
   const { data: updated, error: updateError } = await supabase
-    .from(getSchemaTable("artifacts", mode))
+    .schema(mode)
+    .from("artifacts")
     .update(update)
     .eq("id", artifactId)
     .eq("job_id", jobId)

@@ -1,4 +1,3 @@
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -31,7 +30,8 @@ export default async function EntitiesPage({ params }: EntitiesPageProps) {
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("email, name, avatar_url")
     .eq("id", user.id)
     .single();

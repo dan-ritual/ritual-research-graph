@@ -1,6 +1,5 @@
 "use client";
 
-import { getSchemaTable } from "@/lib/db";
 import { Suspense, useEffect, useState, useCallback, useRef } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
@@ -93,7 +92,8 @@ function NewOpportunityContent() {
 
         if (data.is_duplicate && data.match_id && data.confidence > 70) {
           const { data: matchData } = await supabase
-            .from(getSchemaTable("opportunities", modeId))
+            .schema(modeId)
+            .from("opportunities")
             .select("id, name, thesis")
             .eq("id", data.match_id)
             .single();
@@ -139,7 +139,8 @@ function NewOpportunityContent() {
       }
 
       const { data: workflowsData } = await supabase
-        .from(getSchemaTable("pipeline_workflows", modeId))
+        .schema(modeId)
+        .from("pipeline_workflows")
         .select("*")
         .order("is_default", { ascending: false });
 
@@ -168,7 +169,8 @@ function NewOpportunityContent() {
 
     async function fetchStages() {
       const { data: stagesData } = await supabase
-        .from(getSchemaTable("pipeline_stages", modeId))
+        .schema(modeId)
+        .from("pipeline_stages")
         .select("*")
         .eq("workflow_id", workflowId)
         .order("position", { ascending: true });
@@ -213,7 +215,8 @@ function NewOpportunityContent() {
       const slug = generateSlug(name) + "-" + Date.now().toString(36);
 
       const { data, error: insertError } = await supabase
-        .from(getSchemaTable("opportunities", modeId))
+        .schema(modeId)
+        .from("opportunities")
         .insert({
           slug,
           name: name.trim(),
@@ -231,7 +234,7 @@ function NewOpportunityContent() {
 
       if (insertError) throw insertError;
 
-      await supabase.from(getSchemaTable("opportunity_activity", modeId)).insert({
+      await supabase.schema(modeId).from("opportunity_activity").insert({
         opportunity_id: data.id,
         user_id: user.id,
         action: "created",

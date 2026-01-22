@@ -1,6 +1,5 @@
 "use client";
 
-import { getSchemaTable } from "@/lib/db";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
@@ -151,7 +150,8 @@ export default function OpportunityDetailPage() {
       }
 
       const { data: oppData, error: oppError } = await supabase
-        .from(getSchemaTable("opportunities", modeId))
+        .schema(modeId)
+        .from("opportunities")
         .select("*")
         .eq("id", opportunityId)
         .single();
@@ -171,7 +171,8 @@ export default function OpportunityDetailPage() {
       setStageId(oppData.stage_id);
 
       const { data: wfData } = await supabase
-        .from(getSchemaTable("pipeline_workflows", modeId))
+        .schema(modeId)
+        .from("pipeline_workflows")
         .select("*")
         .eq("id", oppData.workflow_id)
         .single();
@@ -181,7 +182,8 @@ export default function OpportunityDetailPage() {
       }
 
       const { data: stagesData } = await supabase
-        .from(getSchemaTable("pipeline_stages", modeId))
+        .schema(modeId)
+        .from("pipeline_stages")
         .select("*")
         .eq("workflow_id", oppData.workflow_id)
         .order("position", { ascending: true });
@@ -191,7 +193,8 @@ export default function OpportunityDetailPage() {
       }
 
       const { data: activityData } = await supabase
-        .from(getSchemaTable("opportunity_activity", modeId))
+        .schema(modeId)
+        .from("opportunity_activity")
         .select("*")
         .eq("opportunity_id", opportunityId)
         .order("created_at", { ascending: false })
@@ -248,7 +251,8 @@ export default function OpportunityDetailPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       const { error: updateError } = await supabase
-        .from(getSchemaTable("opportunities", modeId))
+        .schema(modeId)
+        .from("opportunities")
         .update({
           name: name.trim(),
           thesis: thesis.trim() || null,
@@ -264,7 +268,7 @@ export default function OpportunityDetailPage() {
       if (stageId !== opportunity.stage_id) {
         const oldStage = stages.find((s) => s.id === opportunity.stage_id);
         const newStage = stages.find((s) => s.id === stageId);
-        await supabase.from(getSchemaTable("opportunity_activity", modeId)).insert({
+        await supabase.schema(modeId).from("opportunity_activity").insert({
           opportunity_id: opportunity.id,
           user_id: user?.id,
           action: "stage_changed",
@@ -275,7 +279,7 @@ export default function OpportunityDetailPage() {
         });
       }
 
-      await supabase.from(getSchemaTable("opportunity_activity", modeId)).insert({
+      await supabase.schema(modeId).from("opportunity_activity").insert({
         opportunity_id: opportunity.id,
         user_id: user?.id,
         action: "edited",
@@ -299,7 +303,8 @@ export default function OpportunityDetailPage() {
       const { data: { user } } = await supabase.auth.getUser();
 
       const { error: updateError } = await supabase
-        .from(getSchemaTable("opportunities", modeId))
+        .schema(modeId)
+        .from("opportunities")
         .update({
           status: "archived",
           archived_at: new Date().toISOString(),
@@ -309,7 +314,7 @@ export default function OpportunityDetailPage() {
 
       if (updateError) throw updateError;
 
-      await supabase.from(getSchemaTable("opportunity_activity", modeId)).insert({
+      await supabase.schema(modeId).from("opportunity_activity").insert({
         opportunity_id: opportunity.id,
         user_id: user?.id,
         action: "archived",

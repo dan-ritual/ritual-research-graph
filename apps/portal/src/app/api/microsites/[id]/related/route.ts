@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -20,7 +19,8 @@ export async function GET(
 
   // Get the microsite
   const { data: microsite, error: micrositeError } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .select("id")
     .eq(isUUID ? "id" : "slug", id)
     .single();
@@ -32,7 +32,8 @@ export async function GET(
   // Find related microsites by entity overlap
   // First get entities in current microsite
   const { data: currentEntities } = await supabase
-    .from(getSchemaTable("entity_appearances", mode))
+    .schema(mode)
+    .from("entity_appearances")
     .select("entity_id")
     .eq("microsite_id", microsite.id);
 
@@ -44,7 +45,8 @@ export async function GET(
 
   // Find other microsites that have these entities
   const { data: relatedAppearances } = await supabase
-    .from(getSchemaTable("entity_appearances", mode))
+    .schema(mode)
+    .from("entity_appearances")
     .select(`
       microsite_id,
       microsites (

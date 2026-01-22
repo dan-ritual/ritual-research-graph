@@ -1,4 +1,3 @@
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -37,7 +36,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("email, name, avatar_url")
     .eq("id", user.id)
     .single();
@@ -49,7 +49,7 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
   };
 
   const { data: userModes, error: userModesError } = await supabase
-    .schema(SHARED_SCHEMA)
+    .schema("shared")
     .rpc("get_user_modes");
 
   const availableModes = Array.isArray(userModes)
@@ -64,7 +64,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch entity
   const { data: entity, error: entityError } = await supabase
-    .from(getSchemaTable("entities", modeId))
+    .schema(modeId)
+    .from("entities")
     .select("*")
     .eq("slug", slug)
     .single();
@@ -75,7 +76,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch appearances with microsite context
   const { data: rawAppearances } = await supabase
-    .from(getSchemaTable("entity_appearances", modeId))
+    .schema(modeId)
+    .from("entity_appearances")
     .select(`
       id,
       section,
@@ -117,7 +119,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch co-occurrences (bidirectional)
   const { data: relationsA } = await supabase
-    .from(getSchemaTable("entity_relations", modeId))
+    .schema(modeId)
+    .from("entity_relations")
     .select(`
       co_occurrence_count,
       entity_b:entities!entity_relations_entity_b_id_fkey (
@@ -132,7 +135,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
     .limit(10);
 
   const { data: relationsB } = await supabase
-    .from(getSchemaTable("entity_relations", modeId))
+    .schema(modeId)
+    .from("entity_relations")
     .select(`
       co_occurrence_count,
       entity_a:entities!entity_relations_entity_a_id_fkey (
@@ -193,7 +197,8 @@ export default async function EntityDetailPage({ params }: EntityDetailPageProps
 
   // Fetch linked opportunities
   const { data: opportunityLinks } = await supabase
-    .from(getSchemaTable("opportunity_entities", modeId))
+    .schema(modeId)
+    .from("opportunity_entities")
     .select(`
       relationship,
       opportunities (

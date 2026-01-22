@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,7 +20,8 @@ export async function POST(
 
   // Fetch opportunity with stage info
   const { data: opportunity, error: oppError } = await supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select(`
       *,
       stage:pipeline_stages(name, slug)
@@ -35,7 +35,8 @@ export async function POST(
 
   // Fetch linked entities
   const { data: linkedEntities } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .select(`
       relationship,
       entity:entities(name, type, slug)
@@ -106,7 +107,8 @@ Return ONLY valid JSON in this exact format, no other text:
 
     // Store result in database
     const { error: updateError } = await supabase
-      .from(getSchemaTable("opportunities", mode))
+      .schema(mode)
+      .from("opportunities")
       .update({ email_draft: emailDraft })
       .eq("id", id);
 

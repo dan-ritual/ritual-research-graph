@@ -1,4 +1,3 @@
-import { SHARED_SCHEMA, getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -13,7 +12,8 @@ export async function GET(request: NextRequest) {
   const mode = await resolveMode(modeParam);
 
   const { data: users, error } = await supabase
-    .from(getSchemaTable("users", mode, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("id, name, email, avatar_url")
     .order("name", { ascending: true });
 

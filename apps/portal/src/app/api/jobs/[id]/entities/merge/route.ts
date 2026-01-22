@@ -1,4 +1,3 @@
-import { getSchemaForMode, getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -26,7 +25,8 @@ export async function POST(
 
   // Verify source entity exists and belongs to this job
   const { data: sourceEntity, error: sourceError } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("id, canonical_name, extraction_job_id")
     .eq("id", sourceEntityId)
     .single();
@@ -40,7 +40,8 @@ export async function POST(
 
   // Verify target entity exists
   const { data: targetEntity, error: targetError } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("id, canonical_name, type")
     .eq("id", targetEntityId)
     .single();
@@ -54,7 +55,7 @@ export async function POST(
 
   // Call the merge_entities function
   const { data: mergeResult, error: mergeError } = await supabase
-    .schema(getSchemaForMode(mode))
+    .schema(mode)
     .rpc("merge_entities", {
       p_source_id: sourceEntityId,
       p_target_id: targetEntityId,
@@ -72,14 +73,16 @@ export async function POST(
   // Optionally update the canonical name if provided
   if (newCanonicalName && newCanonicalName !== targetEntity.canonical_name) {
     await supabase
-      .from(getSchemaTable("entities", mode))
+      .schema(mode)
+      .from("entities")
       .update({ canonical_name: newCanonicalName })
       .eq("id", targetEntityId);
   }
 
   // Fetch updated target entity
   const { data: mergedEntity } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select(`
       id,
       slug,

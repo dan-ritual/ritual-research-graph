@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -68,7 +67,8 @@ export async function GET(
   // 1. Look up microsite first (with service client to bypass RLS)
   // Filter by deleted_at since service client bypasses RLS policies
   const { data: microsite, error: msError } = await serviceClient
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .select("id, blob_path, visibility, slug, url")
     .eq("slug", slug)
     .is("deleted_at", null)

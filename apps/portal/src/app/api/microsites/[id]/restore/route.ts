@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -18,7 +17,8 @@ export async function POST(
   // Check if microsite exists and is deleted
   // Admin policy allows viewing deleted records
   const { data: microsite, error: fetchError } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .select("id, deleted_at")
     .eq("id", id)
     .single();
@@ -36,7 +36,8 @@ export async function POST(
 
   // Restore
   const { error: restoreError } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .update({ deleted_at: null })
     .eq("id", id);
 

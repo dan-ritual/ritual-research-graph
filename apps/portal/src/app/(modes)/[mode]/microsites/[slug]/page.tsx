@@ -1,4 +1,3 @@
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -37,14 +36,16 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("*")
     .eq("id", user.id)
     .single();
 
   // Fetch microsite by slug
   const { data: microsite, error } = await supabase
-    .from(getSchemaTable("microsites", modeId))
+    .schema(modeId)
+    .from("microsites")
     .select("*")
     .eq("slug", slug)
     .single();
@@ -55,7 +56,8 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
   // Fetch entities via entity_appearances junction table
   const { data: appearances } = await supabase
-    .from(getSchemaTable("entity_appearances", modeId))
+    .schema(modeId)
+    .from("entity_appearances")
     .select(`
       entities (
         id,
@@ -100,7 +102,8 @@ export default async function MicrositeDetailPage({ params }: MicrositeDetailPag
 
   if (entityIds.length > 0) {
     const { data: oppLinks } = await supabase
-      .from(getSchemaTable("opportunity_entities", modeId))
+      .schema(modeId)
+      .from("opportunity_entities")
       .select(`
         opportunities (
           id,

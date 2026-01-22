@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function DELETE(
 
   // Delete assignment
   const { error: deleteError } = await supabase
-    .from(getSchemaTable("opportunity_owners", mode))
+    .schema(mode)
+    .from("opportunity_owners")
     .delete()
     .eq("opportunity_id", id)
     .eq("user_id", userId);

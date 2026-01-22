@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function GET(
   const mode = await resolveMode(modeParam);
 
   const { data: owners, error } = await supabase
-    .from(getSchemaTable("opportunity_owners", mode))
+    .schema(mode)
+    .from("opportunity_owners")
     .select(`
       assigned_at,
       user:users(id, name, email, avatar_url)
@@ -58,7 +58,8 @@ export async function POST(
 
   // Check if opportunity exists
   const { data: opportunity } = await supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select("id")
     .eq("id", id)
     .single();
@@ -69,7 +70,8 @@ export async function POST(
 
   // Check if already assigned
   const { data: existing } = await supabase
-    .from(getSchemaTable("opportunity_owners", mode))
+    .schema(mode)
+    .from("opportunity_owners")
     .select("opportunity_id")
     .eq("opportunity_id", id)
     .eq("user_id", user_id)
@@ -81,7 +83,8 @@ export async function POST(
 
   // Create assignment
   const { error: insertError } = await supabase
-    .from(getSchemaTable("opportunity_owners", mode))
+    .schema(mode)
+    .from("opportunity_owners")
     .insert({
       opportunity_id: id,
       user_id,

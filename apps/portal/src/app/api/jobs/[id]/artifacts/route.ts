@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function GET(
 
   // Verify job exists
   const { data: job, error: jobError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .select("id, config, status")
     .eq("id", jobId)
     .single();
@@ -35,7 +35,8 @@ export async function GET(
 
   // Fetch all artifacts for this job
   const { data: artifacts, error: artifactsError } = await supabase
-    .from(getSchemaTable("artifacts", mode))
+    .schema(mode)
+    .from("artifacts")
     .select("*")
     .eq("job_id", jobId)
     .order("created_at", { ascending: true });

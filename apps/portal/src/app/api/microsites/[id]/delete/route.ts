@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function POST(
 
   // Check if microsite exists and user has permission
   const { data: microsite, error: fetchError } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .select("id, user_id, deleted_at")
     .eq("id", id)
     .single();
@@ -35,7 +35,8 @@ export async function POST(
 
   // Soft delete
   const { error: deleteError } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode)
+    .from("microsites")
     .update({ deleted_at: new Date().toISOString() })
     .eq("id", id);
 

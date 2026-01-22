@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -83,7 +82,8 @@ export async function POST(
 
   // Fetch artifact
   const { data: artifact, error } = await supabase
-    .from(getSchemaTable("artifacts", mode))
+    .schema(mode)
+    .from("artifacts")
     .select("*")
     .eq("id", artifactId)
     .eq("job_id", jobId)
@@ -191,7 +191,8 @@ Output the new section content:`;
 
     // Update artifact in database
     const { data: updated, error: updateError } = await supabase
-      .from(getSchemaTable("artifacts", mode))
+      .schema(mode)
+      .from("artifacts")
       .update({
         content: assembledContent,
         sections: updatedSections,

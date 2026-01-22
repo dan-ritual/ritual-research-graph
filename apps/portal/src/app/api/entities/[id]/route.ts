@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,7 +18,8 @@ export async function GET(
   const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
 
   const { data: entity, error: entityError } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("*")
     .eq(isUUID ? "id" : "slug", id)
     .single();
@@ -30,7 +30,8 @@ export async function GET(
 
   // Fetch appearances with microsite context
   const { data: appearances } = await supabase
-    .from(getSchemaTable("entity_appearances", mode))
+    .schema(mode)
+    .from("entity_appearances")
     .select(`
       id,
       section,
@@ -50,7 +51,8 @@ export async function GET(
 
   // Fetch co-occurrences (bidirectional)
   const { data: relationsA } = await supabase
-    .from(getSchemaTable("entity_relations", mode))
+    .schema(mode)
+    .from("entity_relations")
     .select(`
       co_occurrence_count,
       entity_b:entities!entity_relations_entity_b_id_fkey (
@@ -65,7 +67,8 @@ export async function GET(
     .limit(10);
 
   const { data: relationsB } = await supabase
-    .from(getSchemaTable("entity_relations", mode))
+    .schema(mode)
+    .from("entity_relations")
     .select(`
       co_occurrence_count,
       entity_a:entities!entity_relations_entity_a_id_fkey (
@@ -126,7 +129,8 @@ export async function GET(
 
   // Fetch linked opportunities
   const { data: opportunityLinks } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .select(`
       relationship,
       opportunities (

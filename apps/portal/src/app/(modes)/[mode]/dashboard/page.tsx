@@ -1,4 +1,3 @@
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -38,7 +37,8 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("*")
     .eq("id", user.id)
     .single();
@@ -50,28 +50,32 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     { count: inProgressCount },
     { count: opportunityCount },
   ] = await Promise.all([
-    supabase.from(getSchemaTable("microsites", modeId)).select("*", { count: "exact", head: true }).is("deleted_at", null),
-    supabase.from(getSchemaTable("entities", modeId)).select("*", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.schema(modeId).from("microsites").select("*", { count: "exact", head: true }).is("deleted_at", null),
+    supabase.schema(modeId).from("entities").select("*", { count: "exact", head: true }).is("deleted_at", null),
     supabase
-      .from(getSchemaTable("generation_jobs", modeId))
+      .schema(modeId)
+      .from("generation_jobs")
       .select("*", { count: "exact", head: true })
       .not("status", "in", '("completed","failed")'),
     supabase
-      .from(getSchemaTable("opportunities", modeId))
+      .schema(modeId)
+      .from("opportunities")
       .select("*", { count: "exact", head: true })
       .eq("status", "active"),
   ]);
 
   // Fetch recent jobs
   const { data: recentJobs } = await supabase
-    .from(getSchemaTable("generation_jobs", modeId))
+    .schema(modeId)
+    .from("generation_jobs")
     .select("*")
     .order("created_at", { ascending: false })
     .limit(5);
 
   // Fetch recent microsites (excluding soft-deleted)
   const { data: recentMicrosites } = await supabase
-    .from(getSchemaTable("microsites", modeId))
+    .schema(modeId)
+    .from("microsites")
     .select("*")
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
@@ -91,10 +95,10 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
       { count: decisions },
       { count: components },
     ] = await Promise.all([
-      supabase.from(getSchemaTable("entities", modeId)).select("*", { count: "exact", head: true }).eq("type", "topic"),
-      supabase.from(getSchemaTable("entities", modeId)).select("*", { count: "exact", head: true }).eq("type", "feature"),
-      supabase.from(getSchemaTable("entities", modeId)).select("*", { count: "exact", head: true }).eq("type", "decision"),
-      supabase.from(getSchemaTable("entities", modeId)).select("*", { count: "exact", head: true }).eq("type", "component"),
+      supabase.schema(modeId).from("entities").select("*", { count: "exact", head: true }).eq("type", "topic"),
+      supabase.schema(modeId).from("entities").select("*", { count: "exact", head: true }).eq("type", "feature"),
+      supabase.schema(modeId).from("entities").select("*", { count: "exact", head: true }).eq("type", "decision"),
+      supabase.schema(modeId).from("entities").select("*", { count: "exact", head: true }).eq("type", "component"),
     ]);
 
     topicCount = topics ?? 0;
@@ -103,14 +107,16 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     componentCount = components ?? 0;
 
     const { data: decisionsList } = await supabase
-      .from(getSchemaTable("entities", modeId))
+      .schema(modeId)
+      .from("entities")
       .select("id, slug, canonical_name, metadata")
       .eq("type", "decision")
       .order("updated_at", { ascending: false })
       .limit(5);
 
     const { data: featuresList } = await supabase
-      .from(getSchemaTable("entities", modeId))
+      .schema(modeId)
+      .from("entities")
       .select("id, slug, canonical_name, metadata")
       .eq("type", "feature")
       .order("updated_at", { ascending: false })

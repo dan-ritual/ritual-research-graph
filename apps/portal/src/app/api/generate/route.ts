@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -54,7 +53,8 @@ export async function POST(request: NextRequest) {
 
   // Create job record with authenticated user
   const { data: job, error: jobError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .insert({
       user_id: user.id,
       workflow_type: config.workflow,
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
   if (uploadError) {
     console.error("Failed to upload transcript:", uploadError);
     // Clean up the job record
-    await supabase.from(getSchemaTable("generation_jobs", mode)).delete().eq("id", job.id);
+    await supabase.schema(mode).from("generation_jobs").delete().eq("id", job.id);
     return NextResponse.json(
       { error: "Failed to upload transcript" },
       { status: 500 }
@@ -102,7 +102,8 @@ export async function POST(request: NextRequest) {
 
   // Update job with transcript path (stays "pending" for worker to pick up)
   const { error: updateError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .update({
       transcript_path: transcriptPath,
     })

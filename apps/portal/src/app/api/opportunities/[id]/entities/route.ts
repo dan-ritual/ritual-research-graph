@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function GET(
   const mode = await resolveMode(modeParam);
 
   const { data: linkedEntities, error } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .select(`
       relationship,
       entity:entities(id, name, type, slug)
@@ -58,7 +58,8 @@ export async function POST(
 
   // Check if opportunity exists
   const { data: opportunity } = await supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select("id")
     .eq("id", id)
     .single();
@@ -69,7 +70,8 @@ export async function POST(
 
   // Check if entity exists
   const { data: entity } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("id, name")
     .eq("id", entity_id)
     .single();
@@ -80,7 +82,8 @@ export async function POST(
 
   // Check if already linked
   const { data: existing } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .select("opportunity_id")
     .eq("opportunity_id", id)
     .eq("entity_id", entity_id)
@@ -92,7 +95,8 @@ export async function POST(
 
   // Create link
   const { error: insertError } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .insert({
       opportunity_id: id,
       entity_id,

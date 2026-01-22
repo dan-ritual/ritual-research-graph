@@ -1,6 +1,5 @@
 "use client";
 
-import { getSchemaTable } from "@/lib/db";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
@@ -47,7 +46,8 @@ export default function JobStatusPage() {
   useEffect(() => {
     async function fetchJob() {
       const { data, error } = await supabase
-        .from(getSchemaTable("generation_jobs", modeId))
+        .schema(modeId)
+        .from("generation_jobs")
         .select("*")
         .eq("id", jobId)
         .single();

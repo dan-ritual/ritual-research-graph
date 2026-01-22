@@ -1,6 +1,5 @@
 "use client";
 
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { Suspense, useEffect, useState, useCallback } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
@@ -54,7 +53,8 @@ function PipelineContent() {
 
       // Fetch user profile
       const { data: profile } = await supabase
-        .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+        .schema("shared")
+        .from("users")
         .select("*")
         .eq("id", authUser.id)
         .single();
@@ -67,7 +67,8 @@ function PipelineContent() {
 
       // Fetch workflows
       const { data: workflowsData } = await supabase
-        .from(getSchemaTable("pipeline_workflows", modeId))
+        .schema(modeId)
+        .from("pipeline_workflows")
         .select("*")
         .order("is_default", { ascending: false });
 
@@ -103,7 +104,8 @@ function PipelineContent() {
     async function fetchStagesAndOpportunities() {
       // Fetch stages for selected workflow
       const { data: stagesData } = await supabase
-        .from(getSchemaTable("pipeline_stages", modeId))
+        .schema(modeId)
+        .from("pipeline_stages")
         .select("*")
         .eq("workflow_id", selectedWorkflowId)
         .order("position", { ascending: true });
@@ -114,7 +116,8 @@ function PipelineContent() {
 
       // Fetch opportunities for selected workflow
       const { data: opportunitiesData } = await supabase
-        .from(getSchemaTable("opportunities", modeId))
+        .schema(modeId)
+        .from("opportunities")
         .select("*")
         .eq("workflow_id", selectedWorkflowId)
         .eq("status", "active")
@@ -184,14 +187,15 @@ function PipelineContent() {
 
     // Update opportunity stage
     const { error } = await supabase
-      .from(getSchemaTable("opportunities", modeId))
+      .schema(modeId)
+      .from("opportunities")
       .update({ stage_id: nextStage.id })
       .eq("id", opportunityId);
 
     if (!error) {
       // Log activity
       const { data: { user: authUser } } = await supabase.auth.getUser();
-      await supabase.from(getSchemaTable("opportunity_activity", modeId)).insert({
+      await supabase.schema(modeId).from("opportunity_activity").insert({
         opportunity_id: opportunityId,
         user_id: authUser?.id,
         action: "stage_changed",

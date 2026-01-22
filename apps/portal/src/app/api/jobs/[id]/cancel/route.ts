@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,7 +27,8 @@ export async function POST(
 
   // Fetch the job
   const { data: job, error: fetchError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .select("id, user_id, status")
     .eq("id", id)
     .single();
@@ -47,7 +47,8 @@ export async function POST(
 
   // Cancel the job
   const { error: updateError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .update({
       status: "failed",
       error_message: "Cancelled by user",

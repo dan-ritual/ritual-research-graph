@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -21,7 +20,8 @@ export async function POST(
 
   // Fetch opportunity with linked entities
   const { data: opportunity, error: oppError } = await supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select("*")
     .eq("id", id)
     .single();
@@ -32,7 +32,8 @@ export async function POST(
 
   // Fetch linked entities
   const { data: linkedEntities } = await supabase
-    .from(getSchemaTable("opportunity_entities", mode))
+    .schema(mode)
+    .from("opportunity_entities")
     .select(`
       relationship,
       entity:entities(name, type, slug)
@@ -55,7 +56,8 @@ export async function POST(
   let micrositeContext = "";
   if (opportunity.source_microsite_id) {
     const { data: microsite } = await supabase
-      .from(getSchemaTable("microsites", mode))
+      .schema(mode)
+      .from("microsites")
       .select("title, thesis")
       .eq("id", opportunity.source_microsite_id)
       .single();
@@ -100,7 +102,8 @@ Output as clean markdown.`;
 
     // Store result in database
     const { error: updateError } = await supabase
-      .from(getSchemaTable("opportunities", mode))
+      .schema(mode)
+      .from("opportunities")
       .update({ strategy })
       .eq("id", id);
 

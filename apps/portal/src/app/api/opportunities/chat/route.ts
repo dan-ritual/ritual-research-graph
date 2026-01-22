@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -24,7 +23,8 @@ export async function POST(request: NextRequest) {
 
   // Fetch all active opportunities with related data
   const { data: opportunities, error: fetchError } = await supabase
-    .from(getSchemaTable("opportunities", mode))
+    .schema(mode)
+    .from("opportunities")
     .select(`
       id,
       name,

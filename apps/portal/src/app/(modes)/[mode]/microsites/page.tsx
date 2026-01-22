@@ -1,4 +1,3 @@
-import { getSchemaTable, SHARED_SCHEMA } from "@/lib/db";
 import { createClient } from "@/lib/supabase/server";
 import { redirect, notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
@@ -34,14 +33,16 @@ export default async function MicrositesPage({ params }: MicrositesPageProps) {
 
   // Fetch user profile
   const { data: profile } = await supabase
-    .from(getSchemaTable("users", modeId, SHARED_SCHEMA))
+    .schema("shared")
+    .from("users")
     .select("*")
     .eq("id", user.id)
     .single();
 
   // Fetch all microsites (excluding soft-deleted)
   const { data: microsites } = await supabase
-    .from(getSchemaTable("microsites", modeId))
+    .schema(modeId)
+    .from("microsites")
     .select("*")
     .is("deleted_at", null)
     .order("created_at", { ascending: false });

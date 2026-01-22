@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function POST(
 
   // Fetch the job
   const { data: job, error: fetchError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .select("id, user_id, status, transcript_path, config")
     .eq("id", id)
     .single();
@@ -36,7 +36,8 @@ export async function POST(
 
   // Reset the job to pending
   const { error: updateError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode)
+    .from("generation_jobs")
     .update({
       status: "pending",
       error_message: null,
@@ -57,7 +58,7 @@ export async function POST(
   }
 
   // Delete any existing artifacts from the failed attempt
-  await supabase.from(getSchemaTable("artifacts", mode)).delete().eq("job_id", id);
+  await supabase.schema(mode).from("artifacts").delete().eq("job_id", id);
 
   return NextResponse.json({ success: true, status: "pending" });
 }

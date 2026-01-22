@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -20,7 +19,8 @@ export async function GET(request: NextRequest) {
 
   // Search entities by canonical_name (case-insensitive)
   const { data: entities, error } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("id, canonical_name, type, slug")
     .ilike("canonical_name", `%${query}%`)
     .limit(10);

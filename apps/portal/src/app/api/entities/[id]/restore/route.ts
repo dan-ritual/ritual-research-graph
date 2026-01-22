@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +16,8 @@ export async function POST(
 
   // Check if entity exists and is deleted
   const { data: entity, error: fetchError } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .select("id, deleted_at")
     .eq("id", id)
     .single();
@@ -35,7 +35,8 @@ export async function POST(
 
   // Restore
   const { error: restoreError } = await supabase
-    .from(getSchemaTable("entities", mode))
+    .schema(mode)
+    .from("entities")
     .update({ deleted_at: null })
     .eq("id", id);
 

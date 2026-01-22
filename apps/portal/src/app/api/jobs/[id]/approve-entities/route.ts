@@ -1,4 +1,3 @@
-import { getSchemaTable } from "@/lib/db";
 import { resolveMode } from "@/lib/db.server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
@@ -64,7 +63,7 @@ export async function POST(
 
   // Validate job exists and is in correct status
   const { data: job, error: jobError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode).from("generation_jobs")
     .select("id, status, user_id, config")
     .eq("id", jobId)
     .single();
@@ -105,7 +104,7 @@ export async function POST(
     const entityType = TYPE_MAP[entity.type] || "concept";
 
     const { data, error } = await supabase
-      .from(getSchemaTable("entities", mode))
+      .schema(mode).from("entities")
       .upsert(
         {
           slug,
@@ -141,7 +140,7 @@ export async function POST(
   let micrositeId: string;
 
   const { data: existingMicrosite } = await supabase
-    .from(getSchemaTable("microsites", mode))
+    .schema(mode).from("microsites")
     .select("id")
     .eq("job_id", jobId)
     .single();
@@ -154,7 +153,7 @@ export async function POST(
     const slug = slugify(jobConfig.title || `research-${Date.now()}`);
 
     const { data: newMicrosite, error: createError } = await supabase
-      .from(getSchemaTable("microsites", mode))
+      .schema(mode).from("microsites")
       .insert({
         job_id: jobId,
         user_id: job.user_id,
@@ -180,7 +179,7 @@ export async function POST(
 
     // Update job with microsite reference
     await supabase
-      .from(getSchemaTable("generation_jobs", mode))
+      .schema(mode).from("generation_jobs")
       .update({ microsite_id: micrositeId })
       .eq("id", jobId);
   }
@@ -223,7 +222,7 @@ export async function POST(
 
   if (appearances.length > 0) {
     const { error: appearanceError } = await supabase
-      .from(getSchemaTable("entity_appearances", mode))
+      .schema(mode).from("entity_appearances")
       .upsert(appearances, { onConflict: "entity_id,microsite_id,section" });
 
     if (appearanceError) {
@@ -238,7 +237,7 @@ export async function POST(
       for (let j = i + 1; j < entityIdList.length; j++) {
         const [entityA, entityB] = [entityIdList[i], entityIdList[j]].sort();
 
-        await supabase.from(getSchemaTable("entity_relations", mode)).upsert(
+        await supabase.schema(mode).from("entity_relations").upsert(
           {
             entity_a_id: entityA,
             entity_b_id: entityB,
@@ -254,7 +253,7 @@ export async function POST(
 
   // 8. Update job status to continue pipeline
   const { error: statusError } = await supabase
-    .from(getSchemaTable("generation_jobs", mode))
+    .schema(mode).from("generation_jobs")
     .update({
       status: "generating_site_config",
       current_stage: 4,
