@@ -625,7 +625,7 @@
 
     <!-- Header -->
     <header>
-      <div class="eyebrow">Internal Documentation · v1.2.0 · Last Updated: 2026-01-22</div>
+      <div class="eyebrow">Internal Documentation · v1.2.1 · Last Updated: 2026-01-22</div>
       <h1>Ritual Research Graph</h1>
       <p class="subtitle">
         Transform meeting transcripts into interconnected, Wikipedia-style microsites
@@ -1355,7 +1355,21 @@
       </div>
 
       <div class="changelog-entry">
-        <div class="changelog-version">v1.2.0 <span class="tag new">Current</span></div>
+        <div class="changelog-version">v1.2.1 <span class="tag new">Current</span></div>
+        <div class="changelog-date">2026-01-22</div>
+
+        <h4>Vercel Deployment Infrastructure</h4>
+        <ul>
+          <li><strong>Monorepo root deployment</strong> — Vercel now deploys from root with proper workspace resolution</li>
+          <li><strong>Core package fixes</strong> — Split server-only imports (db.server.ts), browser-safe db.ts</li>
+          <li><strong>npm compatibility</strong> — Changed workspace:* to file: protocol for npm install</li>
+          <li><strong>Build isolation</strong> — Core package tsconfig.json prevents script errors blocking builds</li>
+          <li><strong>dist in git</strong> — packages/core/dist committed for Vercel compatibility</li>
+        </ul>
+      </div>
+
+      <div class="changelog-entry">
+        <div class="changelog-version">v1.2.0</div>
         <div class="changelog-date">2026-01-22</div>
 
         <h4>Mode System Implementation</h4>
@@ -1677,7 +1691,7 @@ ritual-research-graph/
     <footer>
       <div class="footer-row">
         <div>
-          Ritual Research Graph · v1.2.0 · Updated 2026-01-22 ·
+          Ritual Research Graph · v1.2.1 · Updated 2026-01-22 ·
           <a href="https://github.com/dan-ritual/ritual-research-graph" style="color: var(--cobalt-600);">GitHub</a>
         </div>
         <div class="footer-links">
