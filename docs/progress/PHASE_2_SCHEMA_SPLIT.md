@@ -19,9 +19,9 @@
 - [x] skunkworks.* schema created and empty
 - [x] shared.* schema created with users, cross_links, mode_config tables
 - [x] RLS policies updated for multi-schema access
-- [ ] All existing queries work against new schema (requires PostgREST config update)
+- [x] All existing queries work against new schema
 
-**Progress:** 5/6 complete
+**Progress:** 6/6 complete
 
 ---
 
@@ -162,12 +162,13 @@ WHERE schemaname = 'shared' AND tablename = 'cross_links';
 
 ### 8. PostgREST db_schema Configuration
 
-**Current Status:** ⚠️ PostgREST only exposes `public` schema by default.
+```sql
+ALTER ROLE authenticator SET pgrst.db_schemas TO 'public,growth,engineering,skunkworks,shared';
+NOTIFY pgrst, 'reload';
+SHOW pgrst.db_schemas;
+```
 
-**Action Required:** Update Supabase project settings to expose additional schemas:
-1. Go to Supabase Dashboard → Project Settings → API
-2. Update `db_schemas` to: `public,growth,engineering,skunkworks,shared`
-3. Or use SQL: `ALTER ROLE authenticator SET pgrst.db_schemas TO 'public,growth,engineering,skunkworks,shared';`
+**Result:** ✅ `public,growth,engineering,skunkworks,shared`
 
 ---
 
@@ -177,18 +178,17 @@ WHERE schemaname = 'shared' AND tablename = 'cross_links';
 
 - ✅ ~~Run migrations in Supabase and validate row counts + RLS~~
 - ✅ ~~Verify RPC functions resolve in mode schemas~~
-- ⚠️ Update PostgREST `db_schema` in Supabase dashboard to include growth/engineering/skunkworks/shared
+- ✅ ~~Update PostgREST `db_schema` in Supabase dashboard to include growth/engineering/skunkworks/shared~~
 
 ### Outstanding Items
 
 - [x] Run migrations in target environment
-- [ ] Update PostgREST db_schema configuration in Supabase dashboard
+- [x] Update PostgREST db_schema configuration in Supabase dashboard
 - [ ] Smoke test portal queries per mode
 
 ### Risks Identified
 
 - Realtime publication updates may need manual verification in Supabase
-- PostgREST schema exposure requires dashboard access
 
 ---
 
@@ -211,3 +211,9 @@ WHERE schemaname = 'shared' AND tablename = 'cross_links';
 - Verified RLS policies exist for all mode schemas (160 total policies)
 - Verified cross_links RLS requires access to both source and target modes
 - Documented PostgREST configuration requirement for schema exposure
+
+### 2026-01-22 (PostgREST Exposure)
+
+- Ran `ALTER ROLE authenticator SET pgrst.db_schemas` to expose growth/engineering/skunkworks/shared
+- Reloaded PostgREST (`NOTIFY pgrst, 'reload'`)
+- Verified `SHOW pgrst.db_schemas` returned expected list
