@@ -65,12 +65,12 @@ export default function JobStatusPage() {
     fetchJob();
 
     const channel = supabase
-      .channel(`job-${jobId}`)
+      .channel(`job-${modeId}-${jobId}`)
       .on(
         "postgres_changes",
         {
           event: "UPDATE",
-          schema: "public",
+          schema: modeId,
           table: "generation_jobs",
           filter: `id=eq.${jobId}`,
         },

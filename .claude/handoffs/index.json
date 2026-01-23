@@ -109,6 +109,46 @@
   },
   "sessions": [
     {
+      "id": "rrg-auto-20260122-2207",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-22T22:07:16.816Z",
+      "file": "rrg-auto-20260122-2207.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260122-2139",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-22T21:39:19.213Z",
+      "file": "rrg-auto-20260122-2139.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260122-2057",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-22T20:57:56.522Z",
+      "file": "rrg-auto-20260122-2057.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
+      "id": "rrg-auto-20260122-1713",
+      "phase": "auto",
+      "status": "in-progress",
+      "created": "2026-01-22T17:13:36.632Z",
+      "file": "rrg-auto-20260122-1713.md",
+      "summary": "Auto-generated before compaction",
+      "dependsOn": [],
+      "blocks": []
+    },
+    {
       "id": "rrg-auto-20260122-0853",
       "phase": "auto",
       "status": "in-progress",
@@ -267,47 +307,7 @@
       "summary": "Auto-generated before compaction",
       "dependsOn": [],
       "blocks": []
-    },
-    {
-      "id": "rrg-auto-20260119-1620",
-      "phase": "auto",
-      "status": "in-progress",
-      "created": "2026-01-19T16:20:59.796Z",
-      "file": "rrg-auto-20260119-1620.md",
-      "summary": "Auto-generated before compaction",
-      "dependsOn": [],
-      "blocks": []
-    },
-    {
-      "id": "rrg-auto-20260118-2037",
-      "phase": "auto",
-      "status": "in-progress",
-      "created": "2026-01-18T20:37:13.883Z",
-      "file": "rrg-auto-20260118-2037.md",
-      "summary": "Auto-generated before compaction",
-      "dependsOn": [],
-      "blocks": []
-    },
-    {
-      "id": "rrg-auto-20260118-2021",
-      "phase": "auto",
-      "status": "in-progress",
-      "created": "2026-01-18T20:21:21.444Z",
-      "file": "rrg-auto-20260118-2021.md",
-      "summary": "Auto-generated before compaction",
-      "dependsOn": [],
-      "blocks": []
-    },
-    {
-      "id": "rrg-auto-20260117-1552",
-      "phase": "auto",
-      "status": "in-progress",
-      "created": "2026-01-17T15:52:19.424Z",
-      "file": "rrg-auto-20260117-1552.md",
-      "summary": "Auto-generated before compaction",
-      "dependsOn": [],
-      "blocks": []
     }
   ],
-  "lastUpdated": "2026-01-22T08:53:13.215Z"
+  "lastUpdated": "2026-01-22T22:07:16.816Z"
 }

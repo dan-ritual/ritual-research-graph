@@ -7,7 +7,7 @@
 | **Status** | Complete |
 | **Started** | 2026-01-22 |
 | **Target** | 2026-01-29 |
-| **Completed** | |
+| **Completed** | 2026-01-22 |
 | **Owner** | Daniel Gosek |
 
 ---
@@ -59,6 +59,8 @@
 | `packages/core/src/db.ts` | Modified | Add cross_links table identifier |
 | `apps/portal/src/lib/db.ts` | Modified | Shared table helper |
 | `apps/portal/src/app/api/cross-links/route.ts` | Created | Read/create cross-links API |
+| `apps/portal/src/components/entities/cross-links-panel.tsx` | Created | Render cross-links + create UI |
+| `apps/portal/src/app/(modes)/[mode]/entities/[slug]/page.tsx` | Modified | Fetch access + mount cross-links UI |
 | `docs/specs/SPEC_1_MODE_SYSTEM.md` | Modified | Document cross-link model |
 
 ---
@@ -75,12 +77,12 @@
 
 ### For Next Session
 
-- Wire cross-link API into entity detail views (mode-aware)
-- Consider UI affordance for creating manual cross-links
+- Optional: add search/autocomplete for target entity IDs
+- Optional: enable entity detail lookups when explicitly requested
 
 ### Outstanding Items
 
-- [ ] Portal UI integration
+- [x] Portal UI integration
 
 ### Risks Identified
 
@@ -96,3 +98,4 @@
 - Added core cross-link types and shared table helper
 - Implemented cross-links API for create/read with strict validation
 - Documented cross-link model in mode system spec
+- Wired cross-link lists + manual create UI into entity detail views

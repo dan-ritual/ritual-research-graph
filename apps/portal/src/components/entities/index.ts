@@ -5,3 +5,4 @@ export { AppearanceList } from "./appearance-list";
 export { CoOccurrenceChips } from "./co-occurrence-chips";
 export { EntityReviewCard } from "./entity-review-card";
 export { EntityMergeModal } from "./entity-merge-modal";
+export { CrossLinksPanel } from "./cross-links-panel";

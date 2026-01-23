@@ -6,13 +6,20 @@ export async function fetchWithMode(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
-  // Get mode from cookie on client side
-  const mode = typeof document !== "undefined" 
-    ? document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("ritual-mode="))
-        ?.split("=")[1] || "growth"
-    : "growth";
+  // Get mode from cookie on client side; fall back to URL path if missing.
+  const mode =
+    typeof document !== "undefined"
+      ? document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("ritual-mode="))
+          ?.split("=")[1] ||
+        (() => {
+          const segment = window.location.pathname.split("/").filter(Boolean)[0];
+          return segment === "growth" || segment === "engineering" || segment === "skunkworks"
+            ? segment
+            : "growth";
+        })()
+      : "growth";
 
   const headers = new Headers(options.headers);
   headers.set("X-Ritual-Mode", mode);
